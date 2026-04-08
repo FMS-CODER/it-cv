@@ -1,0 +1,17 @@
+server:
+  port: 8080 # 项目启动端口
+
+spring:
+  profiles:
+    active: dev # 激活 dev 开发环境
+  ai:
+    deepseek:
+      api-key: sk-3596603d6c9f489d8c037d664b4eca6e # 填写 DeepSeek Api Key, 改成你自己的
+      base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
+      chat:
+        options:
+#          model: deepseek-chat # 使用哪个模型
+          model: deepseek-reasoner # 使用哪个模型
+          temperature: 0.8 # 温度值
+logging:
+  config: classpath:log4j2.xml # 设置日志配置文件路径
