@@ -1,0 +1,83 @@
+server:
+  port: 8080 # 项目启动端口
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  # datasource:
+  #   url: jdbc:postgresql://localhost:5432/xiaoha_ai_robot
+  #   username: postgres
+  #   password: postgres
+  #   driver-class-name: org.postgresql.Driver
+  # jpa:
+  #   hibernate:
+  #     ddl-auto: none
+  #   show-sql: true
+  #   properties:
+  #     hibernate:
+  #       dialect: org.hibernate.dialect.PostgreSQLDialect
+  # sql:
+  #   init:
+  #     schema-locations: classpath:db/schema.sql
+  #     data-locations: classpath:db/data.sql
+  #     mode: always
+  ai:
+    # vectorstore:
+    #   pgvector:
+    #     initialize-schema: true
+    #     index-type: HNSW
+    #     distance-type: COSINE_DISTANCE
+    #     dimensions: 1536
+    # cassandra:
+    #   contact-points: 127.0.0.1 # Cassandra 集群节点地址（可配置多个，用逗号分隔）
+    #   port: 9042 # 端口号
+    #   local-datacenter: datacenter1 # 必须与集群配置的数据中心名称一致（大小写敏感）
+    deepseek:
+      api-key: sk-5760a679655a4021a66582ffa5ad293d # 填写 DeepSeek Api Key，改成你自己的
+      base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat # 使用哪个模型
+          temperature: 0.8 # 温度值
+      embedding:
+        options:
+          model: deepseek-embedding # 使用 deepseek-embedding 模型
+    searxng:
+      url: http://localhost:8081 # SearXNG 服务地址（完全免费，自托管搜索引擎）
+    ollama:
+      base-url: http://localhost:11434 # Ollama 服务的访问地址, 11434 端口是 Ollama 默认的启动端口
+      chat:
+        options: # 模型参数
+          model: qwen3:14b # 指定 Ollama 使用的大模型
+          temperature: 0.7 # 温度值
+    zhipuai:
+      base-url: https://open.bigmodel.cn/api/paas # 智谱 AI 的请求 URL, 可不填，默认值为 open.bigmodel.cn/api/paas
+      api-key: d4fb6685c4ef40829a415dcd0fb89e94.eKjHk0USSnpC8AuY # 填写智谱 AI 的 API Key, 该成你自己的
+      chat:
+        options: # 模型参数
+          model: glm-4-air # 模型名称，使用智谱 AI 哪个模型
+          temperature: 0.7 # 温度值
+    # chat:
+    #   memory:
+    #     repository:
+    #       cassandra:
+    #         keyspace: xiaoha_ai_robot # 指定存储聊天记忆的 Keyspace（类似数据库名）
+    #         table: t_ai_chat_memory # 表名
+    #         time-to-live: 1095d # 数据的自动过期时间（1095天 ≈ 3年）
+    #         initialize-schema: true  # 自动初始化表结构
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:/mcp-servers-config.json # 指定 MCP 服务的配置文件路径
+        toolcallback:
+          enabled: true # 开启 MCP 客户端的工具回调（Tool Callback）功能
+
+# 阿里云百炼 API Key（用于文生图、文生视频、文生音频等）
+bailian:
+  api-key: sk-5760a679655a4021a66582ffa5ad293d
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: debug
