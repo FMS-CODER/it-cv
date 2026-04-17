@@ -1,0 +1,32 @@
+# ===== 操作系统/编辑器 =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+.idea/
+.vscode/
+*.iml
+
+# ===== 日志/运行产物 =====
+logs/
+*.log
+
+# ===== Java / Maven / Spring Boot =====
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+
+# ===== Node / Vue / Vite =====
+**/node_modules/
+**/dist/
+**/.vite/
+**/.cache/
+
+# ===== 环境变量/密钥（避免误提交）=====
+.env
+.env.*
+*.key
+*.pem
+
