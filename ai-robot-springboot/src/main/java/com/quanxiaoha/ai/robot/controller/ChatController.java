@@ -9,6 +9,7 @@ import com.quanxiaoha.ai.robot.domain.mapper.ChatMapper;
 import com.quanxiaoha.ai.robot.domain.mapper.ChatMessageMapper;
 import com.quanxiaoha.ai.robot.model.vo.chat.*;
 import com.quanxiaoha.ai.robot.service.ChatService;
+import com.quanxiaoha.ai.robot.service.ResumeKnowledgeRagService;
 import com.quanxiaoha.ai.robot.service.SearXNGService;
 import com.quanxiaoha.ai.robot.service.SearchResultContentFetcherService;
 import com.quanxiaoha.ai.robot.utils.PageResponse;
@@ -62,8 +63,18 @@ public class ChatController {
     private SearXNGService searXNGService;
     @Resource
     private SearchResultContentFetcherService searchResultContentFetcherService;
-    @Resource
+    @Resource(name = "deepSeekChatModel")
     private ChatModel chatModel;
+
+    @Resource
+    private ResumeKnowledgeRagService resumeKnowledgeRagService;
+
+    /**
+     * 启用知识库 RAG 时的系统角色说明（与检索片段一起注入）
+     */
+    private static final String CHAT_RAG_SYSTEM_PREFIX = """
+            你是一位专业的简历优化与职业发展顾问，擅长简历结构、项目与工作经历表述、面试准备与求职策略。
+            当下方提供【知识库 RAG】片段时，请优先结合这些片段作答，保持建议可落地；片段不足时再补充通用经验，不要编造知识库中不存在的事实。""";
 
     @PostMapping("/new")
     @ApiOperationLog(description = "新建对话")
@@ -86,12 +97,30 @@ public class ChatController {
         Double temperature = aiChatReqVO.getTemperature();
         // 是否开启联网搜索
         boolean networkSearch = aiChatReqVO.getNetworkSearch();
+        // 知识库 RAG（输入语义 + 输出补充 双路检索）
+        boolean knowledgeRag = Boolean.TRUE.equals(aiChatReqVO.getKnowledgeRag());
+        Integer kbTopK = aiChatReqVO.getKbTopK() == null ? 5 : aiChatReqVO.getKbTopK();
+        String kbCategory = aiChatReqVO.getKbCategory();
 
         // 使用注入的 ChatModel（DeepSeek）
-        // 动态设置调用的模型名称、温度值
-        ChatClient.ChatClientRequestSpec chatClientRequestSpec = ChatClient.create(chatModel)
-                .prompt()
-                .user(userMessage); // 用户提示词
+        String ragBlock = knowledgeRag
+                ? resumeKnowledgeRagService.buildChatRagContext(userMessage, kbCategory, kbTopK)
+                : "";
+        ChatClient.ChatClientRequestSpec chatClientRequestSpec;
+        if (knowledgeRag) {
+            String systemText = CHAT_RAG_SYSTEM_PREFIX;
+            if (StringUtils.isNotBlank(ragBlock)) {
+                systemText = systemText + "\n\n" + ragBlock;
+            }
+            chatClientRequestSpec = ChatClient.create(chatModel)
+                    .prompt()
+                    .system(systemText)
+                    .user(userMessage);
+        } else {
+            chatClientRequestSpec = ChatClient.create(chatModel)
+                    .prompt()
+                    .user(userMessage);
+        }
 
         // Advisor 集合
         List<Advisor> advisors = Lists.newArrayList();

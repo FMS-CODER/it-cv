@@ -8,7 +8,7 @@ import java.util.List;
  * @Author: 犬小哈
  * @Date: 2025/7/30 12:13
  * @Version: v1.0.0
- * @Description: TODO
+ * @Description: SearXNG 搜索引擎服务接口
  **/
 public interface SearXNGService {
 

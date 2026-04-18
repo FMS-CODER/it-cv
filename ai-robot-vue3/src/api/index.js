@@ -22,6 +22,9 @@ export const resumeApi = {
    * @param {string} params.resumeText - 简历文本
    * @param {string} params.targetPosition - 目标岗位
    * @param {string} params.additionalRequirements - 额外要求
+   * @param {boolean} [params.knowledgeRag] - 是否启用知识库双路 RAG
+   * @param {string} [params.kbCategory] - 知识库分类过滤
+   * @param {number} [params.kbTopK] - 合并检索条数上限
    * @param {Function} options.onmessage - SSE 消息回调
    * @param {Function} options.onerror - SSE 错误回调
    * @param {AbortSignal} options.signal - 取消信号
@@ -51,6 +54,9 @@ export const chatApi = {
       message: params.message,
       chatId: params.chatId,
       networkSearch: params.networkSearch ?? false,
+      knowledgeRag: params.knowledgeRag ?? false,
+      kbCategory: params.kbCategory || undefined,
+      kbTopK: params.kbTopK ?? 5,
       modelName: params.modelName ?? CHAT_MODEL_NAME,
       temperature: params.temperature ?? 0.8
     }, options)
@@ -115,6 +121,31 @@ export const knowledgeApi = {
    */
   listPage({ current = 1, size = 20, category = '' } = {}) {
     return request.post('/resume-kb/page/list', { current, size, category })
+  },
+
+  /**
+   * 回填历史数据的向量字段（扫描 embedding 为空的记录批量调用 DashScope）
+   * @param {number} [batchSize]
+   */
+  refillEmbeddings(batchSize) {
+    const qs = batchSize ? `?batchSize=${batchSize}` : ''
+    return request.post(`/resume-kb/embedding/refill${qs}`, {})
+  },
+
+  /**
+   * 基于 DashScope 向量 + pgvector 余弦距离的 Top-K 相似度检索
+   * @param {{query: string, topK?: number, category?: string}} payload
+   */
+  search(payload) {
+    return request.post('/resume-kb/search', payload)
+  },
+
+  /**
+   * 更新单条知识并触发后端重算 embedding
+   * @param {{id:number, content:string, category?:string, metadata?:object|string}} payload
+   */
+  update(payload) {
+    return request.post('/resume-kb/update', payload)
   }
 }
 

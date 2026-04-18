@@ -16,15 +16,24 @@ export const useChatSessionStore = defineStore('chatSession', {
   }),
   actions: {
     async fetchSessions() {
-      this.loadingSessions = true
-      try {
-        const res = await chatApi.listChatPage({ current: 1, size: 50 })
-        if (res.success && Array.isArray(res.data)) {
-          this.sessions = res.data
-        }
-      } finally {
-        this.loadingSessions = false
+      // 合并短时间内的重复调用，避免多处 onMounted 或快速连点造成双请求
+      if (this._fetchSessionsPromise) {
+        return this._fetchSessionsPromise
       }
+      this._fetchSessionsPromise = (async () => {
+        this.loadingSessions = true
+        try {
+          const res = await chatApi.listChatPage({ current: 1, size: 50 })
+          if (res.success && Array.isArray(res.data)) {
+            this.sessions = res.data
+          }
+        } finally {
+          this.loadingSessions = false
+        }
+      })().finally(() => {
+        this._fetchSessionsPromise = null
+      })
+      return this._fetchSessionsPromise
     },
 
     /**

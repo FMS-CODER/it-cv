@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS resume_knowledge_base (
     id BIGSERIAL PRIMARY KEY,
     content TEXT NOT NULL,
     metadata JSONB,
-    embedding vector(1536),
+    embedding public.vector(1536),
     category VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

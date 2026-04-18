@@ -9,11 +9,14 @@ import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import reactor.core.publisher.Flux;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -84,14 +87,22 @@ public class NetworkSearchAdvisor implements StreamAdvisor {
         String searchContext = buildContext(successfulResults);
 
         // 填充提示词占位符，转换为 Prompt 提示词对象
-        Prompt newPrompt = DEFAULT_PROMPT_TEMPLATE.create(Map.of("question", userMessage.getText(),
+        Prompt searchPrompt = DEFAULT_PROMPT_TEMPLATE.create(Map.of("question", userMessage.getText(),
                 "context", searchContext), chatClientRequest.prompt().getOptions());
 
-        log.info("## 重新构建的增强提示词: {}", newPrompt.getUserMessage().getText());
+        log.info("## 重新构建的增强提示词: {}", searchPrompt.getUserMessage().getText());
 
-        // 重新构建 ChatClientRequest，设置重新构建的 “增强提示词”
-        ChatClientRequest newChatClientRequest = ChatClientRequest.builder()
-                .prompt(newPrompt)
+        // 保留原 Prompt 中的系统消息（例如知识库 RAG），避免被联网模板覆盖后丢失
+        List<Message> merged = new ArrayList<>();
+        for (Message m : chatClientRequest.prompt().getInstructions()) {
+            if (m.getMessageType() == MessageType.SYSTEM) {
+                merged.add(m);
+            }
+        }
+        merged.addAll(searchPrompt.getInstructions());
+
+        ChatClientRequest newChatClientRequest = chatClientRequest.mutate()
+                .prompt(new Prompt(merged))
                 .build();
 
         return streamAdvisorChain.nextStream(newChatClientRequest);

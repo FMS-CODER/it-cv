@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'node:url'
+﻿import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -27,6 +27,18 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/resume-optimize': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/resume-kb': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/ai': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/v1/ai': {
         target: 'http://localhost:8080',
         changeOrigin: true,
       },

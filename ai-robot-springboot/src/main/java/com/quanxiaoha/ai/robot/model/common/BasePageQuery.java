@@ -6,7 +6,7 @@ import lombok.Data;
  * @author: 犬小哈
  * @url: www.quanxiaoha.com
  * @date: 2023-09-19 8:54
- * @description: TODO
+ * @description: 基础分页查询参数
  **/
 @Data
 public class BasePageQuery {

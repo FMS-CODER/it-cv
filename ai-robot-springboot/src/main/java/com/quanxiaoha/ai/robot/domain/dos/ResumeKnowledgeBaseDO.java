@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.quanxiaoha.ai.robot.utils.mybatis.JsonbTypeHandler;
+import com.quanxiaoha.ai.robot.utils.mybatis.PgVectorTypeHandler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,10 +41,9 @@ public class ResumeKnowledgeBaseDO {
     private String metadata;
 
     /**
-     * 向量 embedding
-     * - 当启用 pgvector 时，列类型为 vector(n)，可直接接受形如 "[0.1,0.2,...]" 的文本输入
-     * - 当未启用 pgvector 时，列类型可能为 TEXT，此时同样存上述文本，便于后续迁移
+     * 向量 embedding（存 "[0.1,0.2,...]" 文本；写入时由 {@link PgVectorTypeHandler} 转为 PG vector）
      */
+    @TableField(typeHandler = PgVectorTypeHandler.class)
     private String embedding;
 
     /**

@@ -3,7 +3,7 @@ spring:
 #    driver-class-name: org.postgresql.Driver # 数据库驱动类名
 #    url: jdbc:postgresql://localhost:5432/robot # 数据库连接 URL
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver # 数据库驱动类名
-    url: jdbc:p6spy:postgresql://localhost:5432/postgres # 数据库连接 URL
+    url: jdbc:p6spy:postgresql://localhost:5432/postgres?currentSchema=cv # 数据库连接 URL
     username: postgres # 数据库用户名
     password: postgres # 数据库密码
     hikari: # HikariCP 连接池配置

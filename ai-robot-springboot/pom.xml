@@ -12,19 +12,21 @@
     <groupId>com.quanxiaoha</groupId>
     <artifactId>ai-robot</artifactId>
     <version>${revision}</version>
-    <name>xiaoha-ai-robot-springboot</name>
-    <description>小哈 AI 机器人</description>
+    <name>it-cv</name>
+    <description>it-cv</description>
 
 
 
 
     <properties>
-        <!-- JDK 版本 -->
+        <!-- JDK 鐗堟湰 -->
         <java.version>21</java.version>
-        <!-- Spring AI 版本 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Spring AI 鐗堟湰 -->
 <!--        <spring-ai.version>1.0.0</spring-ai.version>-->
         <spring-ai.version>1.1.1</spring-ai.version>
-        <!-- 常用工具类 -->
+        <!-- 甯哥敤宸ュ叿绫?-->
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-io.version>2.20.0</commons-io.version>
         <lombok.version>1.18.30</lombok.version>
@@ -35,14 +37,19 @@
         <okhttp.version>4.12.0</okhttp.version>
         <jsoup.version>1.17.2</jsoup.version>
         <hutool.version>5.8.39</hutool.version>
-        <!-- 简历 PDF / DOCX 解析 -->
+        <!-- 绠€鍘?PDF / DOCX 瑙ｆ瀽 -->
         <pdfbox.version>3.0.3</pdfbox.version>
         <poi.version>5.3.0</poi.version>
     </properties>
 
-    <!-- 依赖管理   -->
+    <!-- 渚濊禆绠＄悊   -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dashscope-sdk-java</artifactId>
+                <version>2.20.6</version>
+            </dependency>
             <!-- Spring AI  -->
             <dependency>
                 <groupId>org.springframework.ai</groupId>
@@ -64,6 +71,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+            <version>1.1.2.0</version>
+            <exclusions>
+                <!-- 排除默认的 Logback 依赖 -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
@@ -75,19 +94,19 @@
             </exclusions>
         </dependency>
 
-        <!-- Log4j2 日志 -->
+        <!-- Log4j2 鏃ュ織 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
-        <!-- 参数校验 -->
+        <!-- 鍙傛暟鏍￠獙 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- 健康检查与运行指标（/actuator/health 等） -->
+        <!-- 鍋ュ悍妫€鏌ヤ笌杩愯鎸囨爣锛?actuator/health 绛夛級 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -99,7 +118,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 相关工具类 -->
+        <!-- 鐩稿叧宸ュ叿绫?-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -125,7 +144,7 @@
             <version>${hutool.version}</version>
         </dependency>
 
-        <!-- 避免编写那些冗余的 Java 样板式代码，如 get、set 方法等 -->
+        <!-- 閬垮厤缂栧啓閭ｄ簺鍐椾綑鐨?Java 鏍锋澘寮忎唬鐮侊紝濡?get銆乻et 鏂规硶绛?-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -144,26 +163,26 @@
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
 
-        <!-- 分页插件 -->
+        <!-- 鍒嗛〉鎻掍欢 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
 
-        <!-- PostgreSQL 驱动 -->
+        <!-- PostgreSQL 椹卞姩 -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <!-- p6spy 组件 -->
+        <!-- p6spy 缁勪欢 -->
         <dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
             <version>${p6spy.version}</version>
         </dependency>
 
-        <!-- AOP 切面 -->
+        <!-- AOP 鍒囬潰 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -183,25 +202,25 @@
             <version>${jsoup.version}</version>
         </dependency>
 
-        <!-- PGvector 向量化存储 -->
+        <!-- PGvector 鍚戦噺鍖栧瓨鍌?-->
 <!--        <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
         </dependency>-->
 
-        <!-- 读取 Markdown -->
+        <!-- 璇诲彇 Markdown -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-markdown-document-reader</artifactId>
         </dependency>
 
-        <!-- 简历 PDF 文本提取 -->
+        <!-- 绠€鍘?PDF 鏂囨湰鎻愬彇 -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>${pdfbox.version}</version>
         </dependency>
-        <!-- 简历 DOCX 文本提取 -->
+        <!-- 绠€鍘?DOCX 鏂囨湰鎻愬彇 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -240,7 +259,7 @@
             </snapshots>
         </repository>
 
-        <!-- 添加华为云、阿里云 maven 中央仓库，提升 Jar 包下载速度 -->
+        <!-- 娣诲姞鍗庝负浜戙€侀樋閲屼簯 maven 涓ぎ浠撳簱锛屾彁鍗?Jar 鍖呬笅杞介€熷害 -->
         <repository>
             <id>huaweicloud</id>
             <name>huawei</name>
@@ -254,3 +273,5 @@
     </repositories>
 
 </project>
+
+

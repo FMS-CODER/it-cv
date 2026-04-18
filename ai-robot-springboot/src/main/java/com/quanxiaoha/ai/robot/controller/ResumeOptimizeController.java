@@ -17,6 +17,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.quanxiaoha.ai.robot.service.ChatService;
+import com.quanxiaoha.ai.robot.service.ResumeKnowledgeRagService;
 
 /**
  * @Author: 小明
@@ -37,7 +39,7 @@ import com.quanxiaoha.ai.robot.service.ChatService;
 @CrossOrigin(origins = "http://localhost:5174", allowCredentials = "true")
 public class ResumeOptimizeController {
 
-    @Resource
+    @Resource(name = "deepSeekChatModel")
     private ChatModel chatModel;
 
     @Resource
@@ -45,6 +47,9 @@ public class ResumeOptimizeController {
 
     @Resource
     private ChatService chatService;
+
+    @Resource
+    private ResumeKnowledgeRagService resumeKnowledgeRagService;
 
     /**
      * 上传简历文件
@@ -148,15 +153,25 @@ public class ResumeOptimizeController {
      * @return 流式输出的优化建议
      */
     @PostMapping(value = "/optimize", produces = "text/event-stream;charset=utf-8")
-    public Flux<String> optimizeResume(
-            @RequestBody Map<String, String> params) {
-        
-        String resumeText = params.get("resumeText");
-        String targetPosition = params.get("targetPosition");
-        String additionalRequirements = params.get("additionalRequirements");
-        
-        // 构建提示词
+    public Flux<String> optimizeResume(@RequestBody Map<String, Object> params) {
+
+        String resumeText = stringParam(params.get("resumeText"));
+        String targetPosition = stringParam(params.get("targetPosition"));
+        String additionalRequirements = stringParam(params.get("additionalRequirements"));
+        boolean knowledgeRag = boolParam(params.get("knowledgeRag"));
+        String kbCategory = stringParam(params.get("kbCategory"));
+        int kbTopK = intParam(params.get("kbTopK"), 5);
+
+        // 构建提示词（可选：双路知识库 RAG 置于最前，便于模型优先参考）
         StringBuilder promptBuilder = new StringBuilder();
+        if (knowledgeRag) {
+            String rag = resumeKnowledgeRagService.buildResumeOptimizeRagContext(
+                    targetPosition, resumeText, additionalRequirements,
+                    StringUtils.isBlank(kbCategory) ? null : kbCategory, kbTopK);
+            if (StringUtils.isNotBlank(rag)) {
+                promptBuilder.append(rag).append("\n\n---\n\n");
+            }
+        }
         promptBuilder.append("你是一位专业的简历优化专家。\n\n");
         promptBuilder.append("请帮我优化以下简历，目标岗位是：").append(targetPosition).append("\n\n");
         if (additionalRequirements != null && !additionalRequirements.isEmpty()) {
@@ -219,6 +234,34 @@ public class ResumeOptimizeController {
                     // 返回 JSON 格式，Spring 会自动添加 data: 前缀
                     return "{\"v\": \"" + escapeJson(text) + "\"}";
                 });
+    }
+
+    private static String stringParam(Object v) {
+        return v == null ? "" : String.valueOf(v);
+    }
+
+    private static boolean boolParam(Object v) {
+        if (v == null) {
+            return false;
+        }
+        if (v instanceof Boolean b) {
+            return b;
+        }
+        return "true".equalsIgnoreCase(String.valueOf(v).trim());
+    }
+
+    private static int intParam(Object v, int defaultVal) {
+        if (v == null) {
+            return defaultVal;
+        }
+        if (v instanceof Number n) {
+            return n.intValue();
+        }
+        try {
+            return Integer.parseInt(String.valueOf(v).trim());
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
     }
 
     /**

@@ -9,6 +9,11 @@ spring:
       max-file-size: 50MB # 单个文件最大大小
       max-request-size: 50MB # 请求最大大小
   ai:
+    dashscope:
+      api-key: sk-513d15bb71f3408fbfb02232bbbb23fe   # 从环境变量读取，避免硬编码
+      embedding:
+        options:
+          model: text-embedding-v2      # 可选: v1/v2/v3/v4
     deepseek:
       api-key: sk-793594295dcc4ef988f43a6b83ba70cb # 填写 DeepSeek Api Key, 改成你自己的
       base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com

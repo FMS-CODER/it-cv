@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/v1/ai")
 public class DeepSeekR1ChatController {
 
-    @Resource
+    @Resource(name = "deepSeekChatModel")
     private ChatModel chatModel;
 
     /**
