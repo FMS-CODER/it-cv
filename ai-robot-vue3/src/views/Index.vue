@@ -29,6 +29,14 @@
             >
               知识库
             </button>
+            <button
+              type="button"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="ui.activeTab === 'metrics' ? 'bg-purple-100 text-purple-800' : 'text-gray-600 hover:bg-gray-100'"
+              @click="openMetricsTab"
+            >
+              指标验证
+            </button>
           </div>
 
           <!-- ========== 简历优化 ========== -->
@@ -108,18 +116,8 @@
                   ></textarea>
                 </div>
 
-                <div class="mb-4 flex flex-wrap items-center gap-4 p-3 bg-amber-50 rounded-lg border border-amber-100">
-                  <label class="flex items-center gap-2 text-sm cursor-pointer select-none">
-                    <input v-model="enableResumeKbRag" type="checkbox" class="rounded border-gray-300" />
-                    <span>启用知识库 RAG（输入：岗位+简历摘要 · 输出：岗位+要求+写作要点）</span>
-                  </label>
-                  <div v-if="enableResumeKbRag" class="flex items-center gap-2">
-                    <span class="text-sm text-gray-600">检索分类</span>
-                    <select v-model="resumeKbCategory" class="text-sm border border-gray-300 rounded-lg px-2 py-1 bg-white">
-                      <option value="">全部分类</option>
-                      <option v-for="c in kbCategoryOptions" :key="'rkbc-' + c" :value="c">{{ c }}</option>
-                    </select>
-                  </div>
+                <div class="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-100 text-sm text-amber-800">
+                  当前由 Agent 自动判断是否检索知识库与联网搜索，无需手动切换。
                 </div>
 
                 <button
@@ -443,6 +441,155 @@
             </div>
           </template>
 
+          <!-- ========== 指标验证 ========== -->
+          <template v-else-if="ui.activeTab === 'metrics'">
+            <div class="space-y-5">
+              <div class="bg-white rounded-xl shadow p-5">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <h2 class="text-xl font-bold text-gray-800">统一 Agent 指标验证</h2>
+                    <p class="text-sm text-gray-500 mt-1">查看能力基线、运行指标，并执行 RAG / 联网搜索 / SSE 对话评测。</p>
+                  </div>
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded-lg text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-60"
+                    :disabled="metricsLoading"
+                    @click="loadMetricsDashboard"
+                  >
+                    {{ metricsLoading ? '刷新中...' : '刷新基线' }}
+                  </button>
+                </div>
+
+                <div v-if="metricsBaseline" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  <div class="p-3 rounded-lg bg-gray-50">
+                    <div class="font-medium text-gray-700 mb-2">能力基线</div>
+                    <div class="space-y-1 text-gray-600">
+                      <div>统一编排：{{ metricsBaseline.unifiedOrchestrator ? '已就绪' : '未就绪' }}</div>
+                      <div>Planner：{{ metricsBaseline.plannerEnabled ? '已就绪' : '未就绪' }}</div>
+                      <div>RAG：{{ metricsBaseline.ragEnabled ? '已就绪' : '未就绪' }}</div>
+                      <div>pgvector：{{ metricsBaseline.pgvectorReady ? '已就绪' : '未就绪' }}</div>
+                      <div>SearXNG：{{ metricsBaseline.searxngConfigured ? '已就绪' : '未就绪' }}</div>
+                    </div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-gray-50">
+                    <div class="font-medium text-gray-700 mb-2">链路信息</div>
+                    <div class="space-y-1 text-gray-600">
+                      <div>支持场景：{{ (metricsBaseline.supportedScenes || []).join(' / ') }}</div>
+                      <div>核心步骤：{{ (metricsBaseline.coreSteps || []).length }} 个</div>
+                      <div>数据库：{{ metricsBaseline.datasourceUrl || '-' }}</div>
+                      <div>SearXNG：{{ metricsBaseline.searxngUrl || '-' }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow p-5">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                    :disabled="ragBenchmarking"
+                    @click="runRagBenchmark"
+                  >
+                    {{ ragBenchmarking ? 'RAG 评测中...' : '执行 RAG 评测' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded-lg text-sm font-medium bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
+                    :disabled="webBenchmarking"
+                    @click="runWebBenchmark"
+                  >
+                    {{ webBenchmarking ? '联网评测中...' : '执行联网搜索评测' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                    :disabled="chatBenchmarking"
+                    @click="runChatBenchmark"
+                  >
+                    {{ chatBenchmarking ? '对话评测中...' : '执行 SSE 对话评测' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded-lg text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-60"
+                    :disabled="reportLoading"
+                    @click="generateMetricReport"
+                  >
+                    {{ reportLoading ? '生成中...' : '生成报告与简历条目' }}
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                  <div class="p-3 rounded-lg bg-blue-50" v-if="ragBenchmark">
+                    <div class="font-medium text-blue-800 mb-2">RAG</div>
+                    <div class="text-blue-700">TopK：{{ ragBenchmark.topK }}</div>
+                    <div class="text-blue-700">双路平均耗时：{{ ragBenchmark.dualRoute?.stats?.avgMs ?? 0 }} ms</div>
+                    <div class="text-blue-700">双路提升：{{ ragBenchmark.dualVsSingleCoverageLift ?? 0 }} 个百分点</div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-green-50" v-if="webBenchmark">
+                    <div class="font-medium text-green-800 mb-2">联网搜索</div>
+                    <div class="text-green-700">TopK：{{ webBenchmark.topK }}</div>
+                    <div class="text-green-700">平均耗时：{{ webBenchmark.totalStats?.avgMs ?? 0 }} ms</div>
+                    <div class="text-green-700">近似 Token 压缩率：{{ webBenchmark.totalStats?.avgScore ?? 0 }}%</div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-indigo-50" v-if="chatBenchmark">
+                    <div class="font-medium text-indigo-800 mb-2">SSE 对话</div>
+                    <div class="text-indigo-700">首包均值：{{ chatBenchmark.firstTokenStats?.avgMs ?? 0 }} ms</div>
+                    <div class="text-indigo-700">完整响应均值：{{ chatBenchmark.responseStats?.avgMs ?? 0 }} ms</div>
+                    <div class="text-indigo-700">降级成功率：{{ chatBenchmark.fallbackSuccessRate ?? 0 }}%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow p-5" v-if="metricsRuns.length > 0">
+                <div class="font-medium text-gray-800 mb-3">最近运行指标</div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-left">
+                    <thead class="text-gray-500 border-b">
+                      <tr>
+                        <th class="py-2 pr-3">场景</th>
+                        <th class="py-2 pr-3">首包</th>
+                        <th class="py-2 pr-3">总耗时</th>
+                        <th class="py-2 pr-3">输出长度</th>
+                        <th class="py-2 pr-3">模式</th>
+                        <th class="py-2 pr-3">降级</th>
+                        <th class="py-2 pr-3">成功</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in metricsRuns" :key="item.requestId" class="border-b last:border-b-0">
+                        <td class="py-2 pr-3 text-gray-700">{{ item.scene }}</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.firstTokenLatencyMs }} ms</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.totalDurationMs }} ms</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.outputChars }}</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.toolMode || '-' }}</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.fallbackTriggered ? '是' : '否' }}</td>
+                        <td class="py-2 pr-3 text-gray-700">{{ item.success ? '是' : '否' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow p-5" v-if="metricReport">
+                <div class="font-medium text-gray-800 mb-3">指标报告</div>
+                <StreamMarkdownRender :content="metricReport.markdown || ''" />
+                <div class="mt-5" v-if="(metricReport.resumeBullets || []).length > 0">
+                  <div class="font-medium text-gray-800 mb-2">简历条目</div>
+                  <div class="space-y-2">
+                    <div
+                      v-for="(item, idx) in metricReport.resumeBullets"
+                      :key="'resume-bullet-' + idx"
+                      class="p-3 rounded-lg bg-purple-50 text-sm text-purple-900"
+                    >
+                      {{ item }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+
           <!-- ========== 智能对话（PostgreSQL 历史） ========== -->
           <template v-else>
             <div v-if="chatSession.chatMessages.length === 0" class="flex flex-col items-center justify-center min-h-[50vh] py-8 text-center text-gray-500">
@@ -489,24 +636,8 @@
         <!-- 底部输入：仅在「智能对话」Tab 显示 -->
         <div v-if="ui.activeTab === 'chat'" class="sticky max-w-4xl mx-auto bg-white bottom-8 left-0 w-full px-4">
           <div class="flex flex-wrap items-center gap-3 mb-2">
-            <button
-              type="button"
-              :class="['px-3 py-1 rounded text-sm', enableSearch ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600']"
-              @click="enableSearch = !enableSearch"
-            >
-              {{ enableSearch ? '已联网' : '联网搜索' }}
-            </button>
-            <label class="flex items-center gap-2 px-3 py-1 rounded text-sm cursor-pointer select-none"
-              :class="enableKbRag ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'">
-              <input v-model="enableKbRag" type="checkbox" class="rounded border-gray-300" @click.stop />
-              <span>知识库 RAG</span>
-            </label>
-            <div v-if="enableKbRag" class="flex items-center gap-2">
-              <span class="text-xs text-gray-500">分类</span>
-              <select v-model="chatKbCategory" class="text-sm border border-gray-300 rounded-lg px-2 py-1 bg-white max-w-[9rem]">
-                <option value="">全部</option>
-                <option v-for="c in kbCategoryOptions" :key="'ckbc-' + c" :value="c">{{ c }}</option>
-              </select>
+            <div class="px-3 py-1 rounded text-sm bg-blue-50 text-blue-700">
+              Agent 会自动决定是否联网搜索和检索知识库
             </div>
             <button
               type="button"
@@ -532,7 +663,7 @@ import StreamMarkdownRender from '@/components/StreamMarkdownRender.vue'
 import LoadingDots from '@/components/LoadingDots.vue'
 import Layout from '@/layouts/Layout.vue'
 import ChatInputBox from '@/components/ChatInputBox.vue'
-import { resumeApi, chatApi, knowledgeApi } from '@/api'
+import { resumeApi, chatApi, knowledgeApi, metricsApi } from '@/api'
 import { useUiStore } from '@/stores/ui'
 import { useChatSessionStore } from '@/stores/chatSession'
 
@@ -542,13 +673,6 @@ const chatSession = useChatSessionStore()
 const message = ref('')
 const chatContainer = ref(null)
 const optimizeList = ref([])
-const enableSearch = ref(false)
-/** 智能对话：是否注入知识库双路 RAG */
-const enableKbRag = ref(false)
-const chatKbCategory = ref('')
-/** 简历优化：是否注入知识库双路 RAG */
-const enableResumeKbRag = ref(false)
-const resumeKbCategory = ref('')
 let abortController = null
 const chatSending = ref(false)
 
@@ -600,6 +724,18 @@ const kbSearchTopK = ref(5)
 const kbSearching = ref(false)
 const kbSearchExecuted = ref(false)
 const kbSearchResults = ref([])
+
+const metricsLoading = ref(false)
+const metricsBaseline = ref(null)
+const metricsRuns = ref([])
+const ragBenchmarking = ref(false)
+const ragBenchmark = ref(null)
+const webBenchmarking = ref(false)
+const webBenchmark = ref(null)
+const chatBenchmarking = ref(false)
+const chatBenchmark = ref(null)
+const reportLoading = ref(false)
+const metricReport = ref(null)
 
 const triggerFileInput = () => fileInput.value?.click()
 
@@ -656,10 +792,7 @@ const startOptimize = async () => {
       {
         resumeText: resumeText.value,
         targetPosition: targetPosition.value,
-        additionalRequirements: additionalRequirements.value,
-        knowledgeRag: enableResumeKbRag.value,
-        kbCategory: resumeKbCategory.value || undefined,
-        kbTopK: 5
+        additionalRequirements: additionalRequirements.value
       },
       {
         signal: abortController.signal,
@@ -757,11 +890,7 @@ const sendMessage = async (payload) => {
     await chatApi.completionStream(
       {
         message: text,
-        chatId: uuid,
-        networkSearch: enableSearch.value,
-        knowledgeRag: enableKbRag.value,
-        kbCategory: chatKbCategory.value || undefined,
-        kbTopK: 5
+        chatId: uuid
       },
       {
         signal: abortController.signal,
@@ -844,6 +973,113 @@ const openKbTab = () => {
   ui.setTab('kb')
   if (kbList.value.length === 0) {
     fetchKbList(1)
+  }
+}
+
+const loadMetricsDashboard = async () => {
+  metricsLoading.value = true
+  try {
+    const [baselineRes, runsRes] = await Promise.all([
+      metricsApi.baseline({ recentLimit: 10 }),
+      metricsApi.recentRuns({ limit: 10 })
+    ])
+    if (baselineRes.success) {
+      metricsBaseline.value = baselineRes.data
+    } else {
+      antMessage.error(baselineRes.message || '加载基线失败')
+    }
+    if (runsRes.success) {
+      metricsRuns.value = runsRes.data || []
+    } else {
+      antMessage.error(runsRes.message || '加载运行指标失败')
+    }
+  } catch (e) {
+    console.error(e)
+    antMessage.error(e.message || '加载指标失败')
+  } finally {
+    metricsLoading.value = false
+  }
+}
+
+const openMetricsTab = async () => {
+  ui.setTab('metrics')
+  if (!metricsBaseline.value) {
+    await loadMetricsDashboard()
+  }
+}
+
+const runRagBenchmark = async () => {
+  ragBenchmarking.value = true
+  try {
+    const res = await metricsApi.ragBenchmark({ topK: 5 })
+    if (!res.success) {
+      antMessage.error(res.message || 'RAG 评测失败')
+      return
+    }
+    ragBenchmark.value = res.data
+    antMessage.success('RAG 评测完成')
+    await loadMetricsDashboard()
+  } catch (e) {
+    console.error(e)
+    antMessage.error(e.message || 'RAG 评测失败')
+  } finally {
+    ragBenchmarking.value = false
+  }
+}
+
+const runWebBenchmark = async () => {
+  webBenchmarking.value = true
+  try {
+    const res = await metricsApi.webBenchmark({ topK: 3 })
+    if (!res.success) {
+      antMessage.error(res.message || '联网搜索评测失败')
+      return
+    }
+    webBenchmark.value = res.data
+    antMessage.success('联网搜索评测完成')
+    await loadMetricsDashboard()
+  } catch (e) {
+    console.error(e)
+    antMessage.error(e.message || '联网搜索评测失败')
+  } finally {
+    webBenchmarking.value = false
+  }
+}
+
+const runChatBenchmark = async () => {
+  chatBenchmarking.value = true
+  try {
+    const res = await metricsApi.chatBenchmark({ modelName: 'deepseek-reasoner', temperature: 0.8 })
+    if (!res.success) {
+      antMessage.error(res.message || 'SSE 对话评测失败')
+      return
+    }
+    chatBenchmark.value = res.data
+    antMessage.success('SSE 对话评测完成')
+    await loadMetricsDashboard()
+  } catch (e) {
+    console.error(e)
+    antMessage.error(e.message || 'SSE 对话评测失败')
+  } finally {
+    chatBenchmarking.value = false
+  }
+}
+
+const generateMetricReport = async () => {
+  reportLoading.value = true
+  try {
+    const res = await metricsApi.report()
+    if (!res.success) {
+      antMessage.error(res.message || '生成报告失败')
+      return
+    }
+    metricReport.value = res.data
+    antMessage.success('报告已生成')
+  } catch (e) {
+    console.error(e)
+    antMessage.error(e.message || '生成报告失败')
+  } finally {
+    reportLoading.value = false
   }
 }
 

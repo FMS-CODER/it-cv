@@ -28,13 +28,20 @@ public class AiChatReqVO {
     private String chatId;
 
     /**
+     * 指标追踪 ID（可选）
+     */
+    private String traceId;
+
+    /**
      * 联网搜索
      */
+    @Builder.Default
     private Boolean networkSearch = false;
 
     /**
      * 是否启用简历知识库 RAG（双路向量检索后写入系统提示）
      */
+    @Builder.Default
     private Boolean knowledgeRag = false;
 
     /**
@@ -45,7 +52,26 @@ public class AiChatReqVO {
     /**
      * 知识库合并检索 Top-K（可选，默认 5）
      */
+    @Builder.Default
     private Integer kbTopK = 5;
+
+    /**
+     * 是否启用搜索工具调用（知识库 / 联网）
+     */
+    @Builder.Default
+    private Boolean searchToolEnabled = false;
+
+    /**
+     * 是否启用受控 Planner（当前仅主对话场景生效）
+     */
+    @Builder.Default
+    private Boolean agentPlanner = false;
+
+    /**
+     * Agent 最大步数（包括 Planner / Tool 降级等步骤）
+     */
+    @Builder.Default
+    private Integer maxAgentSteps = 3;
 
     @NotBlank(message = "调用的 AI 大模型名称不能为空")
     private String modelName;
@@ -53,5 +79,6 @@ public class AiChatReqVO {
     /**
      * 温度值，默认为 0.7
      */
+    @Builder.Default
     private Double temperature = 0.7;
 }

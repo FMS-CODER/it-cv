@@ -1,38 +1,20 @@
 package com.quanxiaoha.ai.robot.controller;
 
-import com.google.common.collect.Lists;
-import com.quanxiaoha.ai.robot.advisor.CustomChatMemoryAdvisor;
-import com.quanxiaoha.ai.robot.advisor.CustomStreamLoggerAndMessage2DBAdvisor;
-import com.quanxiaoha.ai.robot.advisor.NetworkSearchAdvisor;
+import com.quanxiaoha.ai.robot.agent.service.AgentOrchestrator;
 import com.quanxiaoha.ai.robot.aspect.ApiOperationLog;
-import com.quanxiaoha.ai.robot.domain.mapper.ChatMapper;
-import com.quanxiaoha.ai.robot.domain.mapper.ChatMessageMapper;
 import com.quanxiaoha.ai.robot.model.vo.chat.*;
 import com.quanxiaoha.ai.robot.service.ChatService;
-import com.quanxiaoha.ai.robot.service.ResumeKnowledgeRagService;
-import com.quanxiaoha.ai.robot.service.SearXNGService;
-import com.quanxiaoha.ai.robot.service.SearchResultContentFetcherService;
 import com.quanxiaoha.ai.robot.utils.PageResponse;
 import com.quanxiaoha.ai.robot.utils.Response;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.api.Advisor;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -48,33 +30,9 @@ public class ChatController {
 
     @Resource
     private ChatService chatService;
-    @Value("${spring.ai.deepseek.base-url:https://api.deepseek.com}")
-    private String baseUrl;
-    @Value("${spring.ai.deepseek.api-key}")
-    private String apiKey;
 
     @Resource
-    private ChatMapper chatMapper;
-    @Resource
-    private ChatMessageMapper chatMessageMapper;
-    @Resource
-    private TransactionTemplate transactionTemplate;
-    @Resource
-    private SearXNGService searXNGService;
-    @Resource
-    private SearchResultContentFetcherService searchResultContentFetcherService;
-    @Resource(name = "deepSeekChatModel")
-    private ChatModel chatModel;
-
-    @Resource
-    private ResumeKnowledgeRagService resumeKnowledgeRagService;
-
-    /**
-     * 启用知识库 RAG 时的系统角色说明（与检索片段一起注入）
-     */
-    private static final String CHAT_RAG_SYSTEM_PREFIX = """
-            你是一位专业的简历优化与职业发展顾问，擅长简历结构、项目与工作经历表述、面试准备与求职策略。
-            当下方提供【知识库 RAG】片段时，请优先结合这些片段作答，保持建议可落地；片段不足时再补充通用经验，不要编造知识库中不存在的事实。""";
+    private AgentOrchestrator agentOrchestrator;
 
     @PostMapping("/new")
     @ApiOperationLog(description = "新建对话")
@@ -89,90 +47,7 @@ public class ChatController {
     @PostMapping(value = "/completion", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ApiOperationLog(description = "流式对话")
     public Flux<AIResponse> chat(@RequestBody @Validated AiChatReqVO aiChatReqVO) {
-        // 用户消息
-        String userMessage = aiChatReqVO.getMessage();
-        // 模型名称
-        String modelName = aiChatReqVO.getModelName();
-        // 温度值
-        Double temperature = aiChatReqVO.getTemperature();
-        // 是否开启联网搜索
-        boolean networkSearch = aiChatReqVO.getNetworkSearch();
-        // 知识库 RAG（输入语义 + 输出补充 双路检索）
-        boolean knowledgeRag = Boolean.TRUE.equals(aiChatReqVO.getKnowledgeRag());
-        Integer kbTopK = aiChatReqVO.getKbTopK() == null ? 5 : aiChatReqVO.getKbTopK();
-        String kbCategory = aiChatReqVO.getKbCategory();
-
-        // 使用注入的 ChatModel（DeepSeek）
-        String ragBlock = knowledgeRag
-                ? resumeKnowledgeRagService.buildChatRagContext(userMessage, kbCategory, kbTopK)
-                : "";
-        ChatClient.ChatClientRequestSpec chatClientRequestSpec;
-        if (knowledgeRag) {
-            String systemText = CHAT_RAG_SYSTEM_PREFIX;
-            if (StringUtils.isNotBlank(ragBlock)) {
-                systemText = systemText + "\n\n" + ragBlock;
-            }
-            chatClientRequestSpec = ChatClient.create(chatModel)
-                    .prompt()
-                    .system(systemText)
-                    .user(userMessage);
-        } else {
-            chatClientRequestSpec = ChatClient.create(chatModel)
-                    .prompt()
-                    .user(userMessage);
-        }
-
-        // Advisor 集合
-        List<Advisor> advisors = Lists.newArrayList();
-
-        // 是否开启了联网搜索
-        if (networkSearch) {
-            advisors.add(new NetworkSearchAdvisor(searXNGService, searchResultContentFetcherService));
-        } else {
-            // 添加自定义对话记忆 Advisor（以最新的 50 条消息作为记忆）
-            advisors.add(new CustomChatMemoryAdvisor(chatMessageMapper, aiChatReqVO, 50));
-        }
-
-        // 添加自定义打印流式对话日志 Advisor
-        advisors.add(new CustomStreamLoggerAndMessage2DBAdvisor(chatMapper, chatMessageMapper, aiChatReqVO, transactionTemplate));
-
-        // 应用 Advisor 集合
-        chatClientRequestSpec.advisors(advisors);
-
-        // 流式输出
-//        return chatClientRequestSpec
-//                .stream()
-//                .content()
-//                .mapNotNull(text -> AIResponse.builder().v(text).build()); // 构建返参 AIResponse
-
-        // 流式输出
-        return chatClientRequestSpec
-                .stream()
-                .chatResponse()
-                .mapNotNull(chatResponse -> { // 构建返参 AIResponse
-                    if (Objects.nonNull(chatResponse) && Objects.nonNull(chatResponse.getResult())) {
-                        // 获取 AI 回复的消息
-                        AssistantMessage message = chatResponse.getResult().getOutput();
-
-                        // 获取正式回答
-                        String text = message.getText();
-
-                        // 获取推理内容（如果存在，避免 metadata 为空导致 NPE）
-                        Object reasoningObj = message.getMetadata() != null
-                                ? message.getMetadata().get("reasoningContent") : null;
-                        String reasoningContent = reasoningObj != null ? reasoningObj.toString() : null;
-
-                        // 构建响应对象
-                        if (StringUtils.isNotBlank(reasoningContent)) {
-                            // 返回思考过程
-                            return AIResponse.builder().reasoning(reasoningContent).build();
-                        }
-
-                        return AIResponse.builder().v(text).build();
-                    }
-
-                    return null;
-                });
+        return agentOrchestrator.streamChat(aiChatReqVO);
     }
 
     @PostMapping("/list")

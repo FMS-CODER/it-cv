@@ -53,10 +53,6 @@ export const chatApi = {
     return request.stream('/chat/completion', {
       message: params.message,
       chatId: params.chatId,
-      networkSearch: params.networkSearch ?? false,
-      knowledgeRag: params.knowledgeRag ?? false,
-      kbCategory: params.kbCategory || undefined,
-      kbTopK: params.kbTopK ?? 5,
       modelName: params.modelName ?? CHAT_MODEL_NAME,
       temperature: params.temperature ?? 0.8
     }, options)
@@ -81,20 +77,6 @@ export const chatApi = {
   deleteChat({ uuid }) {
     return request.post('/chat/delete', { uuid })
   },
-
-  /**
-   * 普通对话（一次性返回）
-   */
-  generate(message) {
-    return request.get('/ai/generate', { message })
-  },
-
-  /**
-   * 流式对话（旧版 /ai/* 保留）
-   */
-  generateStream(message, chatId, options) {
-    return request.stream('/ai/generateStream', { message, chatId }, options)
-  }
 }
 
 /**
@@ -149,8 +131,33 @@ export const knowledgeApi = {
   }
 }
 
+/**
+ * Agent 指标验证
+ */
+export const metricsApi = {
+  baseline(payload = {}) {
+    return request.post('/agent-metrics/baseline', payload)
+  },
+  recentRuns(payload = {}) {
+    return request.post('/agent-metrics/runs/recent', payload)
+  },
+  ragBenchmark(payload = {}) {
+    return request.post('/agent-metrics/benchmark/rag', payload)
+  },
+  webBenchmark(payload = {}) {
+    return request.post('/agent-metrics/benchmark/web', payload)
+  },
+  chatBenchmark(payload = {}) {
+    return request.post('/agent-metrics/benchmark/chat', payload)
+  },
+  report() {
+    return request.post('/agent-metrics/report', {})
+  }
+}
+
 export default {
   resume: resumeApi,
   chat: chatApi,
-  knowledge: knowledgeApi
+  knowledge: knowledgeApi,
+  metrics: metricsApi
 }

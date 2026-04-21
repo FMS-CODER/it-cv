@@ -1,5 +1,7 @@
 package com.quanxiaoha.ai.robot.controller;
 
+import com.quanxiaoha.ai.robot.agent.model.ResumeOptimizeAgentRequest;
+import com.quanxiaoha.ai.robot.agent.service.AgentOrchestrator;
 import jakarta.annotation.Resource;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -9,24 +11,19 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.UUID;
-
-import com.quanxiaoha.ai.robot.service.ChatService;
-import com.quanxiaoha.ai.robot.service.ResumeKnowledgeRagService;
 
 /**
  * @Author: 小明
@@ -39,17 +36,8 @@ import com.quanxiaoha.ai.robot.service.ResumeKnowledgeRagService;
 @CrossOrigin(origins = "http://localhost:5174", allowCredentials = "true")
 public class ResumeOptimizeController {
 
-    @Resource(name = "deepSeekChatModel")
-    private ChatModel chatModel;
-
     @Resource
-    private ChatClient chatClient;
-
-    @Resource
-    private ChatService chatService;
-
-    @Resource
-    private ResumeKnowledgeRagService resumeKnowledgeRagService;
+    private AgentOrchestrator agentOrchestrator;
 
     /**
      * 上传简历文件
@@ -154,86 +142,19 @@ public class ResumeOptimizeController {
      */
     @PostMapping(value = "/optimize", produces = "text/event-stream;charset=utf-8")
     public Flux<String> optimizeResume(@RequestBody Map<String, Object> params) {
-
-        String resumeText = stringParam(params.get("resumeText"));
-        String targetPosition = stringParam(params.get("targetPosition"));
-        String additionalRequirements = stringParam(params.get("additionalRequirements"));
-        boolean knowledgeRag = boolParam(params.get("knowledgeRag"));
-        String kbCategory = stringParam(params.get("kbCategory"));
-        int kbTopK = intParam(params.get("kbTopK"), 5);
-
-        // 构建提示词（可选：双路知识库 RAG 置于最前，便于模型优先参考）
-        StringBuilder promptBuilder = new StringBuilder();
-        if (knowledgeRag) {
-            String rag = resumeKnowledgeRagService.buildResumeOptimizeRagContext(
-                    targetPosition, resumeText, additionalRequirements,
-                    StringUtils.isBlank(kbCategory) ? null : kbCategory, kbTopK);
-            if (StringUtils.isNotBlank(rag)) {
-                promptBuilder.append(rag).append("\n\n---\n\n");
-            }
-        }
-        promptBuilder.append("你是一位专业的简历优化专家。\n\n");
-        promptBuilder.append("请帮我优化以下简历，目标岗位是：").append(targetPosition).append("\n\n");
-        if (additionalRequirements != null && !additionalRequirements.isEmpty()) {
-            promptBuilder.append("额外要求：").append(additionalRequirements).append("\n\n");
-        }
-        promptBuilder.append("简历内容：\n").append(resumeText).append("\n\n");
-        promptBuilder.append("请从以下几个方面提供优化建议：\n");
-        promptBuilder.append("1. 简历结构和格式优化\n");
-        promptBuilder.append("2. 工作内容描述优化（使用 STAR 法则）\n");
-        promptBuilder.append("3. 技能亮点突出\n");
-        promptBuilder.append("4. 项目经验优化\n");
-        promptBuilder.append("5. 整体建议\n\n");
-        promptBuilder.append("请用 Markdown 格式输出，保持专业、详细的风格。");
-        
-        Prompt prompt = new Prompt(new UserMessage(promptBuilder.toString()));
-        
-        // 流式输出
-        return chatModel.stream(prompt)
-                .map(chatResponse -> chatResponse.getResult().getOutput().getText())
-                .map(text -> {
-                    // 返回 JSON 格式，Spring 会自动添加 data: 前缀
-                    return "{\"v\": \"" + escapeJson(text) + "\"}";
-                });
-    }
-
-    /**
-     * 智能对话（流式输出）
-     * @param message 用户消息
-     * @param chatId 会话 ID
-     * @param enableSearch 是否启用搜索
-     * @return 流式输出的回复
-     */
-    @PostMapping(value = "/chat", produces = "text/event-stream;charset=utf-8")
-    public Flux<String> chat(
-            @RequestBody Map<String, Object> params) {
-        
-        String message = (String) params.get("message");
-        String chatId = (String) params.get("chatId");
-        Boolean enableSearch = (Boolean) params.get("enableSearch");
-        
-        // 构建系统提示词
-        String systemPrompt = "你是一位专业的简历优化和职业发展顾问，专注于以下领域：\n" +
-                "1. 简历优化和修改建议\n" +
-                "2. 面试准备和技巧\n" +
-                "3. 职业发展规划\n" +
-                "4. 技能提升建议\n" +
-                "5. 求职策略\n\n" +
-                "请用专业、友好、详细的风格回答用户的问题。" +
-                "如果用户的问题与简历、求职、职业发展无关，请礼貌地引导用户回到这些主题。" +
-                (enableSearch != null && enableSearch ? " 你可以结合最新的行业动态和趋势来回答问题。" : "");
-        
-        // 使用 ChatClient 带记忆的对话
-        return chatClient.prompt()
-                .system(systemPrompt)
-                .user(message)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
-                .stream()
-                .content()
-                .map(text -> {
-                    // 返回 JSON 格式，Spring 会自动添加 data: 前缀
-                    return "{\"v\": \"" + escapeJson(text) + "\"}";
-                });
+        ResumeOptimizeAgentRequest request = ResumeOptimizeAgentRequest.builder()
+                .traceId(stringParam(params.get("traceId")))
+                .resumeText(stringParam(params.get("resumeText")))
+                .targetPosition(stringParam(params.get("targetPosition")))
+                .additionalRequirements(stringParam(params.get("additionalRequirements")))
+                .knowledgeRag(boolParam(params.get("knowledgeRag")))
+                .kbCategory(stringParam(params.get("kbCategory")))
+                .kbTopK(intParam(params.get("kbTopK"), 5))
+                .searchToolEnabled(boolParam(params.get("searchToolEnabled")))
+                .agentPlanner(boolParam(params.get("agentPlanner")))
+                .maxAgentSteps(intParam(params.get("maxAgentSteps"), 3))
+                .build();
+        return agentOrchestrator.streamResumeOptimize(request);
     }
 
     private static String stringParam(Object v) {
@@ -264,66 +185,4 @@ public class ResumeOptimizeController {
         }
     }
 
-    /**
-     * 转义 JSON 特殊字符
-     */
-    private String escapeJson(String text) {
-        if (text == null) {
-            return "";
-        }
-        return text.replace("\\", "\\\\")
-                  .replace("\"", "\\\"")
-                  .replace("\n", "\\n")
-                  .replace("\r", "\\r")
-                  .replace("\t", "\\t");
-    }
-
-    /**
-     * 新建对话
-     */
-    @PostMapping("/chat/new")
-    public ResponseEntity<Map<String, Object>> newChat() {
-        try {
-            String chatId = UUID.randomUUID().toString();
-            return ResponseEntity.ok(Map.of(
-                "success", true,
-                "chatId", chatId
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of(
-                "success", false,
-                "error", "创建对话失败：" + e.getMessage()
-            ));
-        }
-    }
-
-    /**
-     * 获取历史对话列表
-     */
-    @GetMapping("/chat/history")
-    public Map<String, Object> getChatHistory() {
-        // 暂时返回空列表，后续可以从数据库查询
-        return Map.of(
-            "success", true,
-            "list", new java.util.ArrayList<>()
-        );
-    }
-
-    /**
-     * 删除对话
-     */
-    @DeleteMapping("/chat/{chatId}")
-    public ResponseEntity<Map<String, Object>> deleteChat(@PathVariable String chatId) {
-        try {
-            // 暂时只返回成功，后续可以实现真实的删除逻辑
-            return ResponseEntity.ok(Map.of(
-                "success", true
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of(
-                "success", false,
-                "error", "删除对话失败：" + e.getMessage()
-            ));
-        }
-    }
 }
