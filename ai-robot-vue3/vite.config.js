@@ -34,10 +34,6 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
-      '/agent-metrics': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
       '/ai': {
         target: 'http://localhost:8080',
         changeOrigin: true,

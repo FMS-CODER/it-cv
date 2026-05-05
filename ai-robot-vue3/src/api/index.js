@@ -131,33 +131,8 @@ export const knowledgeApi = {
   }
 }
 
-/**
- * Agent 指标验证
- */
-export const metricsApi = {
-  baseline(payload = {}) {
-    return request.post('/agent-metrics/baseline', payload)
-  },
-  recentRuns(payload = {}) {
-    return request.post('/agent-metrics/runs/recent', payload)
-  },
-  ragBenchmark(payload = {}) {
-    return request.post('/agent-metrics/benchmark/rag', payload)
-  },
-  webBenchmark(payload = {}) {
-    return request.post('/agent-metrics/benchmark/web', payload)
-  },
-  chatBenchmark(payload = {}) {
-    return request.post('/agent-metrics/benchmark/chat', payload)
-  },
-  report() {
-    return request.post('/agent-metrics/report', {})
-  }
-}
-
 export default {
   resume: resumeApi,
   chat: chatApi,
-  knowledge: knowledgeApi,
-  metrics: metricsApi
+  knowledge: knowledgeApi
 }

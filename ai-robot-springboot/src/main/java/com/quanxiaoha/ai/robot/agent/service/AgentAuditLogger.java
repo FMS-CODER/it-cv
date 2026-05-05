@@ -3,14 +3,10 @@ package com.quanxiaoha.ai.robot.agent.service;
 import com.quanxiaoha.ai.robot.agent.model.AgentContext;
 import com.quanxiaoha.ai.robot.agent.model.AgentStepTrace;
 import com.quanxiaoha.ai.robot.agent.model.PlannerDecision;
-import com.quanxiaoha.ai.robot.metrics.AgentMetricsService;
-import com.quanxiaoha.ai.robot.metrics.AgentRunMetrics;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -19,9 +15,6 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class AgentAuditLogger {
-
-    @Resource
-    private AgentMetricsService agentMetricsService;
 
     public void recordRunStart(AgentContext context) {
         if (StringUtils.isBlank(context.getRequestId())) {
@@ -89,30 +82,6 @@ public class AgentAuditLogger {
         context.setErrorMessage(errorMessage);
         long totalDurationMs = context.getStartedAtMs() <= 0 ? 0L : Math.max(0L, System.currentTimeMillis() - context.getStartedAtMs());
         context.setTotalDurationMs(totalDurationMs);
-        AgentRunMetrics metrics = AgentRunMetrics.builder()
-                .requestId(context.getRequestId())
-                .scene(context.getScene())
-                .startedAtMs(context.getStartedAtMs())
-                .foundationDurationMs(context.getFoundationDurationMs())
-                .plannerDurationMs(context.getPlannerDurationMs())
-                .knowledgeSearchDurationMs(context.getKnowledgeSearchDurationMs())
-                .webSearchDurationMs(context.getWebSearchDurationMs())
-                .firstTokenLatencyMs(context.getFirstTokenLatencyMs())
-                .totalDurationMs(totalDurationMs)
-                .outputChunks(context.getOutputChunks())
-                .outputChars(context.getOutputChars())
-                .reasoningChars(context.getReasoningChars())
-                .toolMode(context.getToolMode())
-                .fallbackTriggered(context.isFallbackTriggered())
-                .success(success)
-                .errorMessage(errorMessage)
-                .knowledgeRagEnabled(context.isKnowledgeRag())
-                .networkSearchEnabled(context.isNetworkSearch())
-                .searchToolEnabled(context.isSearchToolEnabled())
-                .maxAgentSteps(context.getMaxAgentSteps())
-                .stepTraces(new ArrayList<>(context.getStepTraces()))
-                .build();
-        agentMetricsService.saveRun(metrics);
         log.info("Agent run finish: requestId={}, scene={}, success={}, total={}ms, firstToken={}ms, chunks={}, outputChars={}, reasoningChars={}, fallback={}, toolMode={}, error={}",
                 context.getRequestId(),
                 context.getScene(),
