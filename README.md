@@ -84,12 +84,9 @@ docker compose logs backend | grep -i "rerank\|react\|planner\|embedding\|searxn
 |------|------|
 | AgentOrchestratorImpl | 统一编排 Foundation → Planner → ReAct/Fallback/Standard |
 | AgentPlannerServiceImpl | 模型 JSON 决策，失败规则兜底 |
-| ResumeKnowledgeRagServiceImpl | 双路 RAG（检索→重排→截断→格式化） |
-| SearchToolFacadeImpl | 知识库搜索（含重排）+ 联网搜索门面 |
-| DashScopeRerankServiceImpl | GTE-ReRank 调用 |
-| RagTruncationService | 相似度阈值截断 |
+| ResumeKnowledgeRagServiceImpl |  RAG（检索→重排→截断→格式化） |
+| SearchToolFacadeImpl | 知识库搜索（含重排）+ 联网搜索 |
+| DashScopeRerankServiceImpl | 重排调用 |
 | SearXNGServiceImpl | SearXNG API 调用 |
-| SearchResultContentFetcherServiceImpl | 并发抓取 + Jsoup 清洗 |
 | SemanticChunker | 语义切分器 |
-| ContentExtractor | 正文提取 + 结构化清洗 |
 
