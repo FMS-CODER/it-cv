@@ -110,8 +110,5 @@ docker compose restart backend          # 重启服务
 
 ### 前端（ai-robot-vue3）
 
-Vue 3 + Vite + Ant Design Vue + Pinia + Tailwind CSS + Markdown-it
+Vue 3 + Vite + Ant Design Vue  + Tailwind CSS + Markdown-it
 
-### GitHub
-
-[https://github.com/FMS-CODER/it-cv](https://github.com/FMS-CODER/it-cv)
