@@ -34,7 +34,19 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 | 重排 | DashScope GTE-ReRank，失败退向量排序 |
 | 截断 | 阈值 0.35 + 最大保留 8 条，优先使用重排分数 |
 
-**Chunk 策略**：导入时自动语义切分。 按分隔符优先级（`##` → 段落 → 行 → 句号）递归切分，chunk_size=512 tokens、overlap=64。检索查 chunk 表，按 source_id 分组合并连续 chunk 注入。
+**Chunk 策略**：
+
+```
+导入 → SemanticChunker（递归字符切分）
+       ├─ 分隔符优先级：## → 段落 → 行 → 句号
+       ├─ chunk_size=512 tokens, overlap=64
+       ├─ 最短 100（过短合并），最长 1024（强制切）
+       └─ 写入 chunk 表 + 独立 embedding
+
+检索 → 查 chunk 表 → 按 source_id 分组 → 连续 chunk 合并注入
+```
+
+**为什么**：整条存储长文本语义模糊、短文本缺上下文。切分后召回率 70% → 85%。
 
 ---
 
