@@ -142,7 +142,6 @@ Planner 通过模型输出 JSON 决策：
 
 - **Chunk 策略**：按知识条目粒度存储，每条 content 为一个独立片段（人工编写，无需自动切分）
 - **Embedding 模型**：DashScope `text-embedding-v2`（1536 维）
-- **批量处理**：每批 16 条并发调用 DashScope API
 - **存储**：向量写入 pgvector `vector(1536)` 类型列
 
 ### 2.3 向量检索
