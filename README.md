@@ -34,7 +34,7 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 | 重排 | DashScope GTE-ReRank，失败退向量排序 |
 | 截断 | 阈值 0.35 + 最大保留 8 条，优先使用重排分数 |
 
-**Chunk 策略**：导入时自动语义切分。SemanticChunker 按分隔符优先级（`##` → 段落 → 行 → 句号）递归切分，chunk_size=512 tokens、overlap=64。检索查 chunk 表，按 source_id 分组合并连续 chunk 注入。召回率 70% → 85%。
+**Chunk 策略**：导入时自动语义切分。 按分隔符优先级（`##` → 段落 → 行 → 句号）递归切分，chunk_size=512 tokens、overlap=64。检索查 chunk 表，按 source_id 分组合并连续 chunk 注入。
 
 ---
 
@@ -47,14 +47,9 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
         ① 正文识别：提取 article/main，丢弃 nav/footer/ad
         ② 结构化清洗：保留 h1-h3/ul/ol/pre/code，过滤 Cookie 等模板文本
         ③ 智能截取：取前 3000 字符，段落边界截断
-    → 格式化注入 prompt
+    → 注入 prompt
 ```
 
-**效果**：噪音 40-60% → <10%，token 消耗降 80%，信息密度大幅提升。
-
-**两种注入路径**：
-- NetworkSearchAdvisor：搜索结果注入 user prompt，模型直接回答
-- SearchToolFacade.searchWeb：工具调用返回格式化文本，注入 ReAct 轨迹
 
 ---
 
@@ -161,19 +156,8 @@ Log4j2 已配置 RegexFilter，自动过滤客户端断开异常（`Broken pipe`
 |------|------|
 | AgentOrchestratorImpl | 统一编排 Foundation → Planner → ReAct/Fallback/Standard |
 | AgentPlannerServiceImpl | 模型 JSON 决策，失败规则兜底 |
-| ResumeKnowledgeRagServiceImpl | 双路 RAG（检索→重排→截断→格式化） |
-| SearchToolFacadeImpl | 知识库搜索（含重排）+ 联网搜索门面 |
-| DashScopeRerankServiceImpl | GTE-ReRank 调用 |
-| RagTruncationService | 相似度阈值截断 |
-| SearXNGServiceImpl | SearXNG API 调用 |
-| SearchResultContentFetcherServiceImpl | 并发抓取 + Jsoup 清洗 |
-| SemanticChunker | 语义切分器 |
-| ContentExtractor | 正文提取 + 结构化清洗 |
+| ResumeKnowledgeRagServiceImpl |  RAG（检索→重排→截断→格式化） |
+| SearchToolFacadeImpl | 知识库搜索（含重排）+ 联网搜索 |
+| DashScopeRerankServiceImpl | 重排调用 |
 
-### 前端
 
-Vue 3 + Vite + Ant Design Vue + Pinia + Tailwind CSS + Markdown-it
-
-### GitHub
-
-[https://github.com/FMS-CODER/it-cv](https://github.com/FMS-CODER/it-cv)
