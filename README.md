@@ -34,7 +34,7 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 | 重排 | DashScope GTE-ReRank，失败退向量排序 |
 | 截断 | 阈值 0.35 + 最大保留 8 条，优先使用重排分数 |
 
-**Chunk 策略**：导入时自动语义切分。SemanticChunker 按分隔符优先级（`##` → 段落 → 行 → 句号）递归切分，chunk_size=512 tokens、overlap=64。检索查 chunk 表，按 source_id 分组合并连续 chunk 注入。召回率 70% → 85%。
+**Chunk 策略**：导入时自动语义切分。 按分隔符优先级（`##` → 段落 → 行 → 句号）递归切分，chunk_size=512 tokens、overlap=64。检索查 chunk 表，按 source_id 分组合并连续 chunk 注入。
 
 ---
 
@@ -50,7 +50,6 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
     → 格式化注入 prompt
 ```
 
-**效果**：噪音 40-60% → <10%，token 消耗降 80%，信息密度大幅提升。
 
 **两种注入路径**：
 - NetworkSearchAdvisor：搜索结果注入 user prompt，模型直接回答
@@ -79,8 +78,6 @@ Frontend(Nginx:80) → Backend(Java:8080) → PostgreSQL(PGVector:5432)
 docker compose logs -f backend
 docker compose logs backend | grep -i error
 docker compose logs backend | grep -i "rerank\|react\|planner\|embedding\|searxng"
-docker exec -it cv-backend sh
-docker compose restart backend
 ```
 
 ---
@@ -100,10 +97,3 @@ docker compose restart backend
 | SemanticChunker | 语义切分器 |
 | ContentExtractor | 正文提取 + 结构化清洗 |
 
-### 前端
-
-Vue 3 + Vite + Ant Design Vue + Pinia + Tailwind CSS + Markdown-it
-
-### GitHub
-
-[https://github.com/FMS-CODER/it-cv](https://github.com/FMS-CODER/it-cv)
