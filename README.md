@@ -36,7 +36,7 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 | **双路检索** | Q1=原始输入 + Q2=原始输入+输出锚点，合并去重 |
 | **扩大召回** | topK × expandFactor(2)，给重排留候选空间 |
 | **重排** | DashScope GTE-ReRank，失败退回向量排序 |
-| **动态截断** | 阈值 0.35 + 最大保留 8 条，优先使用重排分数 |
+| **动态截断** | 阈值 0.35 + 使用重排分数 |
 
 **工具调用链路的 RAG**：`knowledge_search` 同样经过 扩大召回 → 向量检索 → 语义重排 → 相似度截断 → 格式化输出。
 
@@ -98,13 +98,9 @@ docker compose restart backend          # 重启服务
 | Prompt 构建 | PromptBuilderStep.java | 构建 system/user prompt |
 | 搜索工具门面 | SearchToolFacadeImpl.java | 知识库搜索(含重排) + 联网搜索 |
 | 搜索工具 | SearchAgentTools.java | @Tool 注解暴露给模型 |
-| RAG 服务 | ResumeKnowledgeRagServiceImpl.java | 双路检索 → 重排 → 截断 → 格式化 |
-| 知识库服务 | ResumeKnowledgeBaseServiceImpl.java | CRUD + Embedding + 向量检索 |
-| 重排服务 | DashScopeRerankServiceImpl.java | GTE-ReRank 调用 |
-| 截断服务 | RagTruncationService.java | 相似度阈值截断 |
+| RAG 服务 | ResumeKnowledgeRagServiceImpl.java | 检索 → 重排 → 截断  |
 | 联网搜索 | SearXNGServiceImpl.java | SearXNG API 调用 |
-| 内容抓取 | SearchResultContentFetcherServiceImpl.java | 并发抓取 + Jsoup 清洗 |
 | ReAct 模型 | ReActStep.java | 多工具调用轨迹记录 |
 | Agent 上下文 | AgentContext.java | 单次请求全量运行时上下文 |
-| 审计日志 | AgentAuditLogger.java | 全链路耗时/状态记录 |
+
 
