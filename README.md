@@ -47,7 +47,7 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
         ① 正文识别：提取 article/main，丢弃 nav/footer/ad
         ② 结构化清洗：保留 h1-h3/ul/ol/pre/code，过滤 Cookie 等模板文本
         ③ 智能截取：取前 3000 字符，段落边界截断
-    → 格式化注入 prompt
+    → 注入 prompt
 ```
 
 
