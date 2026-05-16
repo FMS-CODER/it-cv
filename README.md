@@ -108,7 +108,3 @@ docker compose restart backend          # 重启服务
 | Agent 上下文 | AgentContext.java | 单次请求全量运行时上下文 |
 | 审计日志 | AgentAuditLogger.java | 全链路耗时/状态记录 |
 
-### 前端（ai-robot-vue3）
-
-Vue 3 + Vite + Ant Design Vue  + Tailwind CSS + Markdown-it
-
