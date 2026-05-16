@@ -51,10 +51,6 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 ```
 
 
-**两种注入路径**：
-- NetworkSearchAdvisor：搜索结果注入 user prompt，模型直接回答
-- SearchToolFacade.searchWeb：工具调用返回格式化文本，注入 ReAct 轨迹
-
 ---
 
 ## 4. Docker 编排
