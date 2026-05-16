@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.0-pg17
+    container_name: cv-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: cv-searxng
+    restart: unless-stopped
+    ports:
+      - "8888:8080"
+    volumes:
+      - searxng-data:/etc/searxng
+    environment:
+      SEARXNG_BASE_URL: http://localhost:8888/
+    cap_add:
+      - CAP_NET_BIND_SERVICE
+    cap_drop:
+      - ALL
+
+  backend:
+    build:
+      context: ./ai-robot-springboot
+      dockerfile: Dockerfile
+    container_name: cv-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=cv,public
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SEARXNG_URL: http://searxng:8080/search
+      SPRING_AI_DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY}
+      SPRING_AI_DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./ai-robot-vue3
+      dockerfile: Dockerfile
+    container_name: cv-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  searxng-data:

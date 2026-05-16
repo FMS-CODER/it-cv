@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/postgres?currentSchema=cv,public
+    username: postgres
+    password: postgres
+    hikari:
+      pool-name: AI-Robot-HikariCP
+      auto-commit: true
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+  ai:
+    vectorstore:
+      pgvector:
+        enabled: false
+
+okhttp:
+  connect-timeout: 5000
+  read-timeout: 30000
+  write-timeout: 15000
+  max-idle-connections: 200
+  keep-alive-duration: 5
+
+searxng:
+  url: http://searxng:8080/search
+  count: 10
+
+rag:
+  rerank:
+    enabled: true
+    model: gte-rerank
+  truncation:
+    similarity-threshold: 0.35
+    max-top-k: 8
+  retrieval:
+    expand-factor: 2
