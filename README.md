@@ -78,77 +78,7 @@ Frontend(Nginx:80) → Backend(Java:8080) → PostgreSQL(PGVector:5432)
 | postgres | stdout | `docker compose logs postgres` | 容器内 `/var/log/postgresql/` |
 | searxng | stdout | `docker compose logs searxng` | 容器内 `/etc/searxng/` |
 
-### 日志查看命令
 
-```bash
-# 实时跟踪
-docker compose logs -f backend
-docker compose logs -f frontend
-docker compose logs -f postgres
-docker compose logs -f searxng
-
-# 查看最近 N 行
-docker compose logs --tail=200 backend
-
-# 按时间范围
-docker compose logs --since="10m" backend
-docker compose logs --since="2026-05-16T08:00" --until="2026-05-16T18:00" backend
-
-# 搜索关键词
-docker compose logs backend | grep -i error
-docker compose logs backend | grep -i "rerank\|react\|planner\|embedding\|searxng"
-
-# 进入容器查看日志文件
-docker exec -it cv-backend sh
-cat logs/application-2026-05-16.log
-cat logs/error-2026-05-16.log
-
-docker exec -it cv-frontend sh
-cat /var/log/nginx/access.log
-cat /var/log/nginx/error.log
-
-docker exec -it cv-postgres bash
-ls /var/log/postgresql/
-
-# 容器资源占用
-docker stats
-```
-
-### 后端关键日志关键词
-
-| 关键词 | 级别 | 含义 |
-|--------|------|------|
-| `Agent run start` | INFO | 单次 Agent 请求开始 |
-| `Agent step complete` | INFO | 各步骤执行完成（含耗时） |
-| `Agent planner decision` | INFO | Planner 决策结果 |
-| `Agent first token` | INFO | 首 token 延迟 |
-| `Agent run finish` | INFO | 请求完成（总耗时/成功/失败） |
-| `Agent tool calling fallback` | WARN | ReAct 失败，触发降级 |
-| `ReAct 循环异常` | ERROR | ReAct 循环抛出异常 |
-| `DashScope rerank` | WARN | 重排调用失败，退回向量排序 |
-| `DashScope 向量化` | WARN | Embedding 调用失败 |
-| `SearXNG 搜索结果` | INFO | 联网搜索结果原始 JSON |
-| `知识库 RAG 检索未成功` | WARN | 向量检索失败 |
-| `Planner 模型决策失败` | WARN | Planner JSON 解析失败，退回规则兜底 |
-
-### 常见问题排错
-
-| 问题 | 排查命令 | 常见原因 |
-|------|----------|----------|
-| 后端启动失败 | `docker compose logs backend` | 数据库连接失败 / API Key 未设置 / 端口冲突 |
-| 前端白屏 | `docker exec cv-frontend cat /var/log/nginx/error.log` | Nginx 代理配置错误 / backend 未启动 |
-| 502 Bad Gateway | `docker compose logs frontend \| grep "502"` | 后端无响应，检查 backend 日志 |
-| 知识库检索无结果 | `docker compose logs backend \| grep -i "embedding\|向量"` | Embedding 未生成 / 知识库为空 |
-| 重排不生效 | `docker compose logs backend \| grep -i "rerank"` | DashScope API Key 失效 / 模型返回异常 |
-| 联网搜索无结果 | `docker compose logs backend \| grep -i "searxng"` | SearXNG 未启动 / 搜索引擎不可达 |
-| ReAct 循环异常 | `docker compose logs backend \| grep -i "react\|ReAct"` | 模型返回格式异常 / maxReactSteps 耗尽 |
-| 日志磁盘占用过大 | `docker system df` → `docker system prune -f` | 日志驱动未限制大小 |
-
-### 降噪处理
-
-Log4j2 已配置 RegexFilter，自动过滤客户端断开异常（`Broken pipe`、`Connection reset by peer`），避免 SSE 断开时大量 ERROR 日志误导排障。
-
----
 
 ## 5. 代码模块
 
