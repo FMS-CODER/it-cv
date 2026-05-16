@@ -87,6 +87,5 @@ docker compose logs backend | grep -i "rerank\|react\|planner\|embedding\|searxn
 | ResumeKnowledgeRagServiceImpl |  RAG（检索→重排→截断→格式化） |
 | SearchToolFacadeImpl | 知识库搜索（含重排）+ 联网搜索 |
 | DashScopeRerankServiceImpl | 重排调用 |
-| SearXNGServiceImpl | SearXNG API 调用 |
-| SemanticChunker | 语义切分器 |
+
 
