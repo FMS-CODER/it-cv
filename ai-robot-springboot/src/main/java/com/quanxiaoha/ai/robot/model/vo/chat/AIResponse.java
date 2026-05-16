@@ -5,20 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author: 犬小哈
- * @Date: 2025/6/15 9:00
- * @Version: v1.0.0
- * @Description: AI 对话响应类
- **/
+/** AI 流式响应片段（SSE） */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AIResponse {
-    // 流式响应内容
+
+    /** 正文内容 */
     private String v;
 
-    // 推理过程
+    /** 推理过程（深度思考模型） */
     private String reasoning;
 }

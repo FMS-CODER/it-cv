@@ -1,5 +1,8 @@
 package com.quanxiaoha.ai.robot.agent.service.impl;
 
+import com.quanxiaoha.ai.robot.agent.model.RankedDocument;
+import com.quanxiaoha.ai.robot.agent.service.RagTruncationService;
+import com.quanxiaoha.ai.robot.agent.service.RerankService;
 import com.quanxiaoha.ai.robot.agent.service.SearchToolFacade;
 import com.quanxiaoha.ai.robot.model.dto.SearchResultDTO;
 import com.quanxiaoha.ai.robot.model.vo.knowledge.SearchResumeKnowledgeReqVO;
@@ -11,10 +14,13 @@ import com.quanxiaoha.ai.robot.utils.Response;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 搜索工具统一门面实现。
@@ -23,12 +29,22 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class SearchToolFacadeImpl implements SearchToolFacade {
 
+    @Value("${rag.retrieval.expand-factor:2}")
+    private int expandFactor;
+
+    @Value("${rag.rerank.enabled:true}")
+    private boolean rerankEnabled;
+
     @Resource
     private ResumeKnowledgeBaseService resumeKnowledgeBaseService;
     @Resource
     private SearXNGService searXNGService;
     @Resource
     private SearchResultContentFetcherService searchResultContentFetcherService;
+    @Resource
+    private RerankService rerankService;
+    @Resource
+    private RagTruncationService ragTruncationService;
 
     @Override
     public String searchKnowledge(String query, String category, int topK) {
@@ -52,6 +68,55 @@ public class SearchToolFacadeImpl implements SearchToolFacade {
                     .append("- 分类：").append(StringUtils.defaultString(item.getCategory(), "未分类")).append("\n")
                     .append("- 相似度：").append(String.format("%.3f", item.getSimilarity() == null ? 0D : item.getSimilarity())).append("\n")
                     .append(item.getContent()).append("\n\n");
+        }
+        return sb.toString().trim();
+    }
+
+    @Override
+    public String searchKnowledgeWithRerank(String query, String category, int topK) {
+        if (StringUtils.isBlank(query)) {
+            return "知识库检索问题为空。";
+        }
+
+        int k = topK <= 0 ? 3 : topK;
+        int expandK = k * expandFactor;
+
+        Response<List<SearchResumeKnowledgeRspVO>> response = resumeKnowledgeBaseService.searchSimilar(
+                SearchResumeKnowledgeReqVO.builder()
+                        .query(query.trim())
+                        .category(StringUtils.isBlank(category) ? null : category.trim())
+                        .topK(expandK)
+                        .build());
+        if (response == null || !response.isSuccess() || response.getData() == null || response.getData().isEmpty()) {
+            return "知识库暂无匹配结果。";
+        }
+
+        List<RankedDocument> candidates = response.getData().stream()
+                .filter(r -> r != null && r.getId() != null)
+                .map(RankedDocument::fromSearchVO)
+                .collect(Collectors.toList());
+
+        if (candidates.isEmpty()) {
+            return "知识库暂无匹配结果。";
+        }
+
+        if (rerankEnabled) {
+            candidates = rerankService.rerank(query, candidates);
+        } else {
+            candidates.sort(Comparator.comparingDouble(RankedDocument::effectiveScore).reversed());
+        }
+
+        List<RankedDocument> truncated = ragTruncationService.truncateBySimilarity(candidates);
+
+        StringBuilder sb = new StringBuilder("以下为知识库检索结果（已重排，按相关性排序）：\n\n");
+        int i = 1;
+        for (RankedDocument doc : truncated) {
+            if (StringUtils.isBlank(doc.getContent())) continue;
+            double sim = doc.effectiveScore();
+            String cat = StringUtils.defaultString(doc.getCategory());
+            sb.append("### 片段 ").append(i++).append("（相关性 ").append(String.format("%.3f", sim))
+                    .append("，分类：").append(cat).append("）\n");
+            sb.append(doc.getContent().trim()).append("\n\n");
         }
         return sb.toString().trim();
     }

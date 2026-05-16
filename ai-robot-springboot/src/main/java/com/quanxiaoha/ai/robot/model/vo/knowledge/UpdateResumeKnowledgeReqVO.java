@@ -8,31 +8,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author: 小明
- * @Date: 2026/4/18
- * @Version: v1.0.0
- * @Description: 更新知识库条目请求
- */
+/** 更新知识库条目请求 */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateResumeKnowledgeReqVO {
 
+    /** 条目主键 */
     @NotNull(message = "id 不能为空")
     private Long id;
 
+    /** 知识正文 */
     @NotBlank(message = "content 不能为空")
     private String content;
 
-    /**
-     * 分类（可选）
-     */
+    /** 分类（可选） */
     private String category;
 
-    /**
-     * 元数据（可选）
-     */
+    /** 元数据 JSON（可选） */
     private JsonNode metadata;
 }

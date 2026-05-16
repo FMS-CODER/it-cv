@@ -4,22 +4,16 @@ import com.quanxiaoha.ai.robot.exception.BaseExceptionInterface;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-08-15 10:33
- * @description: 响应异常码
- **/
+/** 接口响应错误码 */
 @Getter
 @AllArgsConstructor
 public enum ResponseCodeEnum implements BaseExceptionInterface {
 
-    // ----------- 通用异常状态码 -----------
+    // 通用
     SYSTEM_ERROR("10000", "出错啦，后台小哥正在努力修复中..."),
     PARAM_NOT_VALID("10001", "参数错误"),
 
-
-    // ----------- 业务异常状态码 -----------
+    // 业务
     CHAT_NOT_EXISTED("20000", "此对话不存在"),
     UPLOAD_FILE_CANT_EMPTY("20001", "上传文件不能为空"),
     ONLY_SUPPORT_MARKDOWN("20002", "仅支持 Markdown 文件（.md 后缀）"),
@@ -30,9 +24,10 @@ public enum ResponseCodeEnum implements BaseExceptionInterface {
     CHUNK_NUM_NOT_COMPLETE("20007", "分片数量不完整"),
     ;
 
-    // 异常码
-    private String errorCode;
-    // 错误信息
-    private String errorMessage;
+    /** 错误码 */
+    private final String errorCode;
 
+    /** 错误提示文案 */
+    private final String errorMessage;
 }
+

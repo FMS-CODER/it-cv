@@ -5,25 +5,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author: 小明
- * @Date: 2026/4/17
- * @Version: v1.0.0
- * @Description: 知识库向量检索结果
- */
+/** 知识库向量检索单条结果 */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchResumeKnowledgeRspVO {
 
+    /** 条目主键 */
     private Long id;
+
+    /** 知识正文 */
     private String content;
+
+    /** 分类 */
     private String category;
+
+    /** 元数据 JSON */
     private String metadata;
 
-    /**
-     * 相似度分值（越大越相似，范围约 [0, 1]；由 1 - 余弦距离近似得到）
-     */
+    /** 相似度，越大越相关，约 [0, 1] */
     private Double similarity;
 }

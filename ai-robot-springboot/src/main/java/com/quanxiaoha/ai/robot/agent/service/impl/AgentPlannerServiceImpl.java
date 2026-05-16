@@ -29,6 +29,9 @@ public class AgentPlannerServiceImpl implements AgentPlannerService {
             5. toolQuery: 若需要搜索，给出更适合检索的查询语句
             6. responseStyle: 简短描述回答风格
             7. reason: 简短说明原因
+            8. initialToolCall: 是否首次直接调用工具（true=直接进入 ReAct 工具调用，false=先让模型直接回答）
+            9. maxReactSteps: 最大轮循次数（偏少，1~2 即可）
+            10. toolStrategy: 工具策略，"parallel" 或 "sequential"
             仅返回一个 JSON 对象。
             """;
 
@@ -83,6 +86,9 @@ public class AgentPlannerServiceImpl implements AgentPlannerService {
                     .toolQuery(defaultIfBlank(root.path("toolQuery").asText(null), fallback.getToolQuery()))
                     .responseStyle(defaultIfBlank(root.path("responseStyle").asText(null), fallback.getResponseStyle()))
                     .reason(defaultIfBlank(root.path("reason").asText(null), fallback.getReason()))
+                    .initialToolCall(root.path("initialToolCall").asBoolean(fallback.isInitialToolCall()))
+                    .maxReactSteps(root.path("maxReactSteps").asInt(fallback.getMaxReactSteps()))
+                    .toolStrategy(defaultIfBlank(root.path("toolStrategy").asText(null), fallback.getToolStrategy()))
                     .build();
         } catch (Exception e) {
             log.warn("Planner JSON 解析失败，退回规则兜底：{}", e.getMessage());
@@ -114,6 +120,9 @@ public class AgentPlannerServiceImpl implements AgentPlannerService {
                 .toolQuery(StringUtils.defaultIfBlank(context.getUserInput(), context.getTargetPosition()))
                 .responseStyle(needWeb ? "优先引用搜索证据并给出结论" : "结构化、可执行、偏实战")
                 .reason("规则兜底")
+                .initialToolCall(needKnowledge || needWeb)
+                .maxReactSteps(1)
+                .toolStrategy("parallel")
                 .build();
     }
 

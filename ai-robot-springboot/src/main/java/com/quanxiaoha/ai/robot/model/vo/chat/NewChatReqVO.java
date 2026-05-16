@@ -6,20 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-09-15 14:07
- * @description: 新建对话
- **/
+/** 新建会话请求 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class NewChatReqVO {
 
+    /** 首条用户消息，用于生成会话摘要 */
     @NotBlank(message = "用户消息不能为空")
     private String message;
-
 }

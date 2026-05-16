@@ -33,5 +33,15 @@ searxng: # SearXNG 搜索引擎配置
   url: http://localhost:8888/search # SearXNG 服务的 API 端点地址
   count: 10 # 每次从搜索结果中，提取的最大数量
 
+rag:
+  rerank:
+    enabled: true
+    model: gte-rerank
+  truncation:
+    similarity-threshold: 0.35
+    max-top-k: 8
+  retrieval:
+    expand-factor: 2
+
 
 

@@ -22,21 +22,17 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @Author: 小明
- * @Date: 2025/8/5 13:40
- * @Version: v1.0.0
- * @Description: 联网搜索 Advisor
- **/
+/** 联网搜索：检索结果注入用户提示词后流式回复 */
 @Slf4j
 public class NetworkSearchAdvisor implements StreamAdvisor {
 
+    /** 搜索引擎服务 */
     private final SearXNGService searXNGService;
+
+    /** 搜索结果正文抓取 */
     private final SearchResultContentFetcherService searchResultContentFetcherService;
 
-    /**
-     * 联网搜索提示词模板
-     */
+    /** 联网搜索提示词模板 */
     private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate("""
             ## 用户问题
             {question}

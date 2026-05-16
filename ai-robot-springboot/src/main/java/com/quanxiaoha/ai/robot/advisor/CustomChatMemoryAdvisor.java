@@ -21,17 +21,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @Author: 小明
- * @Date: 2025/5/26 16:36
- * @Version: v1.0.0
- * @Description: 自定义对话记忆 Advisor
- **/
+/** 从数据库加载近期对话消息，注入本次请求的上下文 */
 @Slf4j
 public class CustomChatMemoryAdvisor implements StreamAdvisor {
 
+    /** 消息表 Mapper */
     private final ChatMessageMapper chatMessageMapper;
+
+    /** 当前对话请求（含 chatId） */
     private final AiChatReqVO aiChatReqVO;
+
+    /** 加载历史消息条数上限 */
     private final int limit;
 
     public CustomChatMemoryAdvisor(ChatMessageMapper chatMessageMapper, AiChatReqVO aiChatReqVO, int limit) {

@@ -9,23 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * @Author: 小明
- * @Date: 2026/4/17
- * @Version: v1.0.0
- * @Description: 导入简历知识库请求
- */
+/** 批量导入知识库请求 */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImportResumeKnowledgeReqVO {
 
-    /**
-     * 批量导入条目
-     */
+    /** 待导入条目列表 */
     @NotEmpty(message = "导入数据不能为空")
     @Valid
     private List<ResumeKnowledgeItemVO> items;
 }
-

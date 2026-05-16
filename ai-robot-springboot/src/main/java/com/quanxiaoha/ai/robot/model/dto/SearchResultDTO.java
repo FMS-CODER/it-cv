@@ -5,30 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author: 犬小哈
- * @Date: 2025/7/30 12:12
- * @Version: v1.0.0
- * @Description: TODO
- **/
+/** 联网搜索结果条目 */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchResultDTO {
 
-    /**
-     * 页面访问链接
-     */
+    /** 页面链接 */
     private String url;
 
-    /**
-     * 相关性评分
-     */
+    /** 相关性得分 */
     private Double score;
 
-    /**
-     * 页面内容
-     */
+    /** 页面正文摘要 */
     private String content;
 }

@@ -6,79 +6,55 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-09-15 14:07
- * @description: AI 聊天
- **/
+/** AI 对话请求 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class AiChatReqVO {
 
+    /** 用户输入消息 */
     @NotBlank(message = "用户消息不能为空")
     private String message;
 
-    /**
-     * 对话 ID
-     */
+    /** 会话 UUID */
     private String chatId;
 
-    /**
-     * 指标追踪 ID（可选）
-     */
+    /** 链路追踪 ID（可选） */
     private String traceId;
 
-    /**
-     * 联网搜索
-     */
+    /** 是否启用联网搜索 */
     @Builder.Default
     private Boolean networkSearch = false;
 
-    /**
-     * 是否启用简历知识库 RAG（双路向量检索后写入系统提示）
-     */
+    /** 是否启用简历知识库 RAG */
     @Builder.Default
     private Boolean knowledgeRag = false;
 
-    /**
-     * 知识库检索分类过滤（可选，空表示全部分类）
-     */
+    /** 知识库分类过滤（空=全部） */
     private String kbCategory;
 
-    /**
-     * 知识库合并检索 Top-K（可选，默认 5）
-     */
+    /** 知识库检索 Top-K，默认 5 */
     @Builder.Default
     private Integer kbTopK = 5;
 
-    /**
-     * 是否启用搜索工具调用（知识库 / 联网）
-     */
+    /** 是否允许 Agent 调用搜索工具 */
     @Builder.Default
     private Boolean searchToolEnabled = false;
 
-    /**
-     * 是否启用受控 Planner（当前仅主对话场景生效）
-     */
+    /** 是否启用 Planner 规划 */
     @Builder.Default
     private Boolean agentPlanner = false;
 
-    /**
-     * Agent 最大步数（包括 Planner / Tool 降级等步骤）
-     */
+    /** Agent 最大执行步数 */
     @Builder.Default
     private Integer maxAgentSteps = 3;
 
+    /** 大模型名称 */
     @NotBlank(message = "调用的 AI 大模型名称不能为空")
     private String modelName;
 
-    /**
-     * 温度值，默认为 0.7
-     */
+    /** 采样温度，默认 0.7 */
     @Builder.Default
     private Double temperature = 0.7;
 }

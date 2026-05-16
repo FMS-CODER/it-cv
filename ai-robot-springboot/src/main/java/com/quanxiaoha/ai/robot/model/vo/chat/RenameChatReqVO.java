@@ -7,23 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-09-15 14:07
- * @description: 对话重命名
- **/
+/** 重命名会话请求 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class RenameChatReqVO {
 
+    /** 会话主键 ID */
     @NotNull(message = "对话 ID 不能为空")
     private Long id;
 
+    /** 新摘要/标题 */
     @NotBlank(message = "对话摘要不能为空")
     private String summary;
-
 }

@@ -41,20 +41,7 @@
               <p class="text-gray-500 mb-8 text-center">帮你优化简历、准备面试、规划职业发展</p>
 
               <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                  <div class="text-sm text-gray-500">
-                    知识库：用于沉淀简历优化方法、模板与面试话术（可一键导入或手动新增）
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <button
-                      type="button"
-                      class="px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                      @click="openKbTab"
-                    >
-                      管理知识库
-                    </button>
-                  </div>
-                </div>
+                
 
                 <div class="mb-4">
                   <label class="block text-sm font-medium text-gray-700 mb-2">选择目标岗位</label>
@@ -108,9 +95,7 @@
                   ></textarea>
                 </div>
 
-                <div class="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-100 text-sm text-amber-800">
-                  当前由 Agent 自动判断是否检索知识库与联网搜索，无需手动切换。
-                </div>
+              
 
                 <button
                   type="button"
@@ -479,9 +464,7 @@
         <!-- 底部输入：仅在「智能对话」Tab 显示 -->
         <div v-if="ui.activeTab === 'chat'" class="sticky max-w-4xl mx-auto bg-white bottom-8 left-0 w-full px-4">
           <div class="flex flex-wrap items-center gap-3 mb-2">
-            <div class="px-3 py-1 rounded text-sm bg-blue-50 text-blue-700">
-              Agent 会自动决定是否联网搜索和检索知识库
-            </div>
+            
             <button
               type="button"
               class="px-3 py-1 rounded text-sm bg-orange-100 text-orange-700 hover:bg-orange-200"

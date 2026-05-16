@@ -7,33 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-09-15 14:07
- * @description: 对话分页
- **/
+/** 会话列表分页项 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class FindChatHistoryPageListRspVO {
-    /**
-     * 对话 ID
-     */
-    private Long id;
-    /**
-     * 对话 UUID
-     */
-    private String uuid;
-    /**
-     * 对话摘要
-     */
-    private String summary;
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 
+    /** 主键 ID */
+    private Long id;
+
+    /** 会话 UUID */
+    private String uuid;
+
+    /** 摘要/标题 */
+    private String summary;
+
+    /** 最后更新时间 */
+    private LocalDateTime updateTime;
 }

@@ -6,12 +6,7 @@ import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 
-/**
- * @Author: 小明
- * @Date: 2025/5/26 16:36
- * @Version: v1.0.0
- * @Description: 自定义日志记录 Advisor
- **/
+/** 记录 ChatClient 同步调用的入参/出参 */
 @Slf4j
 public class MyLoggerAdvisor implements CallAdvisor {
 
@@ -25,7 +20,7 @@ public class MyLoggerAdvisor implements CallAdvisor {
 
     @Override
     public int getOrder() {
-        return 1; // order 值越小，越先执行
+        return 1; // 数值越小越先执行
     }
 
     @Override

@@ -10,12 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @Author: 犬小哈
- * @Date: 2025/8/11 11:32
- * @Version: v1.0.0
- * @Description: 对话 DO 实体类
- **/
+/** 对话会话表 t_chat */
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,10 +18,19 @@ import java.time.LocalDateTime;
 @TableName("t_chat")
 public class ChatDO {
 
+    /** 主键 */
     @TableId(type = IdType.AUTO)
     private Long id;
+
+    /** 会话 UUID，对外标识 */
     private String uuid;
+
+    /** 会话标题/摘要 */
     private String summary;
+
+    /** 创建时间 */
     private LocalDateTime createTime;
+
+    /** 更新时间 */
     private LocalDateTime updateTime;
 }

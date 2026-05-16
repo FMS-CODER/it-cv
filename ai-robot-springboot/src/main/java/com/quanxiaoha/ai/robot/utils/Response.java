@@ -6,28 +6,24 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-08-11 19:50
- * @description: 响应参数工具类
- **/
+/** 统一 API 响应体 */
 @Data
 public class Response<T> implements Serializable {
 
-    // 是否成功，默认为 true
+    /** 是否成功 */
     private boolean success = true;
-    // 响应消息
+
+    /** 提示消息 */
     private String message;
-    // 异常码
+
+    /** 错误码（失败时） */
     private String errorCode;
-    // 响应数据
+
+    /** 业务数据 */
     private T data;
 
-    // =================================== 成功响应 ===================================
     public static <T> Response<T> success() {
-        Response<T> response = new Response<>();
-        return response;
+        return new Response<>();
     }
 
     public static <T> Response<T> success(T data) {
@@ -36,7 +32,6 @@ public class Response<T> implements Serializable {
         return response;
     }
 
-    // =================================== 失败响应 ===================================
     public static <T> Response<T> fail() {
         Response<T> response = new Response<>();
         response.setSuccess(false);
@@ -73,5 +68,4 @@ public class Response<T> implements Serializable {
         response.setMessage(baseExceptionInterface.getErrorMessage());
         return response;
     }
-
 }

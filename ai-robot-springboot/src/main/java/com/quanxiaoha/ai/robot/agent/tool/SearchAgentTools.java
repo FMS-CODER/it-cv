@@ -20,7 +20,7 @@ public class SearchAgentTools {
             @ToolParam(description = "知识库检索问题，例如：Java后端简历项目描述怎么写") String query,
             @ToolParam(required = false, description = "知识库分类，可为空，例如：简历通用、面试、项目描述") String category,
             @ToolParam(required = false, description = "返回条数，建议 1 到 5") Integer topK) {
-        return searchToolFacade.searchKnowledge(query, category, topK == null ? 3 : topK);
+        return searchToolFacade.searchKnowledgeWithRerank(query, category, topK == null ? 3 : topK);
     }
 
     @Tool(name = "web_search", description = "联网搜索最新网页信息，适合查询行业趋势、最新要求、外部资料。")

@@ -1,5 +1,8 @@
 package com.quanxiaoha.ai.robot.service.impl;
 
+import com.quanxiaoha.ai.robot.agent.model.RankedDocument;
+import com.quanxiaoha.ai.robot.agent.service.RagTruncationService;
+import com.quanxiaoha.ai.robot.agent.service.RerankService;
 import com.quanxiaoha.ai.robot.model.vo.knowledge.SearchResumeKnowledgeReqVO;
 import com.quanxiaoha.ai.robot.model.vo.knowledge.SearchResumeKnowledgeRspVO;
 import com.quanxiaoha.ai.robot.service.ResumeKnowledgeBaseService;
@@ -8,15 +11,19 @@ import com.quanxiaoha.ai.robot.utils.Response;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * 双路 RAG：一路偏「输入语义」，一路偏「回答/优化方向」，合并去重后写入系统提示。
+ * 双路 RAG：一路偏「输入语义」，一路偏「回答/优化方向」。
+ * 检索 → 重排 → 相似度截断 → 格式化注入。
  */
 @Service
 @Slf4j
@@ -28,8 +35,20 @@ public class ResumeKnowledgeRagServiceImpl implements ResumeKnowledgeRagService 
     private static final String OUTPUT_ANCHOR_RESUME =
             "\n\n（请从简历结构、STAR、项目描述、技能关键词、面试话术等角度补充相关条目）";
 
+    @Value("${rag.retrieval.expand-factor:2}")
+    private int expandFactor;
+
+    @Value("${rag.rerank.enabled:true}")
+    private boolean rerankEnabled;
+
     @Resource
     private ResumeKnowledgeBaseService resumeKnowledgeBaseService;
+
+    @Resource
+    private RerankService rerankService;
+
+    @Resource
+    private RagTruncationService ragTruncationService;
 
     @Override
     public String buildChatRagContext(String userMessage, String category, int topK) {
@@ -37,13 +56,12 @@ public class ResumeKnowledgeRagServiceImpl implements ResumeKnowledgeRagService 
             return "";
         }
         int k = topK <= 0 ? 5 : topK;
-        int perQuery = Math.max(2, (k + 1) / 2);
 
         String q1 = userMessage.trim();
         String q2 = userMessage.trim() + OUTPUT_ANCHOR_CHAT;
 
-        List<SearchResumeKnowledgeRspVO> merged = mergeDualSearch(q1, q2, category, perQuery, k);
-        return formatContext("对话", merged);
+        List<RankedDocument> finalDocs = retrieveRerankTruncate(q1, q2, category, k);
+        return formatContext("对话", finalDocs);
     }
 
     @Override
@@ -54,38 +72,46 @@ public class ResumeKnowledgeRagServiceImpl implements ResumeKnowledgeRagService 
         String extra = StringUtils.defaultString(additionalRequirements).trim();
 
         int k = topK <= 0 ? 5 : topK;
-        int perQuery = Math.max(2, (k + 1) / 2);
 
-        // 输入侧：岗位 + 简历摘要
         String q1 = pos + "\n\n" + resume;
-        // 输出侧：岗位 + 额外要求 + 锚点（召回写法/模板类条目）
         String q2 = pos + (extra.isEmpty() ? "" : "\n额外要求：" + extra) + OUTPUT_ANCHOR_RESUME;
 
-        List<SearchResumeKnowledgeRspVO> merged = mergeDualSearch(q1, q2, category, perQuery, k);
-        return formatContext("简历优化", merged);
+        List<RankedDocument> finalDocs = retrieveRerankTruncate(q1, q2, category, k);
+        return formatContext("简历优化", finalDocs);
     }
 
-    private List<SearchResumeKnowledgeRspVO> mergeDualSearch(String query1, String query2, String category,
-                                                             int perQuery, int maxTotal) {
+    private List<RankedDocument> retrieveRerankTruncate(String query1, String query2, String category, int topK) {
+        int expandK = topK * expandFactor;
+        int perQuery = Math.max(2, (expandK + 1) / 2);
+
+        List<RankedDocument> candidates = mergeDualSearch(query1, query2, category, perQuery);
+        if (candidates.isEmpty()) return candidates;
+
+        if (rerankEnabled) {
+            candidates = rerankService.rerank(query1, candidates);
+        } else {
+            candidates.sort(Comparator.comparingDouble(RankedDocument::effectiveScore).reversed());
+        }
+
+        return ragTruncationService.truncateBySimilarity(candidates);
+    }
+
+    private List<RankedDocument> mergeDualSearch(String query1, String query2, String category, int perQuery) {
         List<SearchResumeKnowledgeRspVO> a = searchOne(query1, category, perQuery);
         List<SearchResumeKnowledgeRspVO> b = searchOne(query2, category, perQuery);
 
-        Map<Long, SearchResumeKnowledgeRspVO> byId = new LinkedHashMap<>();
+        Map<Long, RankedDocument> byId = new LinkedHashMap<>();
         for (SearchResumeKnowledgeRspVO r : a) {
             if (r != null && r.getId() != null) {
-                byId.putIfAbsent(r.getId(), r);
+                byId.putIfAbsent(r.getId(), RankedDocument.fromSearchVO(r));
             }
         }
         for (SearchResumeKnowledgeRspVO r : b) {
             if (r != null && r.getId() != null && !byId.containsKey(r.getId())) {
-                byId.put(r.getId(), r);
+                byId.put(r.getId(), RankedDocument.fromSearchVO(r));
             }
         }
-        List<SearchResumeKnowledgeRspVO> out = new ArrayList<>(byId.values());
-        if (out.size() > maxTotal) {
-            return out.subList(0, maxTotal);
-        }
-        return out;
+        return new ArrayList<>(byId.values());
     }
 
     private List<SearchResumeKnowledgeRspVO> searchOne(String query, String category, int topK) {
@@ -104,21 +130,21 @@ public class ResumeKnowledgeRagServiceImpl implements ResumeKnowledgeRagService 
         return resp.getData();
     }
 
-    private String formatContext(String scene, List<SearchResumeKnowledgeRspVO> items) {
+    private String formatContext(String scene, List<RankedDocument> items) {
         if (items == null || items.isEmpty()) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
         sb.append("## 【知识库 RAG · ").append(scene).append("】\n");
-        sb.append("以下为从向量知识库检索到的参考片段（按相似度排序）。请优先据此组织回答，必要时再补充通用经验；勿虚构知识库中不存在的事实。\n\n");
+        sb.append("以下为从向量知识库检索到的参考片段（按相关性排序）。请优先据此组织回答，必要时再补充通用经验；勿虚构知识库中不存在的事实。\n\n");
         int i = 1;
-        for (SearchResumeKnowledgeRspVO r : items) {
+        for (RankedDocument r : items) {
             if (r == null || StringUtils.isBlank(r.getContent())) {
                 continue;
             }
-            double sim = r.getSimilarity() == null ? 0D : r.getSimilarity();
+            double sim = r.effectiveScore();
             String cat = StringUtils.defaultString(r.getCategory());
-            sb.append("### 片段 ").append(i++).append("（相似度约 ").append(String.format("%.3f", sim)).append("，分类：")
+            sb.append("### 片段 ").append(i++).append("（相关性 ").append(String.format("%.3f", sim)).append("，分类：")
                     .append(cat).append("）\n");
             sb.append(r.getContent().trim()).append("\n\n");
         }

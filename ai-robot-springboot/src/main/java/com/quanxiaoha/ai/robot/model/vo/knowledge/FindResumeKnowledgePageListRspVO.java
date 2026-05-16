@@ -7,22 +7,25 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @Author: 小明
- * @Date: 2026/4/17
- * @Version: v1.0.0
- * @Description: 知识库分页响应
- */
+/** 知识库分页列表项 */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindResumeKnowledgePageListRspVO {
 
+    /** 主键 */
     private Long id;
+
+    /** 知识正文 */
     private String content;
+
+    /** 分类 */
     private String category;
+
+    /** 元数据 JSON */
     private String metadata;
+
+    /** 创建时间 */
     private LocalDateTime createdAt;
 }
-

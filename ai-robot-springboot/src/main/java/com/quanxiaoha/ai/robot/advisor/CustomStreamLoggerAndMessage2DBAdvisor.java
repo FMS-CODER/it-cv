@@ -23,18 +23,20 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @Author: 小明
- * @Date: 2025/5/26 16:36
- * @Version: v1.0.0
- * @Description: 自定义打印流式日志 Advisor
- **/
+/** 流式对话结束后将用户/助手消息持久化到数据库 */
 @Slf4j
 public class CustomStreamLoggerAndMessage2DBAdvisor implements StreamAdvisor {
 
+    /** 会话表 Mapper */
     private final ChatMapper chatMapper;
+
+    /** 消息表 Mapper */
     private final ChatMessageMapper chatMessageMapper;
+
+    /** 当前对话请求 */
     private final AiChatReqVO aiChatReqVO;
+
+    /** 事务模板，保证消息写入原子性 */
     private final TransactionTemplate transactionTemplate;
 
     public CustomStreamLoggerAndMessage2DBAdvisor(ChatMapper chatMapper,
@@ -47,7 +49,7 @@ public class CustomStreamLoggerAndMessage2DBAdvisor implements StreamAdvisor {
         this.transactionTemplate = transactionTemplate;
     }
 
-    @Override
+    @Override   
     public int getOrder() {
         return 99; // order 值越小，越先执行
     }

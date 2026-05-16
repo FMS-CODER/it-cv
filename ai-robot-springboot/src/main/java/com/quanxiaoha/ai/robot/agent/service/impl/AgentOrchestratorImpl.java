@@ -7,6 +7,7 @@ import com.quanxiaoha.ai.robot.advisor.NetworkSearchAdvisor;
 import com.quanxiaoha.ai.robot.agent.model.AgentContext;
 import com.quanxiaoha.ai.robot.agent.model.AgentScene;
 import com.quanxiaoha.ai.robot.agent.model.PlannerDecision;
+import com.quanxiaoha.ai.robot.agent.model.ReActStep;
 import com.quanxiaoha.ai.robot.agent.model.ResumeOptimizeAgentRequest;
 import com.quanxiaoha.ai.robot.agent.service.AgentAuditLogger;
 import com.quanxiaoha.ai.robot.agent.service.AgentOrchestrator;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SignalType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,7 +106,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
 
         Flux<AIResponse> stream;
         if (context.isSearchToolEnabled()) {
-            stream = streamChatWithNativeTools(context, reqVO)
+            stream = reactLoop(context, reqVO)
                     .onErrorResume(ex -> {
                         agentAuditLogger.recordFallback(context, ex);
                         return streamChatWithFallbackLoop(context, reqVO);
@@ -193,6 +195,210 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                 .tools(searchAgentTools);
         spec.advisors(buildChatAdvisors(reqVO, false, true));
         return mapChatStream(spec);
+    }
+
+    /**
+     * ReAct 多工具调用循环：每轮模型可同时调用多个工具（knowledge_search + web_search），
+     * 根据结构化轨迹自主决定是否继续。
+     */
+    private Flux<AIResponse> reactLoop(AgentContext context, AiChatReqVO reqVO) {
+        PlannerDecision decision = context.getPlannerDecision();
+        if (decision == null) {
+            decision = agentPlannerService.planChat(context);
+            context.setPlannerDecision(decision);
+            agentAuditLogger.recordPlannerDecision(context, decision);
+        }
+
+        int maxStepsRaw = Math.min(decision.getMaxReactSteps(), context.getMaxAgentSteps());
+        final int maxSteps = maxStepsRaw < 1 ? 1 : maxStepsRaw;
+        final PlannerDecision finalDecision = decision;
+
+        if (!finalDecision.isInitialToolCall()) {
+            return streamChatStandard(context, reqVO, true);
+        }
+
+        context.setReactFinished(false);
+        context.setCurrentReactStep(0);
+
+        return Flux.create(sink -> {
+            try {
+                String currentSystemPrompt = context.getSystemPrompt();
+                String userInput = context.getUserInput();
+                StringBuilder reactTrace = new StringBuilder();
+
+                for (int step = 0; step < maxSteps; step++) {
+                    context.setCurrentReactStep(step);
+                    long stepStart = System.currentTimeMillis();
+
+                    String reactPrompt = buildReactPrompt(currentSystemPrompt, userInput, reactTrace.toString(), finalDecision);
+                    String modelResponse = ChatClient.create(chatModel)
+                            .prompt()
+                            .system(reactPrompt)
+                            .user(userInput)
+                            .tools(searchAgentTools)
+                            .call()
+                            .content();
+
+                    if (StringUtils.isBlank(modelResponse)) {
+                        sink.complete();
+                        return;
+                    }
+
+                    ReActStep.ReActStepBuilder stepBuilder = ReActStep.builder()
+                            .stepIndex(step)
+                            .durationMs(System.currentTimeMillis() - stepStart);
+
+                    String thought = extractThought(modelResponse);
+                    stepBuilder.thought(thought);
+
+                    List<ReActStep.ReActToolCall> toolCalls = extractToolCalls(modelResponse);
+                    stepBuilder.toolCalls(toolCalls);
+
+                    if (!toolCalls.isEmpty()) {
+                        for (ReActStep.ReActToolCall tc : toolCalls) {
+                            String result = executeToolCall(context, tc.getToolName(), tc.getToolArgs());
+                            tc.setToolResult(result);
+                        }
+
+                        StringBuilder observation = new StringBuilder();
+                        for (ReActStep.ReActToolCall tc : toolCalls) {
+                            observation.append("【").append(tc.getToolName()).append(" 结果】\n")
+                                    .append(tc.getToolResult()).append("\n\n");
+                        }
+                        stepBuilder.observation(observation.toString().trim());
+
+                        reactTrace.append("【第").append(step + 1).append("轮】\n");
+                        reactTrace.append("思考：").append(thought).append("\n");
+                        for (ReActStep.ReActToolCall tc : toolCalls) {
+                            reactTrace.append("调用工具：").append(tc.getToolName())
+                                    .append("(").append(tc.getToolArgs()).append(")\n");
+                        }
+                        reactTrace.append("观察结果：").append(observation).append("\n\n");
+                    } else {
+                        context.setReactFinished(true);
+                        context.setReactFinalAnswer(modelResponse);
+                        ReActStep finalStep = stepBuilder.observation("").build();
+                        context.getReactTraces().add(finalStep);
+
+                        sink.next(AIResponse.builder().v(modelResponse).build());
+                        sink.complete();
+                        return;
+                    }
+
+                    context.getReactTraces().add(stepBuilder.build());
+                }
+
+                context.setReactFinished(true);
+                String finalAnswer = ChatClient.create(chatModel)
+                        .prompt()
+                        .system(buildReactPrompt(currentSystemPrompt, userInput, reactTrace.toString(), finalDecision)
+                                + "\n\n请基于以上所有工具结果给出最终完整回答。")
+                        .user(userInput)
+                        .call()
+                        .content();
+                context.setReactFinalAnswer(finalAnswer);
+                sink.next(AIResponse.builder().v(StringUtils.defaultString(finalAnswer)).build());
+                sink.complete();
+
+            } catch (Exception e) {
+                log.error("ReAct 循环异常: {}", e.getMessage(), e);
+                sink.error(e);
+            }
+        });
+    }
+
+    private String buildReactPrompt(String baseSystemPrompt, String userInput, String reactTrace,
+                                    PlannerDecision decision) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(baseSystemPrompt).append("\n\n");
+
+        sb.append("## ReAct 工具调用协议\n");
+        sb.append("你有两个工具可用：\n");
+        sb.append("- knowledge_search(query)：查询内部知识库\n");
+        sb.append("- web_search(query)：联网搜索最新信息\n\n");
+        sb.append("每轮你可以同时调用多个工具，也可以不调用工具直接回答。\n\n");
+
+        sb.append("请按以下格式输出：\n");
+        sb.append("思考：<你的推理过程>\n");
+        sb.append("工具调用：[\n");
+        sb.append("  {\"name\": \"knowledge_search\", \"args\": \"查询词\"},\n");
+        sb.append("  {\"name\": \"web_search\", \"args\": \"查询词\"}\n");
+        sb.append("]\n");
+        sb.append("—— 或者 ——\n");
+        sb.append("思考：<你的推理过程>\n");
+        sb.append("最终回答：<你的最终答案>\n\n");
+
+        if (StringUtils.isNotBlank(reactTrace)) {
+            sb.append("## 历史工具调用轨迹\n");
+            sb.append(reactTrace).append("\n");
+            sb.append("请根据以上轨迹判断：如果信息已足够，直接输出最终回答；如果信息不足，继续调用工具。\n\n");
+        }
+
+        sb.append("工具策略：").append(decision.getToolStrategy()).append("\n");
+        sb.append("查询词：").append(StringUtils.defaultIfBlank(decision.getToolQuery(), userInput)).append("\n");
+
+        return sb.toString();
+    }
+
+    private String extractThought(String modelResponse) {
+        if (StringUtils.isBlank(modelResponse)) return "";
+        int thoughtStart = modelResponse.indexOf("思考：");
+        if (thoughtStart < 0) return modelResponse.length() > 100 ? modelResponse.substring(0, 100) : modelResponse;
+        int toolStart = modelResponse.indexOf("工具调用：");
+        int answerStart = modelResponse.indexOf("最终回答：");
+        int end = modelResponse.length();
+        if (toolStart > thoughtStart) end = Math.min(end, toolStart);
+        if (answerStart > thoughtStart) end = Math.min(end, answerStart);
+        return modelResponse.substring(thoughtStart + 3, end).trim();
+    }
+
+    private List<ReActStep.ReActToolCall> extractToolCalls(String modelResponse) {
+        List<ReActStep.ReActToolCall> calls = new ArrayList<>();
+        if (StringUtils.isBlank(modelResponse)) return calls;
+
+        int toolSectionStart = modelResponse.indexOf("工具调用：");
+        if (toolSectionStart < 0) return calls;
+
+        String toolSection = modelResponse.substring(toolSectionStart + 5).trim();
+        int answerStart = toolSection.indexOf("最终回答：");
+        if (answerStart > 0) {
+            toolSection = toolSection.substring(0, answerStart).trim();
+        }
+
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            com.fasterxml.jackson.databind.JsonNode arr = mapper.readTree(toolSection);
+            if (arr.isArray()) {
+                for (com.fasterxml.jackson.databind.JsonNode node : arr) {
+                    String name = node.path("name").asText("");
+                    String args = node.path("args").asText("");
+                    if (StringUtils.isNotBlank(name)) {
+                        calls.add(ReActStep.ReActToolCall.builder()
+                                .toolName(name)
+                                .toolArgs(args)
+                                .build());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("解析工具调用 JSON 失败: {}", e.getMessage());
+        }
+
+        return calls;
+    }
+
+    private String executeToolCall(AgentContext context, String toolName, String toolArgs) {
+        if (StringUtils.isBlank(toolName)) return "";
+        String query = StringUtils.defaultIfBlank(toolArgs, context.getUserInput());
+
+        switch (toolName) {
+            case "knowledge_search":
+                return searchToolFacade.searchKnowledgeWithRerank(query, context.getKbCategory(), context.getKbTopK());
+            case "web_search":
+                return searchToolFacade.searchWeb(query, Math.min(context.getKbTopK(), 5));
+            default:
+                return "未知工具: " + toolName;
+        }
     }
 
     private Flux<AIResponse> streamChatWithFallbackLoop(AgentContext context, AiChatReqVO reqVO) {
