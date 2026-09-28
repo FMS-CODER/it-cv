@@ -29,7 +29,6 @@ AI 驱动的简历优化与职业发展助手，集成 ReAct 多工具调用、R
 | 数据源 | PostgreSQL `resume_knowledge_base`（content + category + embedding VECTOR(1536)） |
 | Embedding | DashScope text-embedding-v2，每批 16 条并发 |
 | 检索 | pgvector 余弦距离（`<=>`），支持分类过滤 |
-| 双路检索 | Q1=原始输入 + Q2=原始输入+输出锚点，合并去重 |
 | 扩大召回 | topK × expandFactor(2)，给重排留候选空间 |
 | 重排 | DashScope GTE-ReRank，失败退向量排序 |
 | 截断 | 阈值 0.35 + 最大保留 8 条，优先使用重排分数 |
