@@ -47,12 +47,12 @@ public class ResumeOptimizeController {
     @PostMapping("/upload")
     public ResponseEntity<Map<String, Object>> uploadResume(@RequestParam("file") MultipartFile file) {
         try {
-            // 验证文件大小（50MB）
-            long maxSize = 50 * 1024 * 1024; // 50MB
+            // 验证文件大小（3MB）
+            long maxSize = 3 * 1024 * 1024; // 3MB
             if (file.getSize() > maxSize) {
                 return ResponseEntity.badRequest().body(Map.of(
                     "success", false,
-                    "error", "文件大小不能超过 50MB"
+                    "error", "文件大小不能超过 3MB"
                 ));
             }
 

@@ -24,7 +24,7 @@ import java.time.YearMonth;
 import java.util.TimeZone;
 
 /**
- * @author: 犬小哈
+ * @author: 小明
  * @date: 2024/4/15 13:50
  * @version: v1.0.0
  * @description: 自动配置自定义的 Jackson

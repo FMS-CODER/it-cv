@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/6/24 17:12
  * @Version: v1.0.0
  * @Description: 书籍信息

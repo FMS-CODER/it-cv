@@ -21,14 +21,6 @@
             >
               智能对话
             </button>
-            <button
-              type="button"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              :class="ui.activeTab === 'kb' ? 'bg-orange-100 text-orange-800' : 'text-gray-600 hover:bg-gray-100'"
-              @click="openKbTab"
-            >
-              知识库
-            </button>
           </div>
 
           <!-- ========== 简历优化 ========== -->
@@ -463,17 +455,6 @@
 
         <!-- 底部输入：仅在「智能对话」Tab 显示 -->
         <div v-if="ui.activeTab === 'chat'" class="sticky max-w-4xl mx-auto bg-white bottom-8 left-0 w-full px-4">
-          <div class="flex flex-wrap items-center gap-3 mb-2">
-            
-            <button
-              type="button"
-              class="px-3 py-1 rounded text-sm bg-orange-100 text-orange-700 hover:bg-orange-200"
-              @click="openKbTab"
-              title="打开知识库管理"
-            >
-              管理知识库
-            </button>
-          </div>
           <ChatInputBox v-model="message" @sendMessage="sendMessage" :loading="chatSending" @stopGeneration="stopGeneration" />
         </div>
       </div>
@@ -568,9 +549,9 @@ const processFile = async (file) => {
     antMessage.warning('请上传 PDF 或 DOCX 格式的文件')
     return
   }
-  const maxSize = 50 * 1024 * 1024
+  const maxSize = 3 * 1024 * 1024
   if (file.size > maxSize) {
-    antMessage.warning('文件大小不能超过 50MB')
+    antMessage.warning('文件大小不能超过 3MB')
     return
   }
   uploadedFile.value = file.name

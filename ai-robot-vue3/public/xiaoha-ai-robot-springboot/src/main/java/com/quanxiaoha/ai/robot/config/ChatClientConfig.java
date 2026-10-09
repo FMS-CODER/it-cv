@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/24 17:30
  * @Version: v1.0.0
  * @Description: TODO
@@ -31,7 +31,7 @@ public class ChatClientConfig {
     public ChatClient chatClient(DeepSeekChatModel chatModel, ToolCallbackProvider tools) {
         return ChatClient.builder(chatModel)
                 .defaultToolCallbacks(tools) // MCP
-//                .defaultSystem("请你扮演一名犬小哈 Java 项目实战专栏的客服人员")
+//                .defaultSystem("请你扮演一名小明 Java 项目实战专栏的客服人员")
                 .defaultAdvisors(new SimpleLoggerAdvisor(), // 添加 Spring AI 内置的日志记录功能
 //                                 new MyLoggerAdvisor(), // 添加自定义的日志打印 Advisor
                                 MessageChatMemoryAdvisor.builder(chatMemory).build()

@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/22 12:25
  * @Version: v1.0.0
  * @Description: DeepSeek 聊天（R1 推理大模型）

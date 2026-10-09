@@ -38,27 +38,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @Author: ??
- * @Date: 2026/4/17
- * @Version: v1.0.0
- * @Description: ?????
+ * 简历知识库实现：知识 CRUD、DashScope 向量化、pgvector 余弦距离检索、embedding 回填。
  */
 @Service
 @Slf4j
 public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseService {
 
     /**
-     * DashScope ????????????DashScope text-embedding ???? 25 ????? 16?
+     * DashScope text-embedding 单次最大输入 25 条，取 16 作为安全批量大小。
      */
     private static final int EMBED_BATCH_SIZE = 16;
 
     /**
-     * ?? embedding ???????
+     * embedding 回填默认每批处理条数。
      */
     private static final int REFILL_BATCH_DEFAULT = 16;
 
     /**
-     * ????? Top-K ???
+     * 相似度检索默认 Top-K 条数。
      */
     private static final int SEARCH_TOPK_DEFAULT = 5;
 
@@ -70,35 +67,32 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
     private ObjectMapper objectMapper;
 
     /**
-     * Embedding ???????
-     * ????? spring-ai-alibaba-starter-dashscope ???? DashScopeEmbeddingModel?
-     * ???????? API Key????? null?????????????? / ?? / ??????
+     * Embedding 模型（由 spring-ai-alibaba-starter-dashscope 自动注入 DashScopeEmbeddingModel）。
+     * 未配置 API Key 时为 null，此时导入/更新/检索跳过向量化。
      */
     @Autowired(required = false)
     private EmbeddingModel embeddingModel;
 
     /**
-     * ??????? embedding ???? pg_attribute ? vector(N)????? embed ??????
-     * ?? 0 ???????
+     * 从 pg_attribute 读取的 embedding 列维度（vector(N) 中的 N），0 表示未知。
      */
     private volatile int embeddingDimension = 0;
 
     /**
-     * ????? embedding ???????
-     * - "vector"?pgvector ????????? vector(N)
-     * - "text"????? text?pgvector ????????
-     * - null?????
+     * embedding 列的实际类型分类：
+     * - "vector"：pgvector 原生 vector(N)
+     * - "text"：普通 text 列（未启用 pgvector）
+     * - null：尚未检测
      */
     private volatile String embeddingColumnType;
 
     /**
-     * pg_catalog.format_type 得到的列类型全名，用于 SQL 中 ?::类型（如 vector(1536)、cv.vector），避免硬编码不存在的 cv.vector
+     * pg_catalog.format_type 返回的列类型全名，用于 SQL cast（如 vector(1024)），避免硬编码。
      */
     private volatile String embeddingPgFormatType;
 
     @PostConstruct
     public void init() {
-        // ????????????????? DDL????? DBA / SQL ?????
         ensureEmbeddingColumnMeta();
     }
 
@@ -112,7 +106,6 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             return Response.success(ImportResumeKnowledgeRspVO.builder().imported(0).build());
         }
 
-        // 1) ???????????
         List<ResumeKnowledgeItemVO> validItems = new ArrayList<>();
         List<String> contents = new ArrayList<>();
         for (ResumeKnowledgeItemVO item : items) {
@@ -129,22 +122,20 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             return Response.success(ImportResumeKnowledgeRspVO.builder().imported(0).build());
         }
 
-        // 2) ??????????? embedding?????????????????
         List<float[]> vectors = null;
         if (embeddingModel != null) {
             vectors = embedInBatches(contents);
             if (vectors == null || vectors.size() != validItems.size()) {
-                return Response.fail("????????????????????????");
+                return Response.fail("向量化结果数量与输入不匹配");
             }
             for (int i = 0; i < validItems.size(); i++) {
                 String emb = toPgVectorString(vectors.get(i));
                 if (StringUtils.isBlank(emb)) {
-                    return Response.fail("??????? " + (i + 1) + " ????????????????? DashScope ??");
+                    return Response.fail("第 " + (i + 1) + " 条向量化结果为空，请检查 DashScope 服务");
                 }
             }
         }
 
-        // 3) ??????? embedding?
         LocalDateTime now = LocalDateTime.now();
         int imported = 0;
         for (int i = 0; i < validItems.size(); i++) {
@@ -156,7 +147,7 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
 
             ResumeKnowledgeBaseDO entity = ResumeKnowledgeBaseDO.builder()
                     .content(item.getContent())
-                    .category(StringUtils.defaultIfBlank(item.getCategory(), "???"))
+                    .category(StringUtils.defaultIfBlank(item.getCategory(), "默认"))
                     .metadata(toJsonbString(item.getMetadata()))
                     .embedding(embedding)
                     .createdAt(now)
@@ -182,27 +173,26 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
 
         ResumeKnowledgeBaseDO existed = resumeKnowledgeBaseMapper.selectById(reqVO.getId());
         if (existed == null) {
-            return Response.fail("???????");
+            return Response.fail("知识不存在");
         }
 
         String content = reqVO.getContent().trim();
         if (StringUtils.isBlank(content)) {
-            return Response.fail("content ????");
+            return Response.fail("content 不能为空");
         }
 
-        // ?????????????????????????????????????????
         String embedding = null;
         if (embeddingModel != null) {
             List<float[]> vectors = embedInBatches(List.of(content));
             float[] vector = (vectors == null || vectors.isEmpty()) ? null : vectors.get(0);
             embedding = toPgVectorString(vector);
             if (StringUtils.isBlank(embedding)) {
-                return Response.fail("????????? DashScope ???????");
+                return Response.fail("重新向量化失败，请检查 DashScope 服务");
             }
         }
 
         existed.setContent(content);
-        existed.setCategory(StringUtils.defaultIfBlank(reqVO.getCategory(), "???"));
+        existed.setCategory(StringUtils.defaultIfBlank(reqVO.getCategory(), "默认"));
         existed.setMetadata(toJsonbString(reqVO.getMetadata()));
         existed.setEmbedding(embedding);
         existed.setUpdatedAt(LocalDateTime.now());
@@ -242,7 +232,7 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
     public Response<Integer> refillEmbeddings(Integer batchSize) {
         ensureEmbeddingColumnMeta();
         if (embeddingModel == null) {
-            log.warn("??? EmbeddingModel?DashScope ?????????");
+            log.warn("未注入 EmbeddingModel，DashScope 可能未配置");
             return Response.success(0);
         }
 
@@ -252,7 +242,6 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             while (true) {
                 List<long[]> empty = new ArrayList<>();
                 List<String> contents = new ArrayList<>();
-                // 1) ??? embedding ?????
                 String selectSql = "SELECT id, content FROM resume_knowledge_base WHERE embedding IS NULL ORDER BY id ASC LIMIT " + size;
                 try (Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery(selectSql)) {
@@ -263,11 +252,9 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
                 }
                 if (contents.isEmpty()) break;
 
-                // 2) ??????
                 List<float[]> vectors = embedInBatches(contents);
                 if (vectors == null) break;
 
-                // 3) ??
                 String updateSql = "UPDATE resume_knowledge_base SET embedding = ?::" + sqlCastEmbeddingType()
                         + ", updated_at = CURRENT_TIMESTAMP WHERE id = ?";
                 try (PreparedStatement ps = conn.prepareStatement(updateSql)) {
@@ -285,14 +272,13 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
                     }
                 }
 
-                // ?????????? size ??????
                 if (empty.size() < size) break;
             }
         } catch (Exception e) {
-            log.error("?? embedding ???{}", e.getMessage(), e);
-            return Response.fail("?? embedding ???" + e.getMessage());
+            log.error("回填 embedding 异常: {}", e.getMessage(), e);
+            return Response.fail("回填 embedding 失败: " + e.getMessage());
         }
-        log.info("?? embedding ???{} ?", totalUpdated);
+        log.info("回填 embedding 完成，共更新 {} 条", totalUpdated);
         return Response.success(totalUpdated);
     }
 
@@ -301,7 +287,7 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
         ensureEmbeddingColumnMeta();
 
         if (embeddingModel == null) {
-            return Response.fail("??? EmbeddingModel?DashScope??????????");
+            return Response.fail("未注入 EmbeddingModel，DashScope 可能未配置");
         }
         if (!"vector".equals(embeddingColumnType)) {
             return Response.fail("pgvector 未就绪：embedding 列需为 vector 类型（当前为 " + embeddingColumnType + "）");
@@ -310,20 +296,18 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
         int topK = (reqVO.getTopK() == null || reqVO.getTopK() <= 0) ? SEARCH_TOPK_DEFAULT : reqVO.getTopK();
         String category = reqVO.getCategory();
 
-        // 1) ? query ???
         float[] qv;
         try {
             qv = embeddingModel.embed(reqVO.getQuery());
         } catch (Exception e) {
-            log.warn("query ??????{}", e.getMessage());
-            return Response.fail("query ??????" + e.getMessage());
+            log.warn("query 向量化失败: {}", e.getMessage());
+            return Response.fail("query 向量化失败: " + e.getMessage());
         }
         if (qv == null || qv.length == 0) {
-            return Response.fail("query ????");
+            return Response.fail("query 向量化为空");
         }
         String qvStr = toPgVectorString(qv);
 
-        // 2) pgvector：cast 类型与列实际类型一致（来自 format_type，如 vector(1536)）
         String castT = sqlCastEmbeddingType();
         StringBuilder sql = new StringBuilder(
                 "SELECT id, content, category, metadata::text AS metadata, " +
@@ -358,19 +342,19 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
                 }
             }
         } catch (Exception e) {
-            log.error("???????{}", e.getMessage(), e);
-            return Response.fail("???????" + e.getMessage());
+            log.error("相似度检索异常: {}", e.getMessage(), e);
+            return Response.fail("相似度检索失败: " + e.getMessage());
         }
         return Response.success(result);
     }
 
     // ============================================================
-    //  Embedding ??
+    //  Embedding 工具方法
     // ============================================================
 
     /**
-     * ?????????? EMBED_BATCH_SIZE ???????????????
-     * ??? list ???????????????? null?
+     * 按 EMBED_BATCH_SIZE 分批调用 DashScope 向量化，返回所有向量。
+     * 若 embeddingModel 为 null 则返回全 null 列表。
      */
     private List<float[]> embedInBatches(List<String> contents) {
         if (embeddingModel == null || contents == null || contents.isEmpty()) {
@@ -382,12 +366,11 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             List<float[]> batch = embedOnceSafely(part);
             all.addAll(batch);
         }
-        // ??????????????????? vector(N) ?????
         if (embeddingDimension == 0) {
             for (float[] v : all) {
                 if (v != null && v.length > 0) {
                     embeddingDimension = v.length;
-                    log.info("DashScope embedding ??????{}", embeddingDimension);
+                    log.info("DashScope embedding 实际维度: {}", embeddingDimension);
                     break;
                 }
             }
@@ -396,7 +379,7 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
     }
 
     /**
-     * ?????? DashScope???????????????????????
+     * 单次调用 DashScope 向量化，失败时逐条重试。
      */
     private List<float[]> embedOnceSafely(List<String> part) {
         try {
@@ -404,18 +387,17 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             if (out != null && out.size() == part.size()) {
                 return out;
             }
-            log.warn("DashScope ?? embedding ????????? {}??? {}??????",
+            log.warn("DashScope 批量 embedding 返回数量不匹配: 输入 {} 条，返回 {} 条",
                     part.size(), out == null ? 0 : out.size());
         } catch (Exception e) {
-            log.warn("DashScope ?? embedding ?????????{}", e.getMessage());
+            log.warn("DashScope 批量 embedding 异常: {}", e.getMessage());
         }
-        // ?????
         List<float[]> result = new ArrayList<>(part.size());
         for (String text : part) {
             try {
                 result.add(embeddingModel.embed(text));
             } catch (Exception ex) {
-                log.warn("DashScope ?? embedding ?????={}????????{}",
+                log.warn("DashScope 单条 embedding 失败: len={}, error={}",
                         text == null ? 0 : text.length(), ex.getMessage());
                 result.add(null);
             }
@@ -424,16 +406,15 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
     }
 
     /**
-     * ? float[] ???? pgvector ??????????"[0.1,0.2,...]"?
-     * - ??????null / ???? null
-     * - ??????????????? null????? pgvector ??????
+     * 将 float[] 转为 pgvector 格式字符串 "[0.1,0.2,...]"。
+     * 维度不匹配时返回 null。
      */
     private String toPgVectorString(float[] vector) {
         if (vector == null || vector.length == 0) {
             return null;
         }
         if (embeddingDimension > 0 && vector.length != embeddingDimension) {
-            log.warn("embedding ???????? {}??? {}????????????????",
+            log.warn("embedding 维度不匹配: 期望 {}，实际 {}，跳过该向量",
                     embeddingDimension, vector.length);
             return null;
         }
@@ -447,14 +428,10 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
         return sb.toString();
     }
 
-    // ============================================================
-    //  ??????????? DDL?
-    // ============================================================
 
     /**
-     * ?? resume_knowledge_base.embedding ???????????? pg_attribute?????
-     * ?????? SQL ? "?::vector" / "?::text" ??????????????
-     * ?? embeddingColumnType ???????????????????????
+     * 从 pg_catalog 查询 resume_knowledge_base.embedding 列的实际类型，初始化 embeddingColumnType / embeddingDimension。
+     * 用于后续 SQL cast 时使用正确的类型名（如 vector(1024)），避免硬编码。
      */
     private void ensureEmbeddingColumnMeta() {
         if (embeddingColumnType != null) {
@@ -496,16 +473,16 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
                         }
                     }
                 } else {
-                    log.warn("???????? resume_knowledge_base.embedding ??????????");
+                    log.warn("未找到 resume_knowledge_base.embedding 列，请确认表结构");
                 }
             } catch (Exception e) {
-                log.warn("?? embedding ??????????????{}", e.getMessage());
+                log.warn("读取 embedding 列元数据失败: {}", e.getMessage());
             }
         }
     }
 
     /**
-     * SQL 中 cast 使用的类型名，必须与 {@link #embeddingPgFormatType}（pg 元数据）一致，避免 cv.vector 未创建时报错。
+     * SQL cast 使用的类型名，优先使用 pg 元数据中的全名，避免 cv.vector 未创建时报错。
      */
     private String sqlCastEmbeddingType() {
         if (StringUtils.isNotBlank(embeddingPgFormatType)) {
@@ -521,11 +498,11 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
     }
 
     // ============================================================
-    //  Metadata / ????
+    //  Metadata / 示例数据
     // ============================================================
 
     /**
-     * ?????? metadata ???? JSONB ????????? null??
+     * 将 JsonNode metadata 转为 JSONB 字符串，null 时返回 null。
      */
     private String toJsonbString(JsonNode metadata) {
         if (metadata == null || metadata.isNull()) {
@@ -545,7 +522,7 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
             }
             return objectMapper.writeValueAsString(metadata);
         } catch (Exception e) {
-            log.warn("metadata ??????????{}", e.getMessage());
+            log.warn("metadata 序列化失败: {}", e.getMessage());
             return null;
         }
     }
@@ -554,58 +531,58 @@ public class ResumeKnowledgeBaseServiceImpl implements ResumeKnowledgeBaseServic
         List<ResumeKnowledgeItemVO> items = new ArrayList<>();
 
         items.add(ResumeKnowledgeItemVO.builder()
-                .category("????")
-                .metadata(parseJsonNode("{\"??\":\"????\",\"??\":\"??\",\"??\":[\"??\",\"??\",\"??\"]}"))
+                .category("简历结构")
+                .metadata(parseJsonNode("{\"来源\":\"系统预设\",\"类型\":\"模板\",\"标签\":[\"结构\",\"排版\",\"规范\"]}"))
                 .content("""
-                        ???????
-                        1?? 1 ??????? 1 ???? 1-2 ???
-                        2??????????/??/??/??/?????
-                        3?????????? ? ??? ? ???? ? ????????? ???
-                        4????????? + ?? + ???????????
+                        简历排版规范
+                        1. 每段经历控制在 1 页以内，每段 1-2 个要点
+                        2. 使用动词开头：负责/主导/优化/设计/重构/推动
+                        3. 结果导向：用数据说话 + 对比 + 量化产出 + 体现影响力
+                        4. 排版原则：对齐 + 留白 + 字体统一
                         """.trim())
                 .build());
 
         items.add(ResumeKnowledgeItemVO.builder()
-                .category("????")
-                .metadata(parseJsonNode("{\"??\":\"????\",\"??\":\"???\",\"??\":[\"STAR\",\"??\",\"????\"]}"))
+                .category("简历结构")
+                .metadata(parseJsonNode("{\"来源\":\"系统预设\",\"类型\":\"方法论\",\"标签\":[\"STAR\",\"案例\",\"数据量化\"]}"))
                 .content("""
-                        STAR ?????
-                        - S?????????/????
-                        - T???????????
-                        - A?????????????????/??/???
-                        - R?????????????????/??/??/????
+                        STAR 法则详解
+                        - S（情境）：项目背景/业务痛点
+                        - T（任务）：负责的目标
+                        - A（行动）：具体方案/技术选型/架构设计
+                        - R（结果）：量化收益/性能提升/业务增长
 
-                        ???
-                        ? XX ??????S??????? P99 ? 800ms ?? 200ms?T?????????SQL ?????????A???? P99 ?? 180ms?????? 92%?R??
+                        示例：
+                        某 XX 项目通过 S 发现 P99 延迟从 800ms 升至 2000ms，T 要求优化 SQL 查询性能，A 引入缓存 + 索引优化，R 实现 P99 降至 180ms，吞吐量提升 92%。
                         """.trim())
                 .build());
 
         items.add(ResumeKnowledgeItemVO.builder()
-                .category("??")
-                .metadata(parseJsonNode("{\"??\":\"????\",\"??\":\"??\",\"??\":[\"??\",\"????\"]}"))
+                .category("技巧")
+                .metadata(parseJsonNode("{\"来源\":\"系统预设\",\"类型\":\"技巧\",\"标签\":[\"优化\",\"关键词\"]}"))
                 .content("""
-                        ???????1 ??????
-                        - ??????/??/????
-                        - ??????2 ????????????
-                        - ????????????????????????
-                        - ??????????????
+                        简历优化第 1 原则：关键词匹配
+                        - 仔细阅读 JD，提取高频关键词
+                        - 将关键词自然融入工作经历中
+                        - 不要简单堆砌，要用项目经历佐证
+                        - 针对不同岗位定制不同版本
 
-                        ?????????????"??"???"??"???
+                        避免空洞描述如"负责维护"改为"主导重构"
                         """.trim())
                 .build());
 
         items.add(ResumeKnowledgeItemVO.builder()
-                .category("??")
-                .metadata(parseJsonNode("{\"??\":\"????\",\"??\":\"??\",\"??\":[\"Java\",\"??\",\"???\"]}"))
+                .category("技巧")
+                .metadata(parseJsonNode("{\"来源\":\"系统预设\",\"类型\":\"技能\",\"标签\":[\"Java\",\"后端\",\"技术栈\"]}"))
                 .content("""
-                        Java ??????????
-                        - ??????Java?JVM??????
-                        - ???Spring Boot?Spring MVC?MyBatis/MyBatis-Plus
-                        - ????Redis?MQ?Kafka/RabbitMQ??ElasticSearch????
-                        - ????PostgreSQL/MySQL???????SQL ???
-                        - ????Git?CI/CD?Docker?????????
+                        Java 后端常见技术栈
+                        - 扎实掌握 Java、JVM 调优经验
+                        - 熟练 Spring Boot、Spring MVC、MyBatis/MyBatis-Plus
+                        - 熟悉 Redis、MQ（Kafka/RabbitMQ）、ElasticSearch 等中间件
+                        - 熟悉 PostgreSQL/MySQL，具备复杂 SQL 优化能力
+                        - 熟悉 Git、CI/CD、Docker 等工程化工具
 
-                        ????"??/??/??"??????????
+                        建议按"熟练/熟悉/了解"分级描述
                         """.trim())
                 .build());
 

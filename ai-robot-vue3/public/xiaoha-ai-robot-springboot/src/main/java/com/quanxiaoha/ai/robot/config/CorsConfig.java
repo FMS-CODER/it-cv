@@ -10,7 +10,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import java.io.IOException;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/6/3 18:17
  * @Version: v1.0.0
  * @Description: 跨域配置和静态资源映射

@@ -7,7 +7,7 @@ import com.quanxiaoha.ai.robot.domain.dos.FileChunkInfoDO;
 import java.util.List;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/8/11 11:36
  * @Version: v1.0.0
  * @Description: 分片信息表

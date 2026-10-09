@@ -4,6 +4,8 @@
 -- AiCustomerServiceFileStorageDO；另含可选知识库表（需 pgvector 扩展）
 -- 在目标库中按需整段执行；空库可一次执行本文件
 -- =============================================================================
+-- 先确保 cv 架构存在（否则 search_path 中的 cv 会被忽略，表会误建到 public）
+CREATE SCHEMA IF NOT EXISTS cv;
 SET search_path TO cv, public;
 
 -- -----------------------------------------------------------------------------
@@ -77,8 +79,8 @@ CREATE INDEX IF NOT EXISTS idx_ai_cs_file_md5 ON t_ai_customer_service_file_stor
 COMMENT ON TABLE t_ai_customer_service_file_storage IS 'AI 客服 Markdown 等大文件存储与分片进度';
 
 -----------------------------------------------------------------------------
-5.（可选）简历知识库 resume_knowledge_base — 需先安装 pgvector
-   若未使用向量检索，可跳过本节
+-- 5.（可选）简历知识库 resume_knowledge_base — 需先安装 pgvector
+--    若未使用向量检索，可跳过本节
 -----------------------------------------------------------------------------
 CREATE EXTENSION IF NOT EXISTS vector;
 

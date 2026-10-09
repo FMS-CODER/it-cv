@@ -1,7 +1,7 @@
 package com.quanxiaoha.ai.robot.exception;
 
 /**
- * @author: 犬小哈
+ * @author: 小明
  * @url: www.quanxiaoha.com
  * @date: 2023-08-15 9:54
  * @description: 通用异常接口

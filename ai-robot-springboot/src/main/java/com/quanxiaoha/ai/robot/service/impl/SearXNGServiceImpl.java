@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/7/30 12:15
  * @Version: v1.0.0
  * @Description: SearXNG 搜索引擎服务实现

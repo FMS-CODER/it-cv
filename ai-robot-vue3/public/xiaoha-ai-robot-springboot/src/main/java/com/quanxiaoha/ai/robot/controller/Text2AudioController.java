@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/29 12:32
  * @Version: v1.0.0
  * @Description: 文生音频

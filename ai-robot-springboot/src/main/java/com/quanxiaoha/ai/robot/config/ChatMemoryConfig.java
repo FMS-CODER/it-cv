@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/27 14:42
  * @Version: v1.0.0
  * @Description: TODO

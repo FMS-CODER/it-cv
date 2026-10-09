@@ -92,6 +92,7 @@ public class CustomChatMemoryAdvisor implements StreamAdvisor {
                 .mutate()
                 .prompt(chatClientRequest.prompt().mutate().messages(messageList).build())
                 .build();
+       
 
         return streamAdvisorChain.nextStream(processedChatClientRequest);
     }

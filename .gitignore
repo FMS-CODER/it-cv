@@ -7,6 +7,9 @@ Desktop.ini
 .vscode/
 *.iml
 
+# ===== AI 工具缓存 =====
+.workbuddy/
+
 # ===== 日志/运行产物 =====
 logs/
 *.log
@@ -27,6 +30,8 @@ logs/
 # ===== 环境变量/密钥（避免误提交）=====
 .env
 .env.*
+# 模板文件需要提交，否则部署时无法 cp .env.example .env
+!.env.example
 *.key
 *.pem
 

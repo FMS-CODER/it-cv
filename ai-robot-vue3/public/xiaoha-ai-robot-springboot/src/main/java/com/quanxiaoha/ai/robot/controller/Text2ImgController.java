@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/29 12:32
  * @Version: v1.0.0
  * @Description: 文生图

@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/5/22 12:25
  * @Version: v1.0.0
  * @Description: Chat Client 客户端
@@ -52,7 +52,7 @@ public class ChatClientController {
         // 流式输出
         return chatClient.prompt()
                 .tools(new DateTimeTools(), new WeatherTools()) // Function Call
-//                .system("请你扮演一名犬小哈 Java 项目实战专栏的客服人员")
+//                .system("请你扮演一名小明 Java 项目实战专栏的客服人员")
                 .user(message) // 提示词
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
                 .stream()

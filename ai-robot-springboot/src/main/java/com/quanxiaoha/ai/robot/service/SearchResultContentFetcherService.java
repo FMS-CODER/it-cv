@@ -8,9 +8,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author: 犬小哈
- * @Date: 2025/7/30 12:13
- * @Version: v1.0.0
  * @Description: 页面内容提取
  **/
 public interface SearchResultContentFetcherService {

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 
 /**
- * @Author: 犬小哈
+ * @Author: 小明
  * @Date: 2025/7/7 14:51
  * @Version: v1.0.0
  * @Description: 天气 Tool

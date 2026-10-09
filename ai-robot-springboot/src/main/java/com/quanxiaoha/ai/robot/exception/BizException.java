@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author: 犬小哈
+ * @author: 小明
  * @url: www.quanxiaoha.com
  * @date: 2023-08-15 9:52
  * @description: 业务异常

@@ -3,7 +3,7 @@ package com.quanxiaoha.ai.robot.agent.service.impl;
 import com.google.common.collect.Lists;
 import com.quanxiaoha.ai.robot.advisor.CustomChatMemoryAdvisor;
 import com.quanxiaoha.ai.robot.advisor.CustomStreamLoggerAndMessage2DBAdvisor;
-import com.quanxiaoha.ai.robot.advisor.NetworkSearchAdvisor;
+
 import com.quanxiaoha.ai.robot.agent.model.AgentContext;
 import com.quanxiaoha.ai.robot.agent.model.AgentScene;
 import com.quanxiaoha.ai.robot.agent.model.PlannerDecision;
@@ -70,11 +70,6 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
     private ChatMessageMapper chatMessageMapper;
     @Resource
     private TransactionTemplate transactionTemplate;
-    @Resource
-    private SearXNGService searXNGService;
-    @Resource
-    private SearchResultContentFetcherService searchResultContentFetcherService;
-
     @Override
     public Flux<AIResponse> streamChat(AiChatReqVO reqVO) {
         boolean forceKnowledgeRag = Boolean.TRUE.equals(reqVO.getKnowledgeRag());
@@ -112,7 +107,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                         return streamChatWithFallbackLoop(context, reqVO);
                     });
         } else {
-            stream = streamChatStandard(context, reqVO, true);
+            stream = streamChatStandard(context, reqVO);
         }
         return wrapChatStream(context, stream);
     }
@@ -193,7 +188,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                 .system(context.getSystemPrompt())
                 .user(context.getUserPrompt())
                 .tools(searchAgentTools);
-        spec.advisors(buildChatAdvisors(reqVO, false, true));
+        spec.advisors(buildChatAdvisors(reqVO, true));
         return mapChatStream(spec);
     }
 
@@ -214,7 +209,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
         final PlannerDecision finalDecision = decision;
 
         if (!finalDecision.isInitialToolCall()) {
-            return streamChatStandard(context, reqVO, true);
+            return streamChatStandard(context, reqVO);
         }
 
         context.setReactFinished(false);
@@ -412,13 +407,13 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
 
         if (context.getMaxAgentSteps() < 2) {
             log.warn("Agent 最大步数不足以执行工具降级流程，直接使用普通生成：maxSteps={}", context.getMaxAgentSteps());
-            return streamChatStandard(context, reqVO, true);
+            return streamChatStandard(context, reqVO);
         }
 
         boolean needKnowledge = decision.isNeedKnowledgeSearch();
         boolean needWeb = decision.isNeedWebSearch();
         if (!needKnowledge && !needWeb) {
-            return streamChatStandard(context, reqVO, true);
+            return streamChatStandard(context, reqVO);
         }
 
         String toolQuery = StringUtils.defaultIfBlank(decision.getToolQuery(), context.getUserInput());
@@ -440,10 +435,10 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
         context.setSystemPrompt(system.toString().trim());
         context.setFinalPromptPreview("[System]\n" + context.getSystemPrompt() + "\n\n[User]\n" + context.getUserPrompt());
         agentAuditLogger.recordPrompt(context);
-        return streamChatStandard(context, reqVO, false);
+        return streamChatStandard(context, reqVO);
     }
 
-    private Flux<AIResponse> streamChatStandard(AgentContext context, AiChatReqVO reqVO, boolean allowNetworkAdvisor) {
+    private Flux<AIResponse> streamChatStandard(AgentContext context, AiChatReqVO reqVO) {
         if (StringUtils.isBlank(context.getToolMode())) {
             agentAuditLogger.recordToolMode(context, "standard");
         }
@@ -451,15 +446,13 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                 .prompt()
                 .system(context.getSystemPrompt())
                 .user(context.getUserPrompt());
-        spec.advisors(buildChatAdvisors(reqVO, allowNetworkAdvisor, false));
+        spec.advisors(buildChatAdvisors(reqVO, false));
         return mapChatStream(spec);
     }
 
-    private List<Advisor> buildChatAdvisors(AiChatReqVO reqVO, boolean allowNetworkAdvisor, boolean alwaysUseMemory) {
+    private List<Advisor> buildChatAdvisors(AiChatReqVO reqVO, boolean alwaysUseMemory) {
         List<Advisor> advisors = Lists.newArrayList();
-        if (allowNetworkAdvisor && Boolean.TRUE.equals(reqVO.getNetworkSearch())) {
-            advisors.add(new NetworkSearchAdvisor(searXNGService, searchResultContentFetcherService));
-        } else if (alwaysUseMemory || StringUtils.isNotBlank(reqVO.getChatId())) {
+        if (alwaysUseMemory || StringUtils.isNotBlank(reqVO.getChatId())) {
             advisors.add(new CustomChatMemoryAdvisor(chatMessageMapper, reqVO, 50));
         }
 
