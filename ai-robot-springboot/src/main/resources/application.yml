@@ -6,8 +6,8 @@ spring:
     active: dev # 激活 dev 开发环境
   servlet:
     multipart:
-      max-file-size: 50MB # 单个文件最大大小
-      max-request-size: 50MB # 请求最大大小
+      max-file-size: 3MB # 单个文件最大大小
+      max-request-size: 3MB # 请求最大大小
   ai:
     dashscope:
       api-key: sk-   # 从环境变量读取，避免硬编码
@@ -20,7 +20,7 @@ spring:
       chat:
         options:
 #          model: deepseek-chat # 使用哪个模型
-          model: deepseek-reasoner # 使用哪个模型
+          model: deepseek-flash # 使用哪个模型
           temperature: 0.8 # 温度值
 logging:
   config: classpath:log4j2.xml # 设置日志配置文件路径
