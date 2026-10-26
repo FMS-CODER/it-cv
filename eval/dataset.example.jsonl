@@ -1,0 +1,5 @@
+{"question": "简历一般写几页比较合适？各个模块应该怎么排序？", "expected_id": 1, "category": "简历通用"}
+{"question": "项目经历用 STAR 法则应该怎么写才更有说服力？", "expected_id": 2, "category": "项目描述"}
+{"question": "面试自我介绍一分钟应该包含哪些内容？", "expected_id": 3, "category": "面试"}
+{"question": "Java 后端简历的技能区应该放哪些技术点？", "expected_id": 4, "category": "后端"}
+{"question": "简历里描述工作成果时，怎么表达才不会显得空泛？", "expected_id": 1, "category": "简历通用"}

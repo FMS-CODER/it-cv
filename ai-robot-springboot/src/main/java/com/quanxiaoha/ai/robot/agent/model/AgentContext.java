@@ -119,6 +119,12 @@ public class AgentContext {
     /** 是否触发降级 */
     private boolean fallbackTriggered;
 
+    /** 流式输出过程中是否异常中断 */
+    private boolean streamInterrupted;
+
+    /** 模型调用重试次数（含首次） */
+    private int modelRetryCount;
+
     /** 是否执行成功 */
     private boolean success;
 

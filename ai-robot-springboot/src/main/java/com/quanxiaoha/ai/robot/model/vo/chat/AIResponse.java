@@ -17,4 +17,7 @@ public class AIResponse {
 
     /** 推理过程（深度思考模型） */
     private String reasoning;
+
+    /** 流式异常终止时的错误提示（正常结束为空） */
+    private String error;
 }

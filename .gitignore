@@ -27,6 +27,13 @@ logs/
 **/.vite/
 **/.cache/
 
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+eval/results/
+
 # ===== 环境变量/密钥（避免误提交）=====
 .env
 .env.*

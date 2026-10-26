@@ -1,0 +1,29 @@
+# =============================================================================
+# Python AI 服务依赖
+# 说明：全部为运行时必需依赖，未引入未使用到的包，保持轻量。
+# =============================================================================
+
+# --- Web 框架 ---
+fastapi>=0.115.0            # ASGI Web 框架，提供路由 / OpenAPI
+uvicorn[standard]>=0.30.0   # ASGI 服务器（含 uvloop/httptools 等加速组件）
+sse-starlette>=2.1.0        # SSE（Server-Sent Events）流式响应，供对话/简历优化使用
+
+# --- LLM 编排 ---
+langchain-core>=0.3.0       # LangChain 核心抽象（Message / Runnable）
+langchain-openai>=0.2.0     # OpenAI 兼容协议封装，DeepSeek 复用该协议
+
+# --- 配置与校验 ---
+pydantic>=2.7.0             # 数据校验
+pydantic-settings>=2.3.0    # 从环境变量 / .env 读取配置
+python-dotenv>=1.0.0        # 本地 .env 加载
+
+# --- HTTP 客户端 ---
+httpx>=0.27.0               # 调用 DashScope embedding / rerank，以及 SearXNG
+
+# --- 数据库（PostgreSQL + pgvector）---
+# 选型说明：直接使用 psycopg 拼 SQL 操作 pgvector，而不引入独立向量库 SDK / ORM。
+# 原因：Java 侧同样是「手工 SQL + 显式 cast」的方式（见 ResumeKnowledgeBaseServiceImpl），
+#      直接拼 SQL 可以完全对齐其检索语义（余弦距离公式、category 过滤、动态 cast），
+#      同时少一层依赖映射，维度/类型问题更可控；pgvector 的 SQL 语法足够简单，无需额外封装。
+psycopg[binary]>=3.2.0      # PostgreSQL 驱动（binary 版免本地编译）
+psycopg-pool>=3.2.0         # psycopg 连接池

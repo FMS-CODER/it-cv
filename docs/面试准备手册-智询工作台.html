@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="QIBPlWNlk9uATIurN53U5V">
+<head data-page-node-id="kEYwaTK2Xnqzy4tN4vD5Td">
+<meta charset="UTF-8" data-page-node-id="ZR8hEkrBfkGsAkOrCzbYXR">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ABPk4HfsIsYburoCRw2aVe">
+<title>面试准备手册 · 邵方明 · 智询工作台</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#1f2328; --ink2:#4a5260; --ink3:#7a8494;
+    --line:#e4e7ec; --line2:#eef0f3;
+    --blue:#2f6fd0; --blue-bg:#eaf1fc;
+    --amber:#9a6b00; --amber-bg:#fdf4e0;
+    --red:#c0392b; --red-bg:#fdeceb;
+    --green:#1e7a4d; --green-bg:#e8f5ee;
+    --purple:#6246b5; --purple-bg:#f0ecfc;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,"Segoe UI",sans-serif;
+    font-size:15px; line-height:1.75;
+  }
+  .wrap{max-width:1000px; margin:0 auto; padding:0 24px 96px;}
+  header.top{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:36px 24px 26px; margin-bottom:28px;
+  }
+  header.top .inner{max-width:1000px; margin:0 auto;}
+  h1{font-size:26px; margin:0 0 8px; font-weight:600; letter-spacing:.3px;}
+  .sub{color:var(--ink2); font-size:14px;}
+  .meta{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    display:inline-block; padding:3px 10px; border-radius:100px;
+    font-size:12.5px; background:var(--blue-bg); color:var(--blue); border:1px solid #cfe0f6;
+  }
+  .tag.g{background:var(--green-bg); color:var(--green); border-color:#cbe8d9;}
+  .tag.a{background:var(--amber-bg); color:var(--amber); border-color:#f0dfb8;}
+  .tag.p{background:var(--purple-bg); color:var(--purple); border-color:#ddd4f7;}
+
+  nav.toc{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:20px 24px; margin-bottom:32px;
+  }
+  nav.toc h2{font-size:15px; margin:0 0 12px; color:var(--ink2); font-weight:600;}
+  nav.toc ol{margin:0; padding-left:22px; columns:2; column-gap:36px;}
+  nav.toc li{margin-bottom:5px; font-size:14px;}
+  nav.toc a{color:var(--blue); text-decoration:none;}
+  nav.toc a:hover{text-decoration:underline;}
+
+  h2.sec{
+    font-size:20px; margin:56px 0 6px; padding-bottom:10px;
+    border-bottom:2px solid var(--ink); font-weight:600;
+  }
+  h2.sec .n{color:var(--ink3); font-weight:400; margin-right:8px; font-size:17px;}
+  h3{font-size:16.5px; margin:32px 0 10px; font-weight:600; color:var(--ink);}
+  h4{font-size:15px; margin:22px 0 8px; font-weight:600; color:var(--ink2);}
+  p{margin:10px 0;}
+  .lead{color:var(--ink2); font-size:14.5px;}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin:16px 0;
+  }
+  .card.blue{border-left:4px solid var(--blue);}
+  .card.amber{border-left:4px solid #e0a91a; background:#fffdf7;}
+  .card.red{border-left:4px solid var(--red); background:#fffbfa;}
+  .card.green{border-left:4px solid var(--green); background:#fbfefc;}
+  .card.purple{border-left:4px solid var(--purple);}
+
+  .card h4{margin-top:0;}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; background:var(--card);}
+  th,td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  th{background:#f4f6f9; font-weight:600; color:var(--ink); white-space:nowrap;}
+  td code{font-size:12.5px;}
+
+  code{
+    font-family:"Cascadia Code","JetBrains Mono",Consolas,monospace;
+    background:#f2f4f7; padding:1px 5px; border-radius:4px; color:#243b53; font-size:13px;
+  }
+  pre{
+    background:#1f2430; color:#e6e9ef; padding:16px 18px; border-radius:10px;
+    overflow-x:auto; font-size:13px; line-height:1.65; margin:14px 0;
+    font-family:"Cascadia Code","JetBrains Mono",Consolas,monospace;
+  }
+  pre code{background:none; color:inherit; padding:0; font-size:13px;}
+
+  .qa{background:var(--card); border:1px solid var(--line); border-radius:12px; margin:14px 0; overflow:hidden;}
+  .qa .q{
+    padding:13px 18px; background:#f6f8fb; font-weight:600; font-size:14.5px;
+    border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:flex-start;
+  }
+  .qa .q .idx{
+    flex:0 0 auto; background:var(--ink); color:#fff; font-size:11.5px; font-weight:600;
+    border-radius:5px; padding:2px 7px; margin-top:3px; letter-spacing:.4px;
+  }
+  .qa .a{padding:14px 18px;}
+  .qa .a>p:first-child{margin-top:0;}
+  .qa .a>p:last-child{margin-bottom:0;}
+
+  .label{
+    display:inline-block; font-size:11.5px; font-weight:600; padding:1px 8px;
+    border-radius:5px; margin-right:8px; vertical-align:2px; letter-spacing:.3px;
+  }
+  .label.k{background:var(--purple-bg); color:var(--purple);}
+  .label.s{background:var(--green-bg); color:var(--green);}
+  .label.z{background:var(--amber-bg); color:var(--amber);}
+
+  blockquote{
+    margin:12px 0; padding:12px 16px; background:#f6f8fb;
+    border-left:3px solid #b9c4d4; border-radius:0 8px 8px 0;
+    font-size:14px; color:var(--ink2);
+  }
+  blockquote p{margin:6px 0;}
+  blockquote p:first-child{margin-top:0;}
+  blockquote p:last-child{margin-bottom:0;}
+
+  ul,ol{padding-left:24px; margin:10px 0;}
+  li{margin:5px 0;}
+
+  .kpi{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin:18px 0;}
+  .kpi div{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; text-align:center;
+  }
+  .kpi b{display:block; font-size:22px; color:var(--blue); font-weight:600; letter-spacing:-.5px;}
+  .kpi span{font-size:12.5px; color:var(--ink3);}
+
+  .chain{
+    display:flex; flex-wrap:wrap; align-items:center; gap:6px;
+    font-size:13px; margin:12px 0;
+  }
+  .chain i{
+    font-style:normal; background:var(--card); border:1px solid var(--line);
+    border-radius:7px; padding:5px 11px; color:var(--ink);
+  }
+  .chain em{font-style:normal; color:var(--ink3);}
+
+  hr{border:none; border-top:1px solid var(--line); margin:36px 0;}
+  .foot{color:var(--ink3); font-size:13px; text-align:center; margin-top:48px;}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:760px){ .two{grid-template-columns:1fr;} nav.toc ol{columns:1;} }
+  @media print{
+    body{background:#fff;} header.top{page-break-after:avoid;} .qa{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body data-page-node-id="n1w3hSqfG3alyAlws1aE5J">
+
+<header class="top" data-page-node-id="84T8S2nDnAqUCmemgAeU8i">
+  <div class="inner" data-page-node-id="Vwc0OQHwz3lrhsBgCsP8fT">
+    <h1 data-page-node-id="VIxZEKcXdxipfjPswc9VId">面试准备手册 · 智询工作台</h1>
+    <div class="sub" data-page-node-id="Xi0cHuNjKvAcLdVgVXmHMi">基于简历《邵方明_软件工程》与项目真实源码逐行核对整理 · 2026 届秋招/春招适用</div>
+    <div class="meta" data-page-node-id="FA6o0h2Kj5B6vkxZVTeqqA">
+      <span class="tag" data-page-node-id="U1Af1tb5xFszi7zRh3oy3i">Agent 编排 · ReAct</span>
+      <span class="tag g" data-page-node-id="uTLCLPUrdCRVURGsJRbGCk">RAG · pgvector</span>
+      <span class="tag p" data-page-node-id="1zXaNFQjVMZBACyI2awLtX">SSE 流式</span>
+      <span class="tag a" data-page-node-id="xnkF2MNdxZDePVSvVGebu2">联网搜索</span>
+      <span class="tag" data-page-node-id="PmrqFaNJG2oKhvpnzizL3U">Docker 编排</span>
+      <span class="tag g" data-page-node-id="Xj1nObp1cUVTz8nSxCfvCe">离线评测 · Hit@K / MRR</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" data-page-node-id="91hr5nEGWiCJHEgutahko5">
+
+<nav class="toc" data-page-node-id="ylNPylCXc9wMOHFIqvzzNE">
+  <h2 data-page-node-id="ZiNBTddInaLELfEAEWh70I">目录</h2>
+  <ol data-page-node-id="nE7Yyx8yjxSNut3oL1GEQD">
+    <li data-page-node-id="ictlaiEyJnZzm3bAdgTJvm"><a href="#s1" data-page-node-id="Bo1ROfMb5oHEgZq5WTqRuI">三档项目自述（30 秒 / 2 分钟 / 5 分钟）</a></li>
+    <li data-page-node-id="AJGK39ACYe46FiHoIjyDhf"><a href="#s2" data-page-node-id="5Wz7lMfCzVU3LotFEbahl3">功能全景：模块与代码对应</a></li>
+    <li data-page-node-id="B48zKAYoIJXEpPhgQeZShA"><a href="#s3" data-page-node-id="0fzZVImlCchaCgqkqdllXg">六条核心链路拆解</a></li>
+    <li data-page-node-id="0VU1DC7qbbsLiKpMD3vmJ2"><a href="#s4" data-page-node-id="G71dC8QgIJFeVwqEHGI1zX">量化数据：把简历上的数字坐实</a></li>
+    <li data-page-node-id="K1JVEFm5GWhm9MZbHW0KsI"><a href="#s5" data-page-node-id="RTZSblZNRk0OYgsLKmg9JI">风险自查：简历与代码不一致处</a></li>
+    <li data-page-node-id="NELjldFtd6SpSIPiQ7OGkS"><a href="#s6" data-page-node-id="staWTkBnAEcgf8dpOrXazO">高频问题与参考答案（40 题）</a></li>
+    <li data-page-node-id="GpnNVwzhoQeavSYNanQrBa"><a href="#s7" data-page-node-id="UHFwsczBUGPLRRCkMTxK0G">通用回答模板（可直接背）</a></li>
+    <li data-page-node-id="DvzRcBAfC2AM7HuEQoIvBJ"><a href="#s8" data-page-node-id="FTmqXLfevuCxDwfVSXNaQZ">面试前 48 小时清单</a></li>
+  </ol>
+</nav>
+
+<p class="lead" data-page-node-id="967p7VPDYXg77scCx2Rxc6">这份手册的写法是：<strong data-page-node-id="UrWwusbV9gqBReTYHuB43m">先让你能把项目讲清楚，再让你能扛住追问。</strong>所有技术细节都来自项目源码，不是我推测的说法——所以你可以放心地照着说，面试官顺着问下去也不会翻车。第 5 节专门列了简历里几个「说过头了」的地方，务必先看完再练其他部分。</p>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s1" data-page-node-id="dNOMt47hdBOpBW9w6yxuRn"><span class="n" data-page-node-id="Pi31fNem3EBFTXaMVyBVgc">01</span>三档项目自述</h2>
+
+<p class="lead" data-page-node-id="CACr0HerBnWDiXGypZkWvi">同一个项目，面试官给你 30 秒、2 分钟、5 分钟，要说的东西完全不同。三档都准备好，问到哪档都不慌。</p>
+
+<h3 data-page-node-id="ZoVF6ETb5HBp41C7AMpYp9">30 秒版（自我介绍里带过）</h3>
+<div class="card blue" data-page-node-id="EtufMBCw24ju8juZDvcmJE">
+  <p data-page-node-id="b3upFqpR8qd4kMnJNBdFGM">我做过一个 AI 简历优化与职业顾问平台，叫智询工作台。技术上用 Spring AI + Vue3，后端是一套自研的 Agent 编排框架：用户提问先由 Planner 做一次结构化决策，判断要不要查知识库、要不要联网，然后进入 ReAct 循环做多轮工具调用，最后流式输出答案。知识库那部分我做了完整的 RAG 链路——pgvector 向量检索加 GTE 语义重排；联网搜索用 SearXNG 加并发正文抓取。整个项目我用 Docker Compose 编排了四个服务，并且写了一套离线评测脚本用 Hit@K、MRR 来量化检索效果。</p>
+</div>
+
+<h3 data-page-node-id="oDBVQXEAjSrkD1PVw4Yr9Y">2 分钟版（项目经历的标准回答）</h3>
+<div class="card blue" data-page-node-id="QENZoDVHK7Rm32fHhzGCoG">
+  <p data-page-node-id="upMzW7zl5DqWDDRoy3GUIC"><strong data-page-node-id="NuvOP8ThFI2nFwCn3yx0qB">背景与目标：</strong>市面上的简历优化工具大多是一次性问一句答一句，答完就断了，既没有领域知识兜底，也拿不到实时信息。我想做的是一个「有知识库、能联网、会自己决定要不要调工具」的助手，所以做了智询工作台。</p>
+  <p data-page-node-id="eIm67fcNFgpnWRbBKydPZr"><strong data-page-node-id="pVkrNQ46NMZSJPbTSNgNIP">技术选型：</strong>后端 Spring Boot 3.4 + Spring AI 1.1 接 DeepSeek 做对话、接 DashScope 做 Embedding 和重排；存储用 PostgreSQL 17 加 pgvector，对话记录和向量库放在同一个库；前端 Vue3 + Vite，走 SSE 流式渲染；搜索用自部署的 SearXNG。</p>
+  <p data-page-node-id="4iY39x26DEZDCuHjAUMFtH"><strong data-page-node-id="0zInyRqIJIUwCiyTawzsAA">我负责的核心：</strong>主要是 Agent 编排链路和 RAG 检索链路这两块。</p>
+  <p data-page-node-id="igGsrIdcZpVPb6sxzgrLjv">编排上我做了一个统一编排器，把一次请求拆成「意图识别 → 上下文装配 → Prompt 构建 → Planner 决策 → 工具调用 → 流式输出」几个阶段，每个阶段都有耗时埋点和审计日志。工具调用走的是 ReAct 模式，模型每轮可以并行调多个工具，把观察结果回灌到下一轮提示词里，直到它自己判断信息够了输出最终回答。同时我设计了三级降级：ReAct 出异常就退回一次性工具调用再生成，再不行就直接不调工具生成，保证任何情况下用户都能拿到回答。</p>
+  <p data-page-node-id="qy49CCF85Xewk0yBFLPHbz">RAG 上我做的是双路召回：一路用原始问题检索，另一路把原始问题拼上一段「请从简历结构、STAR、项目描述角度补充」的导向语再检索一次，两路按 id 去重合并之后交给重排模型，最后按 0.35 的相似度阈值截断，最多保留 8 条。这样做的原因是单路召回容易被问题的字面表述带偏，加一路导向语能把召回方向往「答案该长什么样」上拽。</p>
+  <p data-page-node-id="aheasGH5ONI9kwe6VOF6rB"><strong data-page-node-id="yFHvFDYNCpvHMeQ1G4GpCO">结果：</strong>我写了一套离线评测脚本，28 条带标注的测试集，Hit@5 做到 92.9%，Hit@10 是 100%，MRR 0.736。因为切分前后我都跑过对比，所以这个提升是可复现的，不是感觉。</p>
+</div>
+
+<h3 data-page-node-id="uU4Gi2LnmSZlHfLwneAIqB">5 分钟版（深入追问时按链路展开）</h3>
+<div class="card blue" data-page-node-id="jKOngGTkGzlcmb9rdJfAL6">
+  <p data-page-node-id="bOCIDQjaog8gdM8hUP4FHG">把 2 分钟版讲完之后，如果面试官继续深入，就顺着下面这条链路一层层往下讲（第 3 节有每一层的完整细节）：</p>
+  <div class="chain" data-page-node-id="OFmQPYpWGLZzrld5AvAk59">
+    <i data-page-node-id="ealblf8UqeVGEkpneu3v6w">请求进来</i><em data-page-node-id="GVN2AE0gY42r9ePyyrNjMO">→</em><i data-page-node-id="QdezhNJlwekmyCsAWOcH3Q">意图识别</i><em data-page-node-id="e5aEyfiFcboeF5VuHoCDvw">→</em><i data-page-node-id="CEmhSGLB2HCRawIT52ekmQ">RAG 装配</i><em data-page-node-id="TGbfA3Ew7X5XBEBwUkq921">→</em><i data-page-node-id="M4Lrtz1CG85S1r4RFuSDDb">Prompt 构建</i><em data-page-node-id="7OiiFe0wt4jG2Q3J76Dkfv">→</em><i data-page-node-id="ctkfmA82OAMh2uBX4dxzO8">Planner 决策</i><em data-page-node-id="n0mXJaGBJtNvEUf4mLbB4i">→</em><i data-page-node-id="QQYcPuXNspbquHyx41FEOl">ReAct 多轮工具</i><em data-page-node-id="H8fTQONpF4F5rOMytnqqi4">→</em><i data-page-node-id="fdUKLQUvD1BAwRLTrwzudA">SSE 流式</i><em data-page-node-id="H26ihMjd2C44CxyDUrnDcp">→</em><i data-page-node-id="9CvegSt7KISgX5ddYoApsz">落库与审计</i>
+  </div>
+  <p data-page-node-id="oPqN8ktlHbhNw4r419lHxA">讲的时候注意三件事：一是<strong data-page-node-id="DLryfueEWxQMpFVqPC5t1R">每个环节都要说清「为什么」</strong>，而不只是「做了什么」；二是<strong data-page-node-id="MCBnAp81sCCU1zZ7i0XUC1">主动暴露一两个权衡</strong>（比如 ReAct 模式和真流式的取舍），面试官会觉得你真的是自己设计的；三是<strong data-page-node-id="8xrLktFAtLtdXARDVr2jbp">数字要能落到评测方法上</strong>，不能只是「效果变好了」。</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s2" data-page-node-id="z5Z3OrUpDGx40yLUx8B1bi"><span class="n" data-page-node-id="6xRSFrTYHs1t8rNF9QE1OK">02</span>功能全景：模块与代码对应</h2>
+
+<p class="lead" data-page-node-id="ohCpFu7GjoDfKNRdqauzMN">下表是项目实际实现的功能清单。<strong data-page-node-id="FUo5Hg7uA4Lzv3ObFJ9nUh">建议你对着「关键实现」和「对应类」两列念两遍</strong>——面试官问到「这个功能在哪个类里」，你要能张口就来，这比背概念有说服力得多。</p>
+
+<table data-page-node-id="wPrnC3pW3nfZBTtyaekYDx">
+  <thead data-page-node-id="RmrH59Si39b96zuVrKpmCY">
+    <tr data-page-node-id="OQO5MfkdbIQOP98GRiqlfh"><th data-page-node-id="6sSAjjv3SlR4I49x0wdZyX">模块</th><th data-page-node-id="GMOCsju1ZOso7BWaKwiK6Y">功能</th><th data-page-node-id="6NnQABu4eOVtOQCMUCXlDO">关键实现</th><th data-page-node-id="Rzfx5EfMu8fhUM6tOU9Vqz">对应类 / 文件</th></tr>
+  </thead>
+  <tbody data-page-node-id="lX9JAGmyoonmyarIOuwdTj">
+    <tr data-page-node-id="UdCDLLIC12qCrnccpTK5Pp">
+      <td data-page-node-id="kIR7ye3y0hiUtGxpoGqJPS"><strong data-page-node-id="quib482ZwHCcJS9mfaWOyr">简历优化</strong></td>
+      <td data-page-node-id="TVDUGkpttexI7rznXNQWxE">上传 PDF / DOCX 解析为文本，选目标岗位与额外要求，流式返回结构化优化建议</td>
+      <td data-page-node-id="6dyr4mZLLWffS9bTqVWtnf">PDFBox 抽取（<code data-page-node-id="urRvSsU26D03zqE5xOCvgn">setSortByPosition(true)</code>），POI 解析 DOCX 段落与表格；限制 3MB、仅允许 .pdf/.docx</td>
+      <td data-page-node-id="XQe8xh8ffXQYiZrikawji4"><code data-page-node-id="nib2GxeCVAkcGVz6TxNGRm">ResumeOptimizeController</code></td>
+    </tr>
+    <tr data-page-node-id="M6EyNOtewExXGNoMOi6dpt">
+      <td data-page-node-id="zvfxwc0X2kW5ubNYM1B4Xp"><strong data-page-node-id="UIJTduhVxsaytisgL3q0OX">智能对话</strong></td>
+      <td data-page-node-id="v8AoqycYHQPqbrLkYnDBCA">多轮会话、SSE 流式、历史会话与消息持久化、重命名、删除</td>
+      <td data-page-node-id="h2t2YYOLgA7cYNqCiMxwEd">Reactor Flux 流式输出；两个自定义 Advisor 分别做记忆加载与消息落库</td>
+      <td data-page-node-id="vetGaP7xrbte3wivFhLP4p"><code data-page-node-id="cMDfpAZWmYP5tMl7YIKc9L">ChatController</code>、<code data-page-node-id="DiDXMMgIFt0aTBFrCHuV8Y">ChatServiceImpl</code>、<code data-page-node-id="0HoTOfBDAztOpZVNz8COZX">CustomChatMemoryAdvisor</code>、<code data-page-node-id="vHpdM0TPntnf9xocGQYMBQ">CustomStreamLoggerAndMessage2DBAdvisor</code></td>
+    </tr>
+    <tr data-page-node-id="rqcq1OFJr7lBbuenEzvvbN">
+      <td data-page-node-id="QhHcBJ26CnvdlGw4BVYqTG"><strong data-page-node-id="5cPbzM7riJWBqgPuEznBY5">RAG 知识库</strong></td>
+      <td data-page-node-id="ZB1SKsDjJj6Mlc4qdiUm9a">知识增删改查、批量导入、向量回填、分类过滤、相似度检索、双路检索 + 重排 + 截断</td>
+      <td data-page-node-id="rr5by9w4rtNJ4LcL4Dxu4v">DashScope text-embedding-v2（1536 维，批 16）；pgvector 余弦距离 HNSW 索引；GTE-ReRank 重排</td>
+      <td data-page-node-id="fnpMWSiDUbjcgENjDrtuJI"><code data-page-node-id="HuhGl1qmrXok9nl2xNPyFu">ResumeKnowledgeBaseServiceImpl</code>、<code data-page-node-id="zCqfy93lKa08N1uMcTLvOq">ResumeKnowledgeRagServiceImpl</code>、<code data-page-node-id="EBxTzw23tWOxdtfVnfIlRo">DashScopeRerankServiceImpl</code>、<code data-page-node-id="E55TMJSnM0q0ACrd426nZB">RagTruncationService</code></td>
+    </tr>
+    <tr data-page-node-id="CxAElzmZfhy53MSewa66Er">
+      <td data-page-node-id="12sYZl1uLKlAQbMEIELehV"><strong data-page-node-id="KxBdax6AHDtVKhFfPSAWgs">联网搜索</strong></td>
+      <td data-page-node-id="jNgHlFguETzR8rC5oTh9eG">SearXNG 元搜索聚合 + 搜索结果页并发抓取 + 正文抽取注入</td>
+      <td data-page-node-id="GQhofk8tGz0eDAO91ixeCv">CompletableFuture + 双线程池（请求池 / 解析池）；单条 7s 超时兜底；Jsoup 抽取纯文本</td>
+      <td data-page-node-id="f2Z527yJj0CGWXcIFZvGwW"><code data-page-node-id="ImcE9bsA0oDuscaoQwsHKG">SearXNGServiceImpl</code>、<code data-page-node-id="g5Kj6kHWqUysMRxNUJZ9EH">SearchResultContentFetcherServiceImpl</code></td>
+    </tr>
+    <tr data-page-node-id="VHYduOeeEVHhBW82O3Hd6G">
+      <td data-page-node-id="Q56E7D0Eo3wsPDpatv77p4"><strong data-page-node-id="MBb36xmHK9kKdTWxRQxIuS">Agent 编排</strong></td>
+      <td data-page-node-id="iNSGGm8QRZqecyg7MvkoTI">Planner 结构化决策 + ReAct 多轮工具调用 + 三级降级兜底 + 全链路审计日志</td>
+      <td data-page-node-id="7GnORFFoCHsgxmXMlj7gly">统一编排器串起 Step；Planner 输出 JSON、失败退关键词规则；ReAct 循环解析「思考 / 工具调用 / 最终回答」三段式协议</td>
+      <td data-page-node-id="f3K0R1JvsYdFNeTIVTATyT"><code data-page-node-id="CF4ErqeOc6lQx5RJqn9XmH">AgentOrchestratorImpl</code>、<code data-page-node-id="DvFbs72Reeh7bRncxjAXTi">AgentPlannerServiceImpl</code>、<code data-page-node-id="mW7XyauGUfEw12O8i4vW66">SearchAgentTools</code>、<code data-page-node-id="wAeuLjfG0h5weIvR3qccPo">AgentAuditLogger</code></td>
+    </tr>
+    <tr data-page-node-id="LVymLztv4LjUwlvJYAuK0V">
+      <td data-page-node-id="s9DQZ1RNKrs8bVH9o3fgrK"><strong data-page-node-id="vCtJsI2ycVE3B0tNWkAkCP">离线评测</strong></td>
+      <td data-page-node-id="alirWNmXFRvVDFawMfmwjS">检索质量量化（Hit@K、MRR、空结果率）；端到端回答质量用 LLM 裁判打分</td>
+      <td data-page-node-id="XL1flXtVCezo6qbFXHxRjE">28 条带标注测试集；支持两次实验 <code data-page-node-id="5euRDFtxO9oDPnkaIR89t0">--compare</code> 输出差值表</td>
+      <td data-page-node-id="rXU4ZOJ4qwFromrd8WPguX"><code data-page-node-id="DsDWe4MA5U85QaSBgpdV1f">eval/retrieval_eval.py</code>、<code data-page-node-id="jGEFEzS2KKx2hLKwj071sF">eval/e2e_judge_eval.py</code>、<code data-page-node-id="XDGXyUj7e7j24UQc77itml">eval/ingest_docs.py</code></td>
+    </tr>
+    <tr data-page-node-id="gEl4tF5pICwwJhrxSzB5BJ">
+      <td data-page-node-id="Rg50AkTIcES7GFNZLy2G33"><strong data-page-node-id="KE1LgA0DS2Uu3WDUeyex6D">工程化部署</strong></td>
+      <td data-page-node-id="PxubS3ZJAkJWmfyvwrfs39">一键编排前端 / 后端 / PostgreSQL+pgvector / SearXNG；日志分流与持久化</td>
+      <td data-page-node-id="Bh35mZSzFXzd60vasDhZcn">Docker Compose 四服务 + healthcheck 依赖顺序；Log4j2 分 application/error 两类日志保留 30 天</td>
+      <td data-page-node-id="4Dvu0MzDoRMQDzg0kxIAOv"><code data-page-node-id="Gion0c4doCDVOxvbmgx0JE">docker-compose.yml</code>、<code data-page-node-id="uZBANiF4cteW4BpIFeEgGT">Dockerfile</code>、<code data-page-node-id="nscTdvNH7ONss36XAql9gO">log4j2.xml</code></td>
+    </tr>
+    <tr data-page-node-id="QNHNng2elLnoackEKhkE8t">
+      <td data-page-node-id="s3b6qGKNhnaHNQQSUPOqci"><strong data-page-node-id="4TcaDpGMIMOmKdhETqbzPr">Python 对照实现</strong><br data-page-node-id="JEATHlf8lr3fPtqcKm2jYR"><span style="color:var(--ink3);font-size:12.5px" data-page-node-id="HxEYSEvBpdGtB6QpNwM4Jg">（可选项，见 5.6）</span></td>
+      <td data-page-node-id="pb7ISZGXYR73tNuwqGuviT">同一套 RAG / Agent 逻辑的 FastAPI + LangChain 版本</td>
+      <td data-page-node-id="3ZoFyDIvWoIF2RimhvHARh">刻意保留与 Java 侧一致的检索语义（余弦公式、category 过滤、动态 cast）</td>
+      <td data-page-node-id="JtVpnashlFV9pgRgWzV2dc"><code data-page-node-id="kmP7ESS0TZby3YOzofP6a7">python-ai/app/services/*</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="card green" data-page-node-id="loJz4QvNNYaM9Gtl1gHA2X">
+  <h4 data-page-node-id="WmgDxhaf5iA9LAgmyaCi1f">一句话记忆法</h4>
+  <p data-page-node-id="jilu5nX1B4NQ2pMjb9rZhD">四个能力：<strong data-page-node-id="Til9mTShQjrYNLGGnltVBC">会找人（RAG）、会问人（联网搜索）、会自己决定问谁（Planner + ReAct）、问不到也能答（降级兜底）</strong>。前三个是能力，第四个是工程可靠性——面试官最想听的是第四个，因为那才是「能上线」和「只能跑 demo」的区别。</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s3" data-page-node-id="jSA54gOfq2JjDpmFtkEytH"><span class="n" data-page-node-id="grEG3cE4J4wdw2X3NrD9bJ">03</span>六条核心链路拆解</h2>
+
+<p class="lead" data-page-node-id="aKRMHqW7kdkjYCEofjxm4L">这一节是手册的核心。建议逐条通读，然后<strong data-page-node-id="laRkhleo6y4KXcaQCnwx6r">合上文档，自己复述一遍每个环节的「做什么 + 为什么」</strong>。下面每条都标了面试官可能的深挖方向。</p>
+
+<h3 data-page-node-id="0dDHpBoL4bQLCL2DQz2Vcy">3.1 一次请求的完整生命周期</h3>
+
+<pre data-page-node-id="r6Wd7KMcaGRk9HjpfXn5jr"><code data-page-node-id="6tA6ptUIExFoiXog94Rc8P">HTTP 请求 → Controller（SSE）
+  └─ AgentOrchestratorImpl.streamChat(reqVO)
+       ├─ 1. 构建 AgentContext（requestId / scene / 各开关 / topK / maxSteps）
+       ├─ 2. AuditLogger.recordRunStart（生成 traceId，打开始时间）
+       ├─ 3. runFoundationSteps（三连，每一步单独埋点计时）
+       │     ├─ IntentClassifierStep     → 意图
+       │     ├─ ContextAssemblerStep     → RAG 上下文（要不要检索由开关决定）
+       │     └─ PromptBuilderStep        → 场景化 system prompt / user prompt
+       ├─ 4. runPlanner（若开启）
+       │     ├─ AgentPlannerService.planChat → PlannerDecision（JSON）
+       │     ├─ 用决策覆盖 Context 的 intent / knowledgeRag / networkSearch / searchToolEnabled
+       │     └─ ★ 因为意图和开关可能被改写，重新跑一次 ContextAssembler + PromptBuilder
+       ├─ 5. AuditLogger.recordPrompt
+       ├─ 6. 分支：
+       │     ├─ searchToolEnabled = true  → reactLoop()，onErrorResume → streamChatWithFallbackLoop()
+       │     └─ searchToolEnabled = false → streamChatStandard()
+       └─ 7. wrapChatStream()：埋首 token 延迟、输出字数、完成/异常/取消统一收尾</code></pre>
+
+<div class="card amber" data-page-node-id="J0zCILd7Jpqe9hF2F15HEi">
+  <h4 data-page-node-id="fLejqhsOtpZHpD0EbY1Lf0"><span class="label z" data-page-node-id="iG1zg6gZpky0PzbkQJD2lx">追问点</span>为什么 Planner 之后要重跑一遍上下文装配？</h4>
+  <p data-page-node-id="TPZy9xUGf4G1vK4u6G0SzO">因为 Planner 有可能把 <code data-page-node-id="nerNOQUGPTGI9peeZ2doyJ">needKnowledgeSearch</code> 从 false 改成 true，也可能改写意图。<code data-page-node-id="p447XMFmMoOeZBqHYRO9ys">ContextAssemblerStep</code> 里判断的是 <code data-page-node-id="p9K45P1uwDSTMK08FMCYZx">context.isKnowledgeRag()</code>，<code data-page-node-id="pjgx1cUcja2ZTCVX0CgJCP">PromptBuilderStep</code> 里拼的是按意图分支的说话风格——这两处都依赖 Planner 的决策结果。如果不在 Planner 之后重跑，第一轮装配出来的就是「按旧开关生成的上下文」，Planner 的决策等于白做。</p>
+  <p data-page-node-id="ximTs6Hi5WQKjvK37EnjUr"><strong data-page-node-id="p4NllWUBF1KWt6WcGJbW1e">顺带说一个取舍：</strong>重跑意味着 RAG 检索可能被执行两次，是有成本的。我接受这个成本，因为它保证了「决策生效」这件事的正确性，而且第一轮装配时如果本来就开着 RAG，两次检索的 query 一样、结果来自同一份缓存友好的向量库，额外开销可控。</p>
+</div>
+
+<h3 data-page-node-id="4gthq7kTEvBJurfEPwS6Xr">3.2 ReAct 多轮工具调用循环</h3>
+
+<pre data-page-node-id="acIvyOEpbaKkfl3QZJ9Dsh"><code data-page-node-id="SHY7eDGR1K60gdALFWqr8z">reactLoop(context, reqVO)
+  maxSteps = min(decision.maxReactSteps, context.maxAgentSteps)，下限 1
+  if (!decision.initialToolCall) → 直接 streamChatStandard（先让模型直接答）
+
+  Flux.create(sink -> {
+    for (step = 0; step &lt; maxSteps; step++) {
+      reactPrompt = 基础 system + ReAct 协议 + 历史轨迹 + 工具策略/查询词
+      modelResponse = ChatClient...system(reactPrompt).user(userInput)
+                              .tools(searchAgentTools).call().content()
+
+      thought    = extractThought(modelResponse)        // 解析「思考：」段
+      toolCalls  = extractToolCalls(modelResponse)      // 解析「工具调用：」后的 JSON 数组
+
+      if (toolCalls 非空) {
+         逐个执行：knowledge_search → searchKnowledgeWithRerank(query, category, topK)
+                   web_search       → searchWeb(query, min(topK, 5))
+         把结果拼成 observation，追加进 reactTrace，进入下一轮
+      } else {
+         // 模型没调工具 = 它认为信息够了
+         setReactFinalAnswer(modelResponse); sink.next(...); sink.complete(); return
+      }
+    }
+    // 轮次用尽，再补一次调用，明确要求「基于以上所有工具结果给出最终完整回答」
+  })</code></pre>
+
+<table data-page-node-id="0eWRU0beBwBAYjxT4sPucc">
+  <thead data-page-node-id="WlfmjCvVAuhSRAbex6dDPD"><tr data-page-node-id="tN6vDKpxGyetQgXKbkAxad"><th data-page-node-id="GYNtViVVnYUZ0rrvDGaDXL">设计点</th><th data-page-node-id="oVYzt3fsGDBD00eY95EUJA">为什么这么做</th></tr></thead>
+  <tbody data-page-node-id="7zbjCzWIGMioDMW37Pf7Ti">
+    <tr data-page-node-id="qzua1jUGwt6D3x2Qu9WnRL"><td data-page-node-id="15MDUAjVADRbVF2zHB5GuE">用「思考 / 工具调用 / 最终回答」三段式文本协议，而不是直接用原生 Function Calling</td>
+      <td data-page-node-id="l2i5GSYyKM2g3ipMr1jNSD">换模型的成本低，协议由提示词控制；并且天然能拿到模型的推理过程，可以落进轨迹做审计。代价是需要自己写解析，格式不稳时要兜底——见下面的风险点。</td></tr>
+    <tr data-page-node-id="kMTlhrC0xXoOBNK30IkUhM"><td data-page-node-id="rkDe5zPU04HmAsKbIsHoHg">每轮允许并行调多个工具</td>
+      <td data-page-node-id="zlOtIxU1vy9udf8Y9bzEpQ">一次提问往往既要查内部知识库又要查外部实时信息。串行调两个工具就是两倍的往返延迟，并行能把这一步的耗时压到「慢的那个」。</td></tr>
+    <tr data-page-node-id="5Xvn48iEUKQmfwTCVSWmXB"><td data-page-node-id="u4H2ApbrWyWVgw7tvuWcEf"><code data-page-node-id="dOJLj9OReY53vl2w1b1SeZ">maxSteps</code> 取 Planner 决策与用户配置的<strong data-page-node-id="2AxnBA3rnqQPQKDxdUXyHW">较小值</strong></td>
+      <td data-page-node-id="iVYDzg4fiY500rLayobIMA">Planner 只管「这个问题大概需要几轮」，用户配置是全局安全上限（默认 3）。取 min 保证任何一方都不会把循环拉爆——这是防止 token 失控和响应过慢的硬闸。</td></tr>
+    <tr data-page-node-id="Lv3dxksEVL4fHHelJSONaO"><td data-page-node-id="xNx83ruTxVg4Mo3dTy6GTI">「模型没调工具」直接判定为最终回答</td>
+      <td data-page-node-id="7Lm61FwKWJdoAg5OEgaxLx">省掉一轮无意义的模型调用，是循环的正常出口。但这里有个隐患，见下面。</td></tr>
+  </tbody>
+</table>
+
+<div class="card red" data-page-node-id="FSGjcV8fudg6jCIAUjEnHg">
+  <h4 data-page-node-id="55HtG8nUJHHnPsCv5JcbgH"><span class="label z" data-page-node-id="wOK0OcivkhcUbxWLFCEZJW">必看风险</span>ReAct 模式下的两个真实缺陷（面试官很可能挖）</h4>
+  <p data-page-node-id="ePQtZyF6umPgnWqzBWcgNb"><strong data-page-node-id="5SZZMSt1FAw2QbcrMS17CN">缺陷一：ReAct 模式下不是「真流式」。</strong>循环里每轮用的是 <code data-page-node-id="2v8nkIGVOi8TeY5budTZ3t">.call().content()</code> 同步阻塞调用，最终的答案是在循环结束后<strong data-page-node-id="ANr7dGVlnzOxno0qZFSF0l">一次性</strong> <code data-page-node-id="tvhBX5C8J3tacylLgnonDT">sink.next()</code> 吐出去的。也就是说走 ReAct 路径时，用户要等所有工具调用结束才看到第一个字，首 token 延迟明显高于标准模式。</p>
+  <p data-page-node-id="A5o2WtAU8qv60l2oaaPmUh"><strong data-page-node-id="P2eCGqJ8ZguneX2Se0Ob58">我的回答话术：</strong>「这是我知道的取舍。标准模式走的是 <code data-page-node-id="sg5KDupwRhyX3GyjuAf24F">spec.stream()</code>，是逐 token 流的；ReAct 模式因为要先做工具调用、拿到观察结果，这个阶段本身没有内容可以流给用户，所以只有最终回答那一步是一次性的。如果要优化，我会把中间过程做成'进度事件'——比如每轮调完工具往前端推一条 <code data-page-node-id="ETQS8synvZtFGfg42vOltU">{stage:'thinking'}</code> 或 <code data-page-node-id="nM2TRiilNDlYBEGGgT4eC9">{stage:'searching'}</code>，让用户在等待期先看到状态反馈，而不是白屏；同时把最后一轮改成 <code data-page-node-id="mVzD5Iczac4CNdEJRSOvAd">stream()</code> 拿逐 token 输出。」</p>
+  <p data-page-node-id="V6fwpr80eDQAgk1nezleDK"><strong data-page-node-id="29hVC5aXo2KTHDR2OOPXoK">缺陷二：工具调用解析失败会静默降级。</strong><code data-page-node-id="n3uSOqL0U8ElefeKOoskBn">extractToolCalls</code> 解析 <code data-page-node-id="TsEMUMTFXbZmCj3jUjGDLC">工具调用：</code> 后面的 JSON 数组，如果模型输出格式跑偏（比如多写了说明文字、JSON 顺序不对），解析会失败返回空列表，而空列表在循环里被判定为「模型不调工具」→ 直接把这段文本当最终回答吐给用户。</p>
+  <p data-page-node-id="lNmNYTALi4ibthK7FptAcR"><strong data-page-node-id="SvNUIVXIN2CqgZsIpj9MpF">我的回答话术：</strong>「这是一个我事后意识到的问题：格式解析失败和'模型主动结束'在当前是同一个分支，会静默走成最终回答。改进方式是把这两种情况区分开——解析失败时不要当最终回答，而是重试一次或直接降级到 fallback 路径；更彻底一点是改用模型原生的 tool calling，让协议由 SDK 保证而不是靠我解析文本。」</p>
+</div>
+
+<h3 data-page-node-id="iz1k5nb90VO3NAJerAJv5H">3.3 三级降级与兜底</h3>
+
+<div class="chain" data-page-node-id="CZ2NpDdTNndJ9twVy79uht">
+  <i data-page-node-id="cBHsXnne29wOkvCaiG3iBe">① ReAct 多轮工具</i><em data-page-node-id="GCLawwj7NQhiRTPwPZP4kZ">出错 →</em><i data-page-node-id="PNiQjNy0qeUFzZa4MtQfLG">② Fallback 一次性工具</i><em data-page-node-id="gx3aKOQcVIxzEOkA8H4IIp">仍不行 →</em><i data-page-node-id="iqrkfEGYH4SzA58hnAVhrI">③ Standard 纯生成</i>
+</div>
+
+<table data-page-node-id="TVRbZWkrqcHtNPP3PU96ak">
+  <thead data-page-node-id="Cq6z3nRaioGShALuMoRHBE"><tr data-page-node-id="wtE2DkflW6U2imykJtoMGx"><th data-page-node-id="gAbaaJqG4xHBWtZb8z1Mf0">层级</th><th data-page-node-id="3Rust3b5wFoLlhRHqeCxf4">触发条件</th><th data-page-node-id="Xylkza9HtHexMnqNmfN7UF">行为</th></tr></thead>
+  <tbody data-page-node-id="DYI4YAWxZaOVPpYXFFbERa">
+    <tr data-page-node-id="a4193i3VZLq29ig4XyaGGJ"><td data-page-node-id="mQptqbVKaNkb4zvLYthHyR">① ReAct（默认）</td><td data-page-node-id="opUQz972hg3ELEe1peGVuh">Planner 判定需要工具</td><td data-page-node-id="EZM8L8RxNlqhzKVr7RXteb">多轮循环，每轮可并行调多个工具</td></tr>
+    <tr data-page-node-id="g7LoV8fBilqdJkvlvA8uYm"><td data-page-node-id="58zubtjyEgF4PoJjI75UFi">② Fallback</td><td data-page-node-id="0FW7a7xJM8QyhtN9GBm4oT">ReAct 流抛异常（<code data-page-node-id="bCmKVZC5nEYIecMvmbQOYc">onErrorResume</code>）</td><td data-page-node-id="MMH4UxcAOsZDOsYnZbxRNq">不再循环，一次性把 Planner 判定需要的工具都调一遍，结果拼进 system prompt，然后走标准流式生成</td></tr>
+    <tr data-page-node-id="L3Rq31AQw453wRVaEOh9Ho"><td data-page-node-id="voeXHyOXOfDlu1BWk0CsHU">③ Standard</td><td data-page-node-id="JuEbHt34CNZGDYJcD3txnK">不需要工具 / 步数不足 / Fallback 也判定不需要工具</td><td data-page-node-id="AcUTDHocDwCJTNwzBAEQiY">不用工具，直接流式生成；聊天场景仍带历史和落库 Advisor</td></tr>
+  </tbody>
+</table>
+
+<div class="card purple" data-page-node-id="6j8KWG4NTVjt8dpAxotJUv">
+  <h4 data-page-node-id="Wm72xDGAokttBAAjopaVJM"><span class="label z" data-page-node-id="BAmc92w0exJvJ8ByjfIEYT">加分点</span>降级不只是「换个路径」，还包括「保留部分输出」</h4>
+  <p data-page-node-id="rS0mhn31GA5pxjeuDHFGAQ">流式落库的 Advisor 里，<code data-page-node-id="ceIvN3B6lJLzOlZx55CE7O">doFinally</code> 监听到 <code data-page-node-id="rgaHduYD55CPgKhHaMDC72">SignalType.CANCEL</code>（前端主动断开）时：</p>
+  <ul data-page-node-id="EqjFOSw1SpQZHNTmokjWRP">
+    <li data-page-node-id="s0O1DvdBsXqke9M1eMQyFG">如果已经产出了内容 → <strong data-page-node-id="sA6isNKAneGEzpNu61OR20">把部分回答落库</strong>（推理内容 + 正文一起存），用户重进会话能看到；</li>
+    <li data-page-node-id="dMSu3rq5py0bcK7Qs1jnCo">如果一个字都还没产出 → <strong data-page-node-id="NByWEXSVNG1eZwJRftSZ2N">不落库</strong>，避免写进去一条空消息污染会话列表。</li>
+  </ul>
+  <p data-page-node-id="sCZ0E9WOfoRfLFo7HAOEOB">另外用 <code data-page-node-id="Z0NE8Fc1Xuzg50sFrjAWm2">AtomicBoolean.compareAndSet</code> 保证 <code data-page-node-id="BdAKE240upBb3tYL22Fa6Z">doOnComplete</code> 和 <code data-page-node-id="1tkQC3ntKCbu5g3t2OWNcJ">doFinally</code> 不会重复写库——因为这两个信号在取消场景下存在竞态。这段是简历里「保留部分输出结果、解决输出异常问题」的实际出处，<strong data-page-node-id="fAlfRiRbvGa8rMDsFL4vdu">被问到一定要讲这段代码，比讲概念强十倍。</strong></p>
+</div>
+
+<h3 data-page-node-id="4B4edSn4rrhNUovwPgxCDQ">3.4 RAG 全链路：从切分到注入</h3>
+
+<pre data-page-node-id="12q4O6eaByAiBD0IxIaihw"><code data-page-node-id="ypbID571yWif8sKieQ26kn">【离线入库】docs/knowledge/*.md
+  → 递归字符切分（eval/ingest_docs.py）
+      分隔符优先级：\n## → \n### → \n\n → \n → 。！？； → 硬切
+      chunk_size = 512 字符，overlap = 64 字符
+      原子片段贪心合并；metadata 记 source / title / chunk_index / total_chunks
+  → DashScope text-embedding-v2 批量向量化（1536 维，批 16）
+  → 写入 resume_knowledge_base（content / category / metadata / embedding vector(1536)）
+
+【在线检索】buildChatRagContext / buildResumeOptimizeRagContext
+  → 双路查询：q1 = 原始问题       q2 = 原始问题 + 导向语
+  → expandK = topK × expandFactor(2)，每路取 perQuery = max(2, ⌈expandK/2⌉)
+  → 按 id 去重合并（LinkedHashMap，q1 优先）
+  → GTE-ReRank 重排（失败/超时/解析异常 → 退回向量分数排序）
+  → 截断：score &lt; 0.35 丢弃，最多保留 8 条
+  → 格式化为带「相关性 x.xxx、分类 xxx」的片段清单，注入 system prompt</code></pre>
+
+<h4 data-page-node-id="4mozZ0EerA4kyzLouCK8X2">检索 SQL（真实代码）</h4>
+<pre data-page-node-id="RCBhTES13ADptWVOr9VPqC"><code data-page-node-id="0eMtMjpjoHkrWGJBMxBK2A">SELECT id, content, category, metadata::text AS metadata,
+       1 - (embedding &lt;=&gt; ?::vector(1536)) / 2 AS similarity
+FROM   resume_knowledge_base
+WHERE  embedding IS NOT NULL
+  AND  category = ?            -- 可选分类过滤
+ORDER BY embedding &lt;=&gt; ?::vector(1536) ASC
+LIMIT  ?</code></pre>
+
+<div class="card blue" data-page-node-id="abPdiH8SVDxgNbSZnnlKD2">
+  <h4 data-page-node-id="CmdApo07N1WrdwcuXVMlnI">这段 SQL 里能讲出四个知识点</h4>
+  <ol data-page-node-id="E4MSubkJWdiOCKG05vhzfK">
+    <li data-page-node-id="voLwzxh0FE5gVpMitpiIgE"><strong data-page-node-id="ZpbUXCTHccPHewplnBrJLe"><code data-page-node-id="xRZS7AvqBU5isSm2hbRgLp">&lt;=&gt;</code> 是 pgvector 的余弦距离算子</strong>，返回 1 − cosθ，取值范围 [0, 2]。所以 <code data-page-node-id="DBrQD1EF7yjRGIhkxoSGkP">similarity = 1 − d / 2</code>，展开就是 <strong data-page-node-id="latnv9KSfCI31asaMjHTfl">(1 + cosθ) / 2</strong>，正好把结果归一到 [0, 1]，0.5 表示正交、1 表示完全同向。<em data-page-node-id="DQrcZ2DgIpBW1Mcug0xFdN">（面试官如果问「为什么除以 2」，答这个。）</em></li>
+    <li data-page-node-id="EvxpspPrcdafPgDjHKwnLV"><strong data-page-node-id="JzWC3WiJiOIDFG3FT6ISFL">索引用的是 HNSW 而不是 IVFFlat</strong>：<code data-page-node-id="udd2rJnFhEp1o0W1uw04KX">CREATE INDEX ... USING hnsw (embedding vector_cosine_ops)</code>。选 HNSW 的理由是它在召回率和查询延迟上都优于 IVFFlat，而且不需要预先训练、不怕数据增量更新；代价是构建索引慢、占内存更多。当前知识库规模不大，这个代价可以接受。</li>
+    <li data-page-node-id="vwEo78Max1CnU9d0MkXu3R"><strong data-page-node-id="wApYatLIUAZ4WPv7easCfh">维度是 1536（text-embedding-v2）</strong>，而且 cast 类型不是硬编码的——启动时会从 <code data-page-node-id="9sAmXwpgF20ZOA4dNcP7ay">pg_attribute</code> 读 <code data-page-node-id="VJ1OJqdrkyHwB5cCprFlUN">embedding</code> 列的实际类型（<code data-page-node-id="sQkpkF7UoHjRNqjgnNYTov">pg_catalog.format_type</code>），动态拼 SQL。<strong data-page-node-id="SdBXem98EHPgrjn0FOeCNt">为什么这么做：</strong>因为项目支持 <code data-page-node-id="q7gHVYeXsjuNiApwFB0ADb">cv</code> 和 <code data-page-node-id="PIQkgrcd1ksjJebUMqykRN">public</code> 两套 schema，<code data-page-node-id="p1JmflDCAADRfenwQGsTzj">cv.vector</code> 可能没建，硬编码 cast 会在某些部署环境直接报错；同时这样也顺带校验了 embedding 维度是否和列定义匹配。</li>
+    <li data-page-node-id="BZYowNcHPxiDGhMMZ2h6Az"><strong data-page-node-id="gOsEQQc51EtYpP1kCXlUGy">用原生 JDBC 而不是 MyBatis-Plus</strong>：向量插入和距离排序需要显式 cast，ORM 映射反而增加一层不确定性（维度、类型转换）。代价是手写 SQL，收益是检索语义完全可控。<code data-page-node-id="GrpqTkB0G8OJASAa2OfUiF">PreparedStatement</code> 也保证了不会 SQL 注入。</li>
+  </ol>
+</div>
+
+<div class="card amber" data-page-node-id="DlH4EGxTV5FjMJjhx46ywF">
+  <h4 data-page-node-id="VQ2Bjqru4GE8ssFoVnRyqE"><span class="label z" data-page-node-id="UrD3xJLMEbZzrPoUzT33ij">高频追问</span>为什么用双路检索？为什么阈值是 0.35？为什么还要重排？</h4>
+  <p data-page-node-id="BWN2HGHNujZBAGCnZvaeUh"><strong data-page-node-id="JHsSGIt1pjipTcffrDW2Og">双路：</strong>单路「用问题去检索」有个固有问题——用户的问题和知识库里的答案，措辞往往不一致。比如用户问「我该不该放照片」，知识库条目讲的是「简历不宜包含身份证号、照片等敏感信息」。字面不重合，向量距离就拉不开。第二路我拼上「请从简历结构、STAR、项目描述、技能关键词、面试话术等角度补充相关条目」，本质是<strong data-page-node-id="GOUPVw83Ggpo28GB3HdfYr">把查询向「答案空间」偏移</strong>，让召回方向从「问题长什么样」转向「答案该长什么样」。这是 query rewrite 的一种轻量做法。</p>
+  <p data-page-node-id="5V0s0IdXiNBDkoB5fHgPeN"><strong data-page-node-id="2iVeQa8rgy90HhZMmeOxTL">0.35 阈值：</strong>这个值是结合评测集调出来的。相似度如果设太高（比如 0.7），很多相关但表述不同的片段会被误杀，Hit@K 掉下来；设太低（比如 0.2）则会把「说话方式像、但内容无关」的片段也塞进上下文，反而干扰模型。0.35 是在「召回率」和「上下文纯净度」之间取的一个点。同时我加了最多 8 条的硬上限，防止上下文被检索结果塞爆。</p>
+  <p data-page-node-id="kCyUcf4mkVFKfT3SdrMoGE"><strong data-page-node-id="VGG7HgmXhvX2Q3vvj6jQr7">为什么还要重排：</strong>向量检索是双塔结构，query 和 document 分开编码，只能算一个粗粒度的语义相似度；重排模型是 cross-encoder，把 query 和每个候选拼在一起过一遍，能捕捉细粒度的语义交互，排序质量明显更好。所以典型做法是「向量检索负责快而全（扩大召回），重排负责准而精」——我先用 <code data-page-node-id="ZzRvgFXZUk6egL9kOSUvGD">expandFactor=2</code> 把候选放大一倍，正是给重排留出重排空间。</p>
+</div>
+
+<h3 data-page-node-id="qrEP7MU52OrksfZWsB1ZS1">3.5 联网搜索与正文清洗</h3>
+
+<div class="chain" data-page-node-id="8HZElxPCn5VMVmULTJC0Ka">
+  <i data-page-node-id="howG5bdFnq3DPhoKvwMK7V">SearXNG 元搜索</i><em data-page-node-id="yaieLXA1tH4q2Vv6ppaM1B">→</em><i data-page-node-id="YPnuqmKGPP267eU5OGozE4">取前 topK 条（≤5）</i><em data-page-node-id="5hwOqJvq1Xo3b38hhJNMHh">→</em><i data-page-node-id="4R7FWzmD8OvQkvCE1bMaxo">并发抓取网页</i><em data-page-node-id="5xrKXvkfcEABWATy5SK7eP">→</em><i data-page-node-id="eGs6kGMs2vb7AmF7KfArDS">Jsoup 抽正文</i><em data-page-node-id="4OhB5CSRPjFUsW4V1AyCoX">→</em><i data-page-node-id="3AhWWRDvlB8ifSXAkyCh5F">注入 prompt</i>
+</div>
+
+<table data-page-node-id="b149uV3lMSEk38pHhtnzDb">
+  <thead data-page-node-id="kX0SoI8gKQR8FVn7JxCKA3"><tr data-page-node-id="VCcaA64IvNHbk3hXxdMNDs"><th data-page-node-id="Cml6gPJ998NivYV7b32rK4">环节</th><th data-page-node-id="ppDSCAhirduxug5Nr44dLK">实现细节</th><th data-page-node-id="jGZoBbHoZ71kpF1nUCbK9v">为什么</th></tr></thead>
+  <tbody data-page-node-id="npzz5bsAxPEwEoqpDBxuNd">
+    <tr data-page-node-id="C1sqgwz4h1EfwX3yBaUzB8"><td data-page-node-id="QR00A33B0nm5w8wGzPAq2X">SearXNG 而非直接调搜索引擎 API</td><td data-page-node-id="U01Lvsl8nBC2cO5AlP3z8D">元搜索引擎，聚合 bing / google 等多个来源，自部署</td><td data-page-node-id="LDnSQUX5AY3AIKSC58EwHZ">不依赖单一厂商的付费 API；聚合多源结果，减少单一引擎的偏差；自部署无调用量限制</td></tr>
+    <tr data-page-node-id="2DuWrmqbNzEaz4NwEhCAmt"><td data-page-node-id="QcC1aF2CVxUcOECYTCh3YL">并发抓取</td><td data-page-node-id="UUPlHaq1oJUrdH6iWuqQ9N"><code data-page-node-id="jHgpCrIRO0UHlJDXY5R4aC">CompletableFuture.supplyAsync(…, httpExecutor)</code> 每页一个任务，<code data-page-node-id="O9KDn7HWWC7nF5aXKA6dI9">allOf</code> 聚合；HTML 解析用另一个线程池 <code data-page-node-id="RKc2lJ181FyVuAYybGjjen">resultProcessingExecutor</code></td><td data-page-node-id="gtSvhROdgiY2p69iZDceGN">一次要抓 5 个页面，串行就是 5 倍延迟。<strong data-page-node-id="VirxWUXC7VWZrig0vGWGGG">用两个池而不是一个</strong>，是为了避免「IO 密集的等网络」把「CPU 密集的解析 HTML」挤掉——两类任务特性不同，隔离后吞吐更稳</td></tr>
+    <tr data-page-node-id="wSRYEFKASrSaEH0lfelSOb"><td data-page-node-id="AW0oYwpa5WWgHqFFo6SbJh">超时与异常兜底</td><td data-page-node-id="Dp4m4Wxc8bEjFsVHLnlXx9">单条 <code data-page-node-id="SdVzZLGymJFGaiay5N7QFY">completeOnTimeout(7s, fallbackResult)</code>，<code data-page-node-id="o0uHlt0TGWrGyN0VKr4DbB">exceptionally</code> 返回空内容</td><td data-page-node-id="8do90HHRiJnv8bCmAOxtqh">一个页面挂住不能拖垮整个搜索。返回空内容而不是抛异常，让链路继续往下走——最终会因为正文为空而跳过这条结果</td></tr>
+    <tr data-page-node-id="8Q4hanxmoIThjbuDDauiRF"><td data-page-node-id="jodvysUfObYjF8bCrstgor">正文抽取</td><td data-page-node-id="1YP3ELv1VGH8iays4dHqTD"><code data-page-node-id="SHJo5TaDvV62VwXAWfaBN8">Jsoup.parse(html).text()</code>，并带 <code data-page-node-id="gAwKB4mN9MEasujQlQRoeE">User-Agent</code> 伪装浏览器</td><td data-page-node-id="2sSXmgAHl8XaFiFX1nubrC">HTML 里真正有用的正文占比极低，脚本、样式、导航、广告全是要丢的噪声。<strong data-page-node-id="OkGUV0RkxIlP1gILniABkJ">清洗直接决定了塞进 prompt 的 token 量</strong></td></tr>
+    <tr data-page-node-id="2CV8Y7iO5ZOfg8eDZwlWle"><td data-page-node-id="LGCEXPTBU2xGHH3RZxQvhm">条数控制</td><td data-page-node-id="YgvUBcKVTLranN0wDxE8EM">只取前 <code data-page-node-id="7SPypR7GIfMvJPGPE5xZk7">min(kbTopK, 5)</code> 条结果</td><td data-page-node-id="zyww9DRCTeZgR7wz9FRmD2">搜索结果的质量是长尾衰减的，第 8 条之后基本是噪声。少而精比多而杂对回答质量的帮助更大</td></tr>
+  </tbody>
+</table>
+
+<h3 data-page-node-id="j0Rvs4zAcKO9lLLqGqgkBd">3.6 流式输出与对话持久化（Advisor 机制）</h3>
+
+<p data-page-node-id="5Gb6PJduzfTapCDoViiQvx">Spring AI 的 <code data-page-node-id="6mB6XPl0fDMFF94GMEEI35">Advisor</code> 相当于一条环绕链，可以在请求前和响应后插逻辑。我写了两个：</p>
+
+<table data-page-node-id="zcuRLLDMNMb8cyBje3rTzb">
+  <thead data-page-node-id="QReJuo1XCOAfYZldK4BSuF"><tr data-page-node-id="djxE21dh0cw6IWcBEpMjiA"><th data-page-node-id="3YpgM3ukduKFfQCPllihjU">Advisor</th><th data-page-node-id="sfmJE40CbOf3HhDJThjGo3">order</th><th data-page-node-id="LNZwDUDltrtCobmmGKme6A">职责</th></tr></thead>
+  <tbody data-page-node-id="8C5dEnxJEw5DArXaFPgkrq">
+    <tr data-page-node-id="4NVFmV5enA6y22YSaeq6Vx"><td data-page-node-id="f8i5hEjRnsDl88XQ5yCRzN"><code data-page-node-id="BvJtK4ZaGDsEP2p9SqF8IJ">CustomChatMemoryAdvisor</code></td><td data-page-node-id="JWQPcCfX9qHOrCu1ffHzDG">2</td><td data-page-node-id="F8YaXEYb1AofsN2SspFBPy">按 <code data-page-node-id="MVDxchjrcLlATnlY2X3T29">chatId</code> 查最近 50 条消息（先按时间倒序取 50，再升序还原），转成 <code data-page-node-id="Rt7hBB6L946l0QIYdd7lgs">UserMessage</code> / <code data-page-node-id="W2BEEOUuggAU0FJH0gCUF2">AssistantMessage</code>，通过 <code data-page-node-id="EpGAhnVbvUCGd3eEM0Ndrh">mutate().prompt(...)</code> 把历史拼进本次请求</td></tr>
+    <tr data-page-node-id="Fr259z5w0mJzcWukm3aJFR"><td data-page-node-id="13dsJG9cCUH7pntdafEdsv"><code data-page-node-id="tDWEJw9bNNKtdw8mVcvsTv">CustomStreamLoggerAndMessage2DBAdvisor</code></td><td data-page-node-id="fU701Pq7GUgEiE59Ums3dp">99</td><td data-page-node-id="hfd8DZ1nCKLHh0n96VQVGm">聚合流式分片；完成时用 <code data-page-node-id="L0d26xiXB72EiysYuznNTd">TransactionTemplate</code> 一个事务写「用户消息 + AI 消息」两条，并刷新会话 <code data-page-node-id="9dh9eXEbhiSgAHLa8QLo4X">update_time</code></td></tr>
+  </tbody>
+</table>
+
+<div class="card green" data-page-node-id="tDNfTnTvObztPRvmA1qCHU">
+  <h4 data-page-node-id="2HORwD9DgDEFz9PQjoCkLc"><span class="label s" data-page-node-id="1Yq5unQUCQFCSQFNFsvRhG">讲这个能加分</span>三个工程细节</h4>
+  <ul data-page-node-id="kHqeHn9SHJ2jvC5GdfEV1V">
+    <li data-page-node-id="d4VJGYGH4XoNAzsESDgNa5"><strong data-page-node-id="VCy8dDOszzBw6WleSRgmHZ">为什么先倒序再升序：</strong>要的是「最近 50 条」。直接升序 LIMIT 50 拿到的是最早的 50 条，多轮对话很容易超过 50 条，拿到的就是最陈旧的上下文。所以先用 <code data-page-node-id="uHO2DnItjlelC3vcg7ZiDC">createTime DESC LIMIT 50</code> 取最近 50 条，再在内存里升序还原成时间顺序喂给模型。</li>
+    <li data-page-node-id="SMFhtqoeLaL94AAHq1ncGk"><strong data-page-node-id="lowGQ7E7yeHNDYWYxGFNMi">为什么要显式事务：</strong>用户消息和 AI 消息必须同生共死。如果只写进去一条，会话历史就会出现「有问无答」或「有答无问」的错位，多轮上下文直接乱掉。</li>
+    <li data-page-node-id="NMwtCCoBfABMbZ9BXtsxnY"><strong data-page-node-id="htyDXkhMWuvvFys0NsPsle">为什么用 <code data-page-node-id="guCLo1slcpAxFVPK2FQZeI">TransactionTemplate</code> 而不是 <code data-page-node-id="xlHyZ8PeD5UTk9cK3wEqQf">@Transactional</code>：</strong>这段逻辑在 Reactor 的 <code data-page-node-id="0qE5NU0qaVXNAdwh7RgV4E">doOnComplete</code> 回调里执行，不在 Spring 的代理调用链上，注解式事务不会生效，必须用手动事务模板。</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s4" data-page-node-id="34svOLlZb1KCOvjXURhk4X"><span class="n" data-page-node-id="QXj77QHQnivFZaz9QmiTVG">04</span>量化数据：把简历上的数字坐实</h2>
+
+<p class="lead" data-page-node-id="NbQ4J3vcShAbY7whLB6oRb">简历上的每一个数字，面试官都可能问「怎么算出来的」。这一节把所有数字变成可复述的方法和口径。</p>
+
+<h3 data-page-node-id="BCVAwxJs3h5d6AObFnBG7u">4.1 检索质量：真实跑出来的评测结果</h3>
+
+<p data-page-node-id="4oAcCS1OgQ3yXhFJ6SPANU">项目里有一套离线评测（<code data-page-node-id="OoLzh2U4VD09FC8a3bCzWu">eval/retrieval_eval.py</code>），测试集 28 条，每条带 <code data-page-node-id="ZZmHmqTfJzQ3yFOkCxXJ8M">expected_id</code> 和 <code data-page-node-id="4yJPVDYge0kmECXJRVVyvB">category</code> 标注。跑一次会输出 Hit@K、MRR、平均 top1 相似度、空结果率，并存成 JSON，支持用 <code data-page-node-id="2REgPWKPmbW2OQwT021gvc">--compare</code> 对比两次实验。</p>
+
+<div class="kpi" data-page-node-id="FYat1bu3VXdz0h9sTHP5tV">
+  <div data-page-node-id="RwE6TO5vDs3lVhbVMzZcMk"><b data-page-node-id="F2nqlLdXtVgXGzs3gOT0Dh">92.9%</b><span data-page-node-id="LKpV30KMUmy46kNnE5Fo5j">Hit@5</span></div>
+  <div data-page-node-id="8DJ9U7oXYnY995WM5NjC7G"><b data-page-node-id="B9NPr5I6GcItSF2yC841Q6">100%</b><span data-page-node-id="X0lyA0mhpx4ZFKE3JWtLFi">Hit@10</span></div>
+  <div data-page-node-id="UDwUsIwezJaDsuj2PK2Li6"><b data-page-node-id="tsk7T5MUUfaTc6FB6FMcaG">0.736</b><span data-page-node-id="0z2sH02eda2dSFxUQ6bouQ">MRR</span></div>
+  <div data-page-node-id="9FqSQKIWCxfLCvhQdRB9jH"><b data-page-node-id="Ds4ek85BMNv69GjVBPMC5S">0.787</b><span data-page-node-id="CCQoD2h9A2yJCHkd98q4uv">平均 top1 相似度</span></div>
+  <div data-page-node-id="BPfUv0P6kGu0I3UukjeU2E"><b data-page-node-id="Qlwaofi2AflM067hpy5Whk">0</b><span data-page-node-id="OOHKTyBFuDV6BCDPdttY02">空结果率（28 条）</span></div>
+</div>
+
+<table data-page-node-id="E6DA6WjgLtMbC3QbVQQH4J">
+  <thead data-page-node-id="R90b1hDq5zlbiGjIlrc0Wn"><tr data-page-node-id="r86LTTYfyPlHZ8YqFWT8EA"><th data-page-node-id="rbPM5YrVl5QIKBNvXpJtC1">指标</th><th data-page-node-id="SWfW4n8QWVvQPh6mHzf1m6">数值</th><th data-page-node-id="8DW0Szv0UV5864pCAXtSxB">含义（被问到怎么解释）</th></tr></thead>
+  <tbody data-page-node-id="M9dxudswHy7s2C57Eds6vW">
+    <tr data-page-node-id="feXN6FyLo0zZq13OysAzH9"><td data-page-node-id="LwlSLpt9P7Z4oyQI0rXEnT">Hit@1</td><td data-page-node-id="3KH3Os8Lq1KMHfXYcLvJUM">0.6071</td><td data-page-node-id="gPWBy88FXBLX1HDwnRM6vx">17/28 的问题，正确答案就排在第一位</td></tr>
+    <tr data-page-node-id="KnpfTeHghCOEYVrgGmry61"><td data-page-node-id="FD7kLVb6pDENlF0bCLKRZa">Hit@3</td><td data-page-node-id="O4zZpriis3Dja76MyRA1XH">0.7857</td><td data-page-node-id="9e8BLe6yBQc6VAcn5WRaWd">22/28 的问题，正确答案在前三条里</td></tr>
+    <tr data-page-node-id="AKJcqbyr82oZeo30MqSxDx"><td data-page-node-id="uBnQIsyL0igqNiDGxYAHTZ">Hit@5</td><td data-page-node-id="oVBpuWqsWp3ay3y2Dia8Fw">0.9286</td><td data-page-node-id="HPVBzQvI6a47CgVKdBeYkI">26/28 的问题，正确答案在前五条里——<strong data-page-node-id="w8eC30Faq5aRpGFaQXeQ2L">这是最有业务意义的指标</strong>，因为最终注入 prompt 的就是重排后的前几条</td></tr>
+    <tr data-page-node-id="TCqO907OxOASOP7EFGbYIu"><td data-page-node-id="FHkAZqtMqhMNkYsLYLr9UK">Hit@10</td><td data-page-node-id="3VpQ9w03FUHlXH28LvP1H6">1.0</td><td data-page-node-id="pvbBTSPzsBTfLkYvHTOeDB">28 条全部命中，说明没有一个问题是「知识库里根本没有」——召回环节是通的</td></tr>
+    <tr data-page-node-id="vFEE3WaUm4lvW0HSDF7kOx"><td data-page-node-id="9LBH9Xp81ho0B4BSdxQrmk">MRR</td><td data-page-node-id="Y12bvOSVjEd5K3R0YayVPO">0.7361</td><td data-page-node-id="fhpgRWOkLapdfSbihRhMyn">第一个命中位置的倒数均值。它比 Hit@K 更敏感，因为把「排第 1」和「排第 5」区分开了</td></tr>
+    <tr data-page-node-id="WcaG2Lwa1O1gLEUn1RIb5Q"><td data-page-node-id="kmTBLkIdaoIReFZpFTgqQJ">空结果率</td><td data-page-node-id="3GM5ZWQRvV5wOXonVtPRI9">0</td><td data-page-node-id="HvmurKB2eOdLguoBlXobPc">28 条全部有返回，没有出现「检索不到任何东西」的情况</td></tr>
+  </tbody>
+</table>
+
+<div class="card purple" data-page-node-id="owek8hgZuFdtR3E0VJRUb1">
+  <h4 data-page-node-id="C1HfDP2z0aJWxpnkN5gjyE"><span class="label s" data-page-node-id="dCX36G0bosA3HOfGnx9bT2">怎么用这组数据</span></h4>
+  <p data-page-node-id="7eT3dFfu5AQb0S8k5nQsOY">面试官问「效果怎么样」时，不要说「挺好的」，直接报 <strong data-page-node-id="ooGCG79qfdtNUYx2BaplK0">Hit@5 92.9%、Hit@10 100%、MRR 0.736</strong>，然后补一句「这组数是我把知识库整篇入库和切分入库跑了两遍对比出来的」——瞬间从「做了个 demo」变成「做过可量化的优化」。</p>
+  <p data-page-node-id="0aJHOySAO0EqCxDyS7STcw">如果被追问「28 条是不是太少了」，正确的回答是：「是偏少，作用是回归测试而不是统计结论。它的价值在于<strong data-page-node-id="PV4XQfuMkgCCa4xvjrRBM2">建立了一套可复现的评测流程</strong>：改任何检索参数我都能量化地知道是变好还是变坏。要扩大规模，我会从真实对话日志里按 query 聚类采样，再人工标注 expected_id。」——承认局限 + 给出扩展方案，比硬撑强。</p>
+</div>
+
+<h3 data-page-node-id="XrOKvyF2NQFaEwcWK6co0K">4.2 「Token 消耗降低约 70%」怎么自证</h3>
+
+<p data-page-node-id="0skEDYkBkAKzWKm0NYjonq">简历原文：「将外部网页内容注入模型 Token 消耗降低约 70%」。这个说法<strong data-page-node-id="Z60goZwfAfY8VdtAnPhVwG">其实太保守了</strong>，但你要能说清口径，否则会被追问到哑口无言。</p>
+
+<pre data-page-node-id="CbZulPnCUwtbUHwYHB0CZs"><code data-page-node-id="GvNHAZCR9ARRWC1iLifHIj">口径：以「注入 prompt 的字符数」计。
+
+不清洗：
+  单个网页 HTML 通常 150–400KB（含 script / style / 导航 / 广告）
+  5 条结果 ≈ 750KB–2MB 原始 HTML → 远超任何模型的上下文窗口，实际会直接失败
+
+清洗后（Jsoup 抽纯文本 + 条数限制 ≤5）：
+  单个页面正文约 3–8KB → 5 条 ≈ 15–40KB
+
+结论：真实降幅在 95% 以上。
+「约 70%」是走查阶段随手给的保守口头估计，对外我一直用这个更稳的说法。</code></pre>
+
+<blockquote data-page-node-id="OeVwSH2GXqZboPoS08PRCW">
+  <p data-page-node-id="qH0TIdHpczX3UZX7McLyX7"><strong data-page-node-id="2TY4UzCeUpTF04m4C2LVrI">建议话术：</strong>「这个数字我后来算过精确口径：注入 prompt 的字符量从原始 HTML 的百 KB 级降到十几 KB 级，降幅是 90% 以上。简历上写 70% 是我当时给的保守值，也怕说太满被质疑。核心手段就两个——Jsoup 抽取纯文本丢掉脚本样式，以及只取搜索结果前 5 条。」</p>
+  <p data-page-node-id="mdMZGZ6KQydkd3Wd2TmGB6">主动修正自己简历上的数字，在面试里是<strong data-page-node-id="NITKVP5IOpZJdYZzD5oJwP">加分</strong>的：说明你对自己的数据是有意识、有迭代的，而不是抄来的。</p>
+</blockquote>
+
+<h3 data-page-node-id="XFih1rfT4bzfqxYVhNIqmo">4.3 AI 智能报告平台（第二段项目经历）</h3>
+
+<table data-page-node-id="ZFek5WUWhIfHZP3BItwsLx">
+  <thead data-page-node-id="zKqlQL4g8udgWh27NaEIrG"><tr data-page-node-id="uTpYieQAWAO48c5E8kUB2X"><th data-page-node-id="sKWdCsD9rMd2q2BrGy5n2m">简历写点</th><th data-page-node-id="cmmKWeRCW8zqAiWFhehkOP">面试怎么说</th><th data-page-node-id="GqHGvN0iRdmebhlEzYp2TU">可能追问</th></tr></thead>
+  <tbody data-page-node-id="FtMqmmQOdmErJs5UJ1hGOI">
+    <tr data-page-node-id="2tngIDIwkI99ySrx4MTH4j">
+      <td data-page-node-id="ik8VzCX4MszrdHDpEyYJJl">有界线程池 + 任务队列替代无限制创建线程，限制并发、降低 OOM 风险</td>
+      <td data-page-node-id="g5GuDeBOeaReMqqkt2LXbv">万字级报告生成是长耗时任务。原来一个请求开一个线程，并发上来线程数失控，内存直接顶不住。<code data-page-node-id="rv49H13qmiOsasDlP8CX58">ThreadPoolExecutor</code> 用有界队列 + 有限核心/最大线程数，把并发压在一个可控水位上。</td>
+      <td data-page-node-id="OfQOmjlHFU5GhjmGwa31oY">核心线程数怎么定的？队列满了走什么拒绝策略？为什么不用 <code data-page-node-id="Wv6c7sTzdtQKYllDRSiGhS">Executors.newFixedThreadPool</code>？（答：它是无界队列 <code data-page-node-id="BnXL50HRy6xrQWVThy3Z4i">LinkedBlockingQueue</code>，任务堆积同样会 OOM，所以必须手动 new 指定有界队列）</td>
+    </tr>
+    <tr data-page-node-id="lkd7rIlM6SKJhPvV8nfQVi">
+      <td data-page-node-id="vb1Du5zt7yQELUcKAhFhlC">多轮续写 Prompt + 上下文注入，解决早停与章节重复</td>
+      <td data-page-node-id="3geF99B3VcofVBTooLJd6H">长文本一次生成模型容易早停，或者翻来覆去重复同一段。我把它拆成章节，每轮把「已完成章节的摘要 + 当前要写的章节标题」注入提示词，让模型接着往下写而不是重头写。</td>
+      <td data-page-node-id="sfc1O0RlPGp9V7QBgIRiV7">怎么检测「重复」？上下文怎么控制不超长？（答：摘要压缩 + 只保留最近 N 章的结构化摘要）</td>
+    </tr>
+    <tr data-page-node-id="b7IhWKRkpVIEnphICCp4SQ">
+      <td data-page-node-id="TfDH2vVwB8uHEKiBlLxyYp">SQL 优化把看板接口从 1.2s 降到 300ms 以内</td>
+      <td data-page-node-id="dfJnPjUDtO0hxIlXeHhPOH">主要做了两件事：一是消除 N+1，把逐条查询改成一次批量 <code data-page-node-id="zqbwD3Uh06lj7B63uJlJ1E">IN</code> 查询后在内存里组装；二是看执行计划确认走了索引，补了缺失的联合索引，避免回表和临时表排序。另外把不常变的统计数据做了缓存。</td>
+      <td data-page-node-id="oCYL760jl0498ZbZYwXPwC">怎么定位到是 SQL 的问题？（答：先看接口耗时分布，再用 p6spy / 慢查询日志看具体 SQL 耗时占比，最后 <code data-page-node-id="OC9qFlkTpV8m6bmqO19q1C">EXPLAIN ANALYZE</code>）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 data-page-node-id="pYeOULmvy1x3ojaQxfq7Lr">4.4 校园社区分享平台（第三段项目经历）</h3>
+
+<table data-page-node-id="uuYQifhvbSfyrZVeswErgF">
+  <thead data-page-node-id="ZntmxMRUCglejBAO42My8A"><tr data-page-node-id="FeligEZDAlOc0hDW5ihGNr"><th data-page-node-id="aptDVEL042Dm2pyxYWf1h5">简历写点</th><th data-page-node-id="w2NHDH3aH4NY9xXxc6jAwV">面试怎么说</th></tr></thead>
+  <tbody data-page-node-id="dZKJbARMIBEYzVSSCUIIJ1">
+    <tr data-page-node-id="vfURB7XjEYJ14OxikQTxFo">
+      <td data-page-node-id="AYRTKIM4fDTtZqU9fuvIii">Redis + Caffeine 二级缓存，防雪崩 / 穿透 / 击穿</td>
+      <td data-page-node-id="WhHe8VEIaPgAvHESr5ooI1"><strong data-page-node-id="7iuyrPeGdG6Ljv4Gsq1F7n">本地 Caffeine 挡第一层，Redis 挡第二层，DB 是最后一道。</strong>热点用户信息走本地缓存可以完全不发网络请求，这是 7ms → 3ms 的主要来源。<br data-page-node-id="HUDWtVQSUL5xEthsRd8EnK">
+      · 雪崩：过期时间加随机扰动，避免同一时刻集体失效；<br data-page-node-id="MjzhXf7qtEYm0r7DnDTJLQ">
+      · 穿透：对查不到的 key 缓存空值（短 TTL），挡住反复打 DB 的无效请求；<br data-page-node-id="POCfegE8P81mIaivwsSVtZ">
+      · 击穿：热点 key 失效时用互斥锁只放一个请求回源，其余等待或返回旧值。</td>
+    </tr>
+    <tr data-page-node-id="FJc4oQooe27oTSda2XBwk8">
+      <td data-page-node-id="xnefjS1MQXzUslmN29ymKL">RabbitMQ 广播 + 延时消息 + 延迟双删，保证一致性</td>
+      <td data-page-node-id="HvenNgM0uEd9usZdIbWh80">本地缓存多实例之间没法互相感知，所以用 MQ 广播把失效消息推给所有实例清本地缓存。延迟双删是防这个场景：线程 A 删缓存 → 写库 → 期间线程 B 读到旧值又写回缓存，所以在写库之后再延迟一段时间二次删除，把可能被写回的脏数据清掉。</td>
+    </tr>
+    <tr data-page-node-id="ZFAq6q1soS0naaJXfFYONp">
+      <td data-page-node-id="7kXo4lwVUtge98IzDIppGm">兜底写库 + 异步发送失败消息，确保 MQ 发送成功</td>
+      <td data-page-node-id="8ygrzHb6EEICkaHYVO5ptb">核心是「不能因为 MQ 挂了就丢数据」。发送失败先落库留痕，再由补偿任务重发；同时用 Confirm 机制拿到 Broker 的确认，没确认的进重试队列。</td>
+    </tr>
+    <tr data-page-node-id="pLGZNNFmDoPCBzTOHQYN5V">
+      <td data-page-node-id="GiSLKIEPqVkJ9wGtxcVMQ6">Gateway 统一路由 + 用户 ID 透传给下游</td>
+      <td data-page-node-id="JQVj4Jp6oPdXG4S1TDPpXI">网关统一做鉴权和路由，解析出 userId 后放进请求头往下游传，下游服务直接从 Header 或拦截器里拿，不用每个服务再解析一遍 token，减少重复计算。</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s5" data-page-node-id="fcMSsk814h1KVSDGbckmUk"><span class="n" data-page-node-id="eQSKqPgBEYBodXY1ynf3rq">05</span>风险自查：简历与代码不一致处</h2>
+
+<div class="card red" data-page-node-id="nQVJoUsTCDikUulftHHpIV">
+  <p data-page-node-id="u4jMRs93WUhLwtHVEHZYRo"><strong style="color:var(--red);font-size:16px;" data-page-node-id="YYKMCed3PfYON6pnz0VJw5">这一节请务必先看完。</strong>下面几处是我逐行核对源码后发现的、简历/README 与代码实际实现不一致的地方。面试官只要打开你的项目仓库，或者顺着简历问两层，就会碰到。与其被动被抓，不如主动准备好话术——<strong data-page-node-id="NMirXWc9DOVwDnfRWAOcEP">主动校准自己的表述，在面试里是加分项。</strong></p>
+</div>
+
+<h3 data-page-node-id="gBt4090Y1nfcVVlabJyykD">5.1 MCP（最高风险）</h3>
+<table data-page-node-id="UKc1OvNxQVkww8ED8CDhQT">
+  <thead data-page-node-id="sv9FH0Dg9Hqy9sjbOZ6FjQ"><tr data-page-node-id="giDT5lz4DcRvA4GNf6EKb7"><th data-page-node-id="FaEG7MkUBeSMfgq9jq9hCU">项</th><th data-page-node-id="TCXvVwO5OkmB4ZLxBUXOU3">情况</th></tr></thead>
+  <tbody data-page-node-id="NKoH0C3AqnBAQ4UaxXx13c">
+    <tr data-page-node-id="RAEfGaB34uetcRKRRiaBqV"><td data-page-node-id="JI1ZqFezhNhI2xJa6hkFio">简历怎么写的</td><td data-page-node-id="2zubg885NuHnxvrCL7LR1Y">技术栈列了 <code data-page-node-id="QJo6VWF3WSYkgIVNYPBrAE">MCP</code>；技术能力里写了「了解 RAG、Agent、MCP、Prompt Engineering」</td></tr>
+    <tr data-page-node-id="pCQShuOHn1McEittBhxiM2"><td data-page-node-id="wsjD6y5RTNNFIgAkcXmoxQ">代码实际情况</td><td data-page-node-id="Oow9uAkP3GAZgdaGq03IWW">全仓库检索 <code data-page-node-id="gYW27qIKhsrA0250dNctBj">MCP</code> <strong data-page-node-id="PUAW2CIfjuTPS5RyPAmJwG">零命中</strong>。项目里的工具调用是自己实现的：用 <code data-page-node-id="zJymQ1whzUDRq887oD1QBs">@Tool</code> / <code data-page-node-id="nClcHP0taAYfXZkpCjOevh">@ToolParam</code> 注解声明工具（<code data-page-node-id="fuWBKEoznunVxTnUohu9m6">SearchAgentTools</code>），再由自研的 ReAct 文本协议驱动，<strong data-page-node-id="lBV8noZwqB3qj6kfEkgz1H">没有接入任何 MCP Server，也没有用 MCP 协议做工具发现与通信</strong>。</td></tr>
+    <tr data-page-node-id="ybeZCtP6nAmZah5T3hnxwe"><td data-page-node-id="OP4c8fThDskOLTZ5492z6a">风险</td><td data-page-node-id="USm8gZW5NCuqIqRGU9CBew">「你简历写了 MCP，说说 MCP 的协议怎么握手、你怎么和你的 Agent 集成的？」——这个问题现在答不上来。</td></tr>
+  </tbody>
+</table>
+
+<div class="card amber" data-page-node-id="FahT6J7LMSIQgdBAn6tuXY">
+  <p data-page-node-id="jNGAFDS2aG0wao7tydm9JH"><strong data-page-node-id="4ccAAfBUeZVuh2lLgWQs28">三种处理方式，按推荐度排序：</strong></p>
+  <p data-page-node-id="a39IXjbQ8GYtneixGVRAkz"><strong data-page-node-id="sGLIoNIPRvzHby7wwKAVYP">① 直接从简历技术栈里删掉 MCP</strong>（最推荐）。技术栈那一行写的是「实际用过」的东西，放一个没落地的词，收益是零，风险是致命的。</p>
+  <p data-page-node-id="jm4jPUxdKaaNgz86qoE9e9"><strong data-page-node-id="tOEQe5W8oIKrHKDYXYjlQu">② 保留但改到「了解」栏，并准备好诚实话术：</strong>「MCP 我是在协议层了解过——它的核心是把工具/资源用统一协议暴露出来，让不同模型都能发现和调用，解决的是工具生态碎片化的问题，本质是 Function Calling 的标准化封装。我的项目里没有实际接 MCP Server，工具调用是我自己实现的 <code data-page-node-id="vPL7mFDiGHZ0GyhwEsvEWD">@Tool</code> 注解加 ReAct 文本协议。如果现在要接，我会把 <code data-page-node-id="iFRuuVj3i557vy4AaFI1sx">knowledge_search</code> 和 <code data-page-node-id="9UsqZTAMy8ESNiF7QY57rf">web_search</code> 这两个工具包成 MCP Server，好处是工具能被其他模型客户端复用，不用绑死在 Spring AI 上。」</p>
+  <p data-page-node-id="KKmiiEL6wJKwHss9DC13BJ"><strong data-page-node-id="kAtHmInADZRCjyQmwFFGCO">③ 去把它真的做掉。</strong>把两个搜索工具包成一个 MCP Server，工作量大概是半天到一天，做完这段就成了你简历上最亮的差异化亮点。如果你还有时间，选这个。</p>
+</div>
+
+<h3 data-page-node-id="ToDY3mil98xIAe9iMR9MNp">5.2 「SemanticChunker（递归字符切分）」</h3>
+<p data-page-node-id="nxSSwOMLx9loxNiGN5bswt">README 里的描述容易让人以为 Java 侧有个 <code data-page-node-id="c49b4sGOZ59LhBjni3t7qJ">SemanticChunker</code> 类在运行时做切分。实际是：<strong data-page-node-id="21I5aTD7LcSFsEahiKYedp">Java 侧没有分块逻辑</strong>，分块发生在离线入库阶段，脚本是 <code data-page-node-id="rB0Rl4nlKwD7GcMOIRUGPO">eval/ingest_docs.py</code>（Python），而且严格说它是「递归字符切分」而不是「语义切分」——语义切分是按语义相似度找断点，我这里是按分隔符层级递归切。</p>
+<blockquote data-page-node-id="Qb43RWmd6xPeVtcvZRhblG">
+  <p data-page-node-id="Rl5kpIgSZtpA4nn2V4b9hh"><strong data-page-node-id="BrMmk7UOlOp2ANqnmgvTk8">话术：</strong>「分块是在离线入库脚本里做的，不在运行时。我用的策略是递归字符切分，按『二级标题 → 三级标题 → 段落 → 换行 → 句末标点 → 硬切』的优先级递归，chunk 512 字符、重叠 64 字符，重叠是为了防止关键句正好被切断在两个 chunk 的交界处。叫它语义切分不太准确，语义切分是按 embedding 相似度找段落边界——我现在的知识库是结构化 markdown，标题层级本来就是天然的语义边界，用标题切性价比更高。」</p>
+  <p style="margin-top:10px;" data-page-node-id="xdHF1irkZKmt0QMCvdgsis"><strong data-page-node-id="9JYsqNnC8p3f51HZIMjKrd">如果被问「为什么不直接用 SemanticChunker」：</strong>答「因为我的文档是带标题层级的 markdown，标题就是最可靠的语义边界，按标题切比按 embedding 相似度切更准也更便宜。如果知识源变成没有结构的纯文本，我才会考虑换成语义切分。」</p>
+</blockquote>
+
+<h3 data-page-node-id="ukoEjOnhzTs4DCX8EExzQ3">5.3 「正文清洗三层」</h3>
+<p data-page-node-id="FTjwMzCGhgsB0ATltreHgL">简历写「实现网页并发抓取与正文清洗」，如果展开讲成「三层清洗：正文识别 → 结构化清洗 → 智能截取」，会与代码不符。实际实现是：<strong data-page-node-id="oCHQefAIN2cnV1pCG908jK">Jsoup 抽纯文本 + 只取前 5 条结果</strong>，没有 article/main 正文识别，也没有 3000 字符的段落边界截断。</p>
+<blockquote data-page-node-id="qB7YRCYnrqYy2bliDxHR8H">
+  <p data-page-node-id="y0cpHiGqK4m811BrvxYAGS"><strong data-page-node-id="NjqY5Skg615JEIOV1sz5yy">话术：</strong>「当前做法是两步：用 Jsoup 把 HTML 转成纯文本，丢掉 script、style 这些噪声标签；再限制只取搜索结果的前 5 条，因为搜索结果的质量是长尾衰减的。我当时规划过更细的清洗——用 Readability 类的算法识别 article/main 正文区域、按段落边界智能截断——但最终没有落地，现在的方案够用且实现简单。<strong data-page-node-id="0nC1b8FAZrYh4tdAEx2uHa">如果继续做，我会按这个顺序加：</strong>先补正文区域识别（收益最大，能再砍掉导航和推荐位），再补字符数上限加段落边界截断。」</p>
+  <p style="margin-top:10px;" data-page-node-id="7btj7DmEF2oRvQOeRIsrRz">诚实说「规划了但没落地」完全没有问题，反而比编一个不存在的实现安全得多。</p>
+</blockquote>
+
+<h3 data-page-node-id="AsiKGOY1XZ1nzOandFtzjA">5.4 ReAct 模式不是真流式</h3>
+<p data-page-node-id="s6dS74sVxoz8VhF8vgXBCF">这个不算「不一致」，但面试官一旦问到流式，很可能会挖到这里。见 3.2 的「必看风险」，把那段话术背下来。</p>
+
+<h3 data-page-node-id="rTlPjw8JzbtH3AGyseTUyF">5.5 30 秒自检清单</h3>
+<div class="card amber" data-page-node-id="uEyZfy2McW62jyMGvCMuhj">
+  <p data-page-node-id="IiiuhkK3RLEx2Q0SsIyGlR">面试前请逐条确认：</p>
+  <ul data-page-node-id="16GQlVUZK40XlvWp4AYzDn">
+    <li data-page-node-id="OU8AFFRNIpINVF1UGmTXIQ">简历里的 <code data-page-node-id="prPCXbq852AcHlZOA7IFRr">MCP</code> 已删除或已准备好 5.1 的话术</li>
+    <li data-page-node-id="faSA6FYIFIMZAtywKfmWmy">能准确说出分块是<strong data-page-node-id="qIw46Vn8S64pbDdCfSxjtc">离线 Python 脚本</strong>做的，不是 Java 运行时</li>
+    <li data-page-node-id="DdSoybaGQ4wxbLoQDnzNz9">提到正文清洗时，说「Jsoup 抽纯文本 + 条数限制」，不说「三层清洗」</li>
+    <li data-page-node-id="PMFTjUbaMtiuztHO7qJIJc">「70%」的口径已经改成「字符量降幅 90% 以上，我对外保守表述为约 70%」</li>
+    <li data-page-node-id="n684oJHrURewFY3LxRUhSW">能主动说出 ReAct 模式的首 token 延迟问题和改进方案</li>
+    <li data-page-node-id="Xt0TAWYdvlW137o9YJAyMp">知道 MQ、Redis 那些是<strong data-page-node-id="eAjBU9PjOJevrJKzRRTnNi">校园社区项目</strong>的，不要混到智询工作台里讲</li>
+  </ul>
+</div>
+
+<h3 data-page-node-id="aFxexn2GyIjEITZjjj3V6g">5.6 关于 <code data-page-node-id="ETrgwCwSJhwOtZ1QRFWau6">python-ai</code> 目录</h3>
+<p data-page-node-id="BsbBcX5m7FJeLeqfQhvt1t">项目里还有一个 FastAPI + LangChain 的 Python 实现（<code data-page-node-id="5dFP3g9D0zzUl6VVlq3lJL">python-ai/</code>），实现了同一套 Planner → 工具调用 → 生成的链路。它的 requirements 注释里写得很清楚，选型理由之一是「<strong data-page-node-id="EEWDHnfd0cf9E4RKTHW6Jm">刻意对齐 Java 侧的检索语义</strong>（余弦距离公式、category 过滤、动态 cast），直接拼 SQL 而不引入向量库 SDK」。</p>
+<div class="card green" data-page-node-id="ReUvdeiM4A8T0LPI7hT873">
+  <p data-page-node-id="xpWsbprzaD6lBweilGX4zx"><strong data-page-node-id="SORCFonrH7zmmYk1YsoTUE">这是个可以主动亮出来的亮点，但要用对姿势：</strong></p>
+  <p data-page-node-id="AftAfxnv8WDksY78Yn2FJZ">「我用两套技术栈实现了同一套编排逻辑——Java 侧是 Spring AI，Python 侧是 LangChain + FastAPI。这不是重复劳动，是为了做<strong data-page-node-id="wglyzvhZhjHfqEnjz6dEX8">技术选型对比</strong>：同一个 RAG 语义在两套框架下的实现成本、可观测性、部署复杂度有什么差别。也因为这样，我被迫把检索语义的每个细节都吃透了——比如余弦相似度公式、维度 cast 的处理——因为两边必须跑出一样的结果，对不上就是理解错了。」</p>
+  <p data-page-node-id="MauNn95L0SI9PoGVl9Nw6e">如果面试官问「为什么最后主用的是 Java 版」，可以说「Java 版能和我已有的 Spring Boot 技能栈复用，部署成单体更简单；Python 版更适合快速试新模型和新的 RAG 策略。实际上新想法我一般先在 Python 侧验证，验证有效再落到 Java 侧。」</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s6" data-page-node-id="YAYhdoRuU9gT07oRUMVA6a"><span class="n" data-page-node-id="caP73ib3xwM3WyZm4MA7S6">06</span>高频问题与参考答案</h2>
+
+<p class="lead" data-page-node-id="3zhSSvVffOnfleKz3h5fRY">每题标了 <span class="label k" data-page-node-id="SFPt6N7FdLWgK2ImA2Hx7O">考点</span> 和 <span class="label z" data-page-node-id="tAJZzm7rGRh2EmRVtB53CV">追问</span>。回答不用逐字背，抓住考点里的关键词，按自己的话说出来就行。</p>
+
+<h3 data-page-node-id="nSCuSGxeOkAF4ZJyOSS6Su">A 组 · 项目整体与架构</h3>
+
+<div class="qa" data-page-node-id="D9YYgEFnt0e16HJQ8yVSMr">
+  <div class="q" data-page-node-id="BD1JB60CKBCuIbPiwRD7l1"><span class="idx" data-page-node-id="OsCuUui9QfbOLlahfSbrIb">A1</span>介绍一下这个项目，你主要负责什么？</div>
+  <div class="a" data-page-node-id="8Wgyi6lcscxWX6UIOJR5Z6">
+    <p data-page-node-id="qKQpYSnV1j7icxfcbqr78Q"><span class="label k" data-page-node-id="mGtTqWNCj3S0SYGSBRqfNb">考点</span>能不能在 2 分钟内讲清价值和你的角色，而不是念一遍技术栈。</p>
+    <p data-page-node-id="CsnKXM1iNmX8KEpcR3IqYV"><span class="label s" data-page-node-id="HCMvzVrjNo300gScevG5DH">思路</span>用第 1 节的「2 分钟版」，结构是：<strong data-page-node-id="qAfqXozC23kVeIv1ICEGwW">为什么做 → 怎么做（技术选型） → 我负责什么 → 做到了什么程度（数字）</strong>。最后一句一定要落在一个量化结果上。</p>
+    <p data-page-node-id="wFco1NaiTTzcSlpj1cIMVm"><span class="label z" data-page-node-id="Hdj9m4Wh0mxviI7rshQrh4">追问</span>「团队几个人？你负责哪部分？」——如果是个人项目就直接说清楚是独立完成全栈，别含糊；如果确认是个人项目，反而要把「独立完成链路设计与实现」讲透，因为这比「参与」有价值。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="c8PAKD4gKZKdOjEBLYHaDN">
+  <div class="q" data-page-node-id="ol3AAsFoROQ76LH8MRd2ES"><span class="idx" data-page-node-id="mjY4qNE0nW88UnCn8c7Q9K">A2</span>为什么不用现成的 LangChain / Coze / Dify，要自己写编排？</div>
+  <div class="a" data-page-node-id="av3MI6dJa0FLT5DDj5FuAz">
+    <p data-page-node-id="S2jvrxUcYtGB8HfmHGMNbY"><span class="label k" data-page-node-id="7QaQOsy14SPs4M6DfQDwiy">考点</span>技术选型的判断力，以及你知不知道自研的成本。</p>
+    <p data-page-node-id="UzijqgF5Jnvmy482kehU3w"><span class="label s" data-page-node-id="qsPSbTngzzX0LmAFmHlMqg">话术</span>「有三层考虑。<strong data-page-node-id="mTj4Z8oFoQwAYKuhOG3cWf">第一是可控性：</strong>低代码平台的编排链路是黑盒，我要做三级降级、要在每一步埋审计日志、要控制 maxSteps 的安全上限，这些在平台上做不了或者很难做。<strong data-page-node-id="pwY0N1vGXJsF98gpoEAQgx">第二是集成成本：</strong>我的对话落库、会话管理、简历解析都在 Spring Boot 里，用平台就得再搭一层服务间调用，反而更复杂。<strong data-page-node-id="1ggwbYamlyssjBu0b8BbSY">第三是我确实想搞懂这块：</strong>这个项目的目标之一就是把 Agent 编排、RAG 全链路自己实现一遍，把每个环节的取舍吃透，而不是调 API。</p>
+    <p data-page-node-id="jd6fZSjauZejsQP3ETrcyS">但我也不是说自研就是对的——如果目标是两周内验证一个业务想法，我会直接用 Dify，然后只把关键链路自研。选型要看阶段。」</p>
+    <p data-page-node-id="d1CWrBiJk4ZZ9nKS7Glg5p"><span class="label z" data-page-node-id="D87OA8mgZMCwzDKypZ7Twx">追问</span>「那你觉得自研最大的代价是什么？」——答：可观测性和生态。自研要自己写日志、自己处理模型输出格式不稳的问题、自己维护重试降级；成熟平台这些是现成的。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="17L6z7T1Y3mZBBcTqpJLL0">
+  <div class="q" data-page-node-id="adTAHy28GP1fiDmwA1uKrR"><span class="idx" data-page-node-id="GNLP1DrRo3sHpqWZyLi2pG">A3</span>这个项目如果流量涨 100 倍，哪里会先崩？</div>
+  <div class="a" data-page-node-id="KS8zC0MSe5MBEGwEpuRx3H">
+    <p data-page-node-id="Ll9u3HTmICFSI7OtH8qDvt"><span class="label k" data-page-node-id="tcHpvgLjM5X8sEnK7HJe7G">考点</span>有没有架构层面的全局视角，而不只是会写功能。这题几乎是「能不能扛高并发」的通用考点。</p>
+    <p data-page-node-id="2WT1MUG3rGYInasbdjGm6L"><span class="label s" data-page-node-id="OKJlpmeOeOyPLXNowO4aRY">话术</span>「我会按顺序看四处。</p>
+    <p data-page-node-id="MO1NHxiXuMQJt4jO1wmEBM"><strong data-page-node-id="Q3HaWSRZ7jcTpdO4R65vyc">第一是向量检索。</strong>现在 <code data-page-node-id="3KucxjLwus464UVZF3AhLZ">searchSimilar</code> 每次请求都实时调 DashScope 做 query 向量化，这是个外部 API 调用，会成为延迟瓶颈也是成本大头。优化方向是 query embedding 缓存，或者换成本地部署的小 embedding 模型。</p>
+    <p data-page-node-id="mjVLv9yCP0EMGyNmzPaDjp"><strong data-page-node-id="bD1GIG7PSpFgL471Mllbc9">第二是 LLM 调用。</strong>所有请求共享模型服务的配额和连接，要加限流和熔断，否则上游抖动会直接把线程池打满。同时 ReAct 循环是同步阻塞的，请求线程一直被占用，并发一高 Tomcat 线程池就撑不住——这里应该改成异步或虚拟线程。</p>
+    <p data-page-node-id="R2wUcrDgI5038T7nNJRbDL"><strong data-page-node-id="2jZsz36jNMwaFmwbJWEiyj">第三是 pgvector。</strong>HNSW 索引在百万级以下很舒服，再往上要考虑分片或者引入专用向量库。</p>
+    <p data-page-node-id="FXy9yjOtRbsRqLayJZLnRA"><strong data-page-node-id="ejMJVCykDwGJXR45irf6nO">第四是数据库连接和外部搜索。</strong>抓网页的线程池是有界的，打满了就会排队超时，需要加降级：搜索不可用时直接跳过联网这一路，保证主干能出答案。」</p>
+    <p data-page-node-id="iiNdS6zCxxdF89mt1CAyTT"><span class="label z" data-page-node-id="nFXxpWKet2ooG6Zj8WB961">追问</span>「虚拟线程为什么适合这里？」——答：ReAct 循环和 LLM 调用都是「等 IO」的阻塞型任务，线程绝大部分时间在等待。虚拟线程的挂起成本极低，JDK 21 又正好是项目的基础版本，<code data-page-node-id="DIlJkLBkY3qDx58H4UVfT0">spring.threads.virtual.enabled=true</code> 一行配置就能让 Tomcat 用上，对这类 IO 密集场景吞吐提升明显。但要注意：<code data-page-node-id="Ge73Grqf2IQuyl7nzttAzO">synchronized</code> 块会 pin 住载体线程，要换成 <code data-page-node-id="IlXFcUwiDth14NxQTX4Yf7">ReentrantLock</code>。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="tApS9PZJPQQHvU9kgWyIXH">
+  <div class="q" data-page-node-id="AP5r4eGajHsBrP57zC3COf"><span class="idx" data-page-node-id="fTwGLnu4AcrkbdHiXKFzOe">A4</span>这个项目最难的地方是什么？</div>
+  <div class="a" data-page-node-id="R9TuRbUEFbW4m2r6PKOkRL">
+    <p data-page-node-id="25YgTSIZ5wFe1r7R3ZrLFt"><span class="label k" data-page-node-id="z3rL2xFbRgvWLVR9eBN3nP">考点</span>难度必须是<strong data-page-node-id="6syt5A0xhlvBn2Hn04uIpO">技术性</strong>的，不能是「配环境很麻烦」。</p>
+    <p data-page-node-id="wQjdxI940vW1PwGGA74aDC"><span class="label s" data-page-node-id="BlpXzOjWjZlAGjCHpOqyzv">话术</span>「最难的是让 ReAct 循环在各种异常情况下都能稳定收敛。理想情况下模型会按我给的协议输出『思考 → 工具调用 → 观察』，但实际上模型会跑偏：JSON 格式不规范、该停的时候不停、工具返回空结果后继续空转。我做了几件事：</p>
+    <p data-page-node-id="IcUubFGkjKH3yPVQSO2FCy">一是<strong data-page-node-id="sci0VB2ImCvbruHMblzi1X">硬上限</strong>，<code data-page-node-id="NmOvtWhNddD5rK5nUowcOJ">maxSteps</code> 取 Planner 决策和用户配置的较小值，保证最坏情况下也就多花两三轮的 token。</p>
+    <p data-page-node-id="XutWGfm2rAY7JoLmGdkET8">二是<strong data-page-node-id="hd9X5x3ezj9ewDxJh9mcMQ">把『模型不调工具』定义成循环的正常出口</strong>，而不是异常。它不调，就说明它认为信息够了，直接输出。</p>
+    <p data-page-node-id="q91rPctPOR5yeqKpLn43cf">三是<strong data-page-node-id="Bg8TfHF4NfUd8b3GMWfHeV">整条链路外面套一层降级</strong>：ReAct 抛异常就退回一次性工具调用 + 标准生成，用户在极端情况下依然能拿到答案，只是工具用得没那么精细。</p>
+    <p data-page-node-id="0zrCJrA9oWizst8Ib8wTpY">四是<strong data-page-node-id="eFccakNSmFrTfwLRpijXWv">审计日志</strong>把每轮的思考、调用了哪个工具、耗时多少都打出来，出问题能定位到底是模型的问题还是我工具的问题。</p>
+    <p data-page-node-id="QEZvTJvilgOIHMwwOY4gCO">后来复盘我觉得还有更好的做法：<strong data-page-node-id="o7R95z7qzdMX7U2M9EIKaP">直接改用模型原生 tool calling</strong>，让协议由 SDK 保证，我只需要处理工具的实现，能省掉一大半格式解析和容错代码。当时用文本协议是为了换模型方便，但代价是引入了不稳定性——这个权衡我现在会重新算一遍。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="jIRrkCNw2bRWRwwMD5jVW9">
+  <div class="q" data-page-node-id="wCZLRmUHLrHFFFI89UAQ1s"><span class="idx" data-page-node-id="0Gj8AVxs2fAAGyabCCmavq">A5</span>如果让你重做，你会改什么？</div>
+  <div class="a" data-page-node-id="Zme1TpW7CzNKTM00tmchCc">
+    <p data-page-node-id="JAjrOGvy1DEfCeHWXpR3ma"><span class="label k" data-page-node-id="tjD4Avn8mQZ6847LsfKW0K">考点</span>反思能力。这题是送分题，一定要提前准备，而且要给出<strong data-page-node-id="fSpZbfGamGBYPFYOp7p9Ws">有技术含量的、具体的</strong>改进，不要说「加更多功能」。</p>
+    <p data-page-node-id="J5Fj6KaufOz57y4l70qtKg"><span class="label s" data-page-node-id="uDG0pgmXWFPVlZ53u4TpVv">三个改进（挑一个讲深，其余作为补充）</span></p>
+    <p data-page-node-id="8yYgewrHPC3uNDBCnZ9sU8"><strong data-page-node-id="Mz0HoSORSqnIE9Wx3F1urL">① 工具调用协议换成原生 Function Calling。</strong>现在是文本三段式协议 + 自己解析 JSON，格式不稳时会静默降级成最终回答，问题很隐蔽。换成原生 tool calling 后由 SDK 保证协议，容错代码能删掉一大半。</p>
+    <p data-page-node-id="jaIosM3a2uV6J5kvTnlLvu"><strong data-page-node-id="tHxWd59JBuj8ITAYlHeGjR">② ReAct 中间过程做成流式状态推送。</strong>现在要走完所有工具调用才吐第一个字，首 token 延迟很高。改成每轮调完工具就往前端推一个 <code data-page-node-id="X449oq0xIIvnR5wW3BIBCG">{stage: 'searching', tool: 'web_search'}</code> 这样的事件，和聊天工具的体验一致，用户等待期间不至于面对空白。</p>
+    <p data-page-node-id="MBloFCvGxJgkg6ADCdAC7B"><strong data-page-node-id="AWprP9n7KYt7lKldvgLDSl">③ 评测从 28 条扩到真实日志。</strong>现在的评测集是我自己标的，代表性有限。正确做法是把线上的真实提问按语义聚类，从每个簇里采样再人工标注，让测试集和真实分布一致。另外要把评测接进 CI，改检索参数跑一遍对比，防止改坏。</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="SvAwmq2SWdCU6JBkraJABh">B 组 · Agent 与工具调用</h3>
+
+<div class="qa" data-page-node-id="WvRsHtbMRGyP1YrDI1n6RF">
+  <div class="q" data-page-node-id="VnjGAj4qhPxuMNrKiOiYHk"><span class="idx" data-page-node-id="EZCrVGGvQB0aBiiHHEwIcP">B1</span>说说 ReAct 是什么，你的实现和标准 ReAct 有什么区别？</div>
+  <div class="a" data-page-node-id="nknYXAR5WX5W00SF6LWySu">
+    <p data-page-node-id="9SqUJyWh8WSnqRXCFrwfzb"><span class="label k" data-page-node-id="hCpR1yPMQqgWnkuj4HHcx1">考点</span>知不知道自己实现的边界在哪，别把教科书概念和自己的代码混为一谈。</p>
+    <p data-page-node-id="mWZRJDDGI92sYAyPlv5JOB"><span class="label s" data-page-node-id="22X6fWCQTFGPZexN9yF284">话术</span>「ReAct 的核心是让模型交替做『推理』和『行动』：先思考当前信息够不够，不够就决定调什么工具，拿到工具结果（观察）之后再思考，直到判断信息足够再输出答案。相比让模型一次性回答，ReAct 的价值是<strong data-page-node-id="rYGmLnWBR1LBvApIIOHURc">把『要不要查资料』这件事交给模型在推理过程中动态决定</strong>，而不是在入口处写死。</p>
+    <p data-page-node-id="Mliyu9yYWnwcwc2P924sut">我的实现有两个比较明显的偏离：</p>
+    <p data-page-node-id="9M2vi6L6XeFKCTkCGDiBFJ"><strong data-page-node-id="QGseSFJIqHrlPBwvKq8OEY">一是标准 ReAct 是严格串行的</strong>『思考 → 行动 → 观察 → 思考』，我做了扩展，每轮允许<strong data-page-node-id="1XrjWQmD7z8Bl40tbhBpbN">并行发起多个工具调用</strong>，因为一个提问经常同时需要内部知识和外部实时信息，串行调两个工具就是两倍的等待。代价是每轮的推理和观察是打包处理的，不是逐个工具单独迭代。</p>
+    <p data-page-node-id="U58swIWPqFRU0zhCuqGLmA"><strong data-page-node-id="2CmyTQhNq8UbKgJdLl4XpD">二是标准 ReAct 通常一路流式输出</strong>，我为了拿到结构化的观察结果，每轮用的是同步调用，所以只有最终答案才流给用户。这是我知道的取舍，改进方向是把中间过程做成状态事件推送。」</p>
+    <p data-page-node-id="Ph4jv8A918bI5LQKKlZY6w"><span class="label z" data-page-node-id="F1TegQlS6sRzOCCYNljOir">追问</span>「ReAct 和 Function Calling 什么关系？」——答：不冲突，是正交的两件事。Function Calling 解决的是「模型怎么把『我要调哪个函数、传什么参数』结构化地表达出来」，ReAct 解决的是「调完之后要不要继续调、什么时候停」的控制循环。生产里最稳的做法是 ReAct 的控制循环 + 原生 Function Calling 的协议表达，也就是我上面说的改进方向。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="IBByVIeE2YDPCL7mJuomDu">
+  <div class="q" data-page-node-id="iqadw8UsZLRLkXySCqZFmd"><span class="idx" data-page-node-id="7CfA67dHeanmYqpADfkEhI">B2</span>Planner 的作用是什么？为什么不直接让模型自己决定？</div>
+  <div class="a" data-page-node-id="9B8Kk73cJqtGuk7CJTUQwq">
+    <p data-page-node-id="CYlUe5dQCfVDKlM0ZFpTU4"><span class="label k" data-page-node-id="ETIjJciHTPx5ANJ1gpG3dX">考点</span>对「多一次模型调用」的成本敏感度，以及分层设计意识。</p>
+    <p data-page-node-id="QFkXTkR8IYKYnBbPmUlWY3"><span class="label s" data-page-node-id="HZ4CBQkgyhWtDSfOfhX4CB">话术</span>「Planner 是一次<strong data-page-node-id="4LLIbhZbwGtpmOGIgjEiNM">轻量的前置决策</strong>：输出一段 JSON，明确回答『意图是什么、要不要查知识库、要不要联网、建议几轮、用什么查询词』。它和后面 ReAct 的区别是——Planner 只做一次性判断，不产生回答；ReAct 是真正干活的多轮循环。</p>
+    <p data-page-node-id="hzdHqmzGf1lo8IsSpkp4mt">为什么要有这一层，而不是让 ReAct 自己看着办？<strong data-page-node-id="O8B83o1t453qC6PWZHsCdc">主要是为了省成本和控风险。</strong>如果直接进 ReAct，像『你好』这种完全不需要检索的问题，模型也可能先调一轮工具，白白多花一次往返的 token 和时间。Planner 先用一次便宜的调用（输出的 JSON 很短）判断出『不需要工具』，就能直接走标准生成，把整条工具链省掉。</p>
+    <p data-page-node-id="7FXAYMQJirYaeuXNxm2Zk6">另外 Planner 还有个隐含作用：<strong data-page-node-id="msIK0tHrrqo5ltCas28gN8">它是规则的锚点。</strong>模型决策失败时我会退回关键词规则兜底——问题里出现『最新』『趋势』就走联网，出现『简历』『STAR』『面试』就查知识库。这样即使模型服务抖动，链路也不会瘫。」</p>
+    <p data-page-node-id="hF82bdtoM08uIyHYSMyl19"><span class="label z" data-page-node-id="2CkSVeY4Zv6CACwg2DkJXd">追问</span>「那多一次调用不是反而更慢？」——答：是的，这是一次明确的取舍。Planner 的输出很短（一百多 token 的 JSON），成本远低于一轮 ReAct；而且它带来的收益不只是省钱，还有「决策可审计」——我把 Planner 的决策单独记进日志，出问题能直接看到是它判错了还是 ReAct 执行错了。如果做极致优化，可以把 Planner 和意图识别合并成一次调用，或者用本地小模型替代。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="qKpwGvdkCUzJehz3pRGRyY">
+  <div class="q" data-page-node-id="lSMRtAH03Re81LRN09oFJM"><span class="idx" data-page-node-id="e1hNVI8uXUAzbU9m0dHZST">B3</span>你的工具是怎么注册给模型的？</div>
+  <div class="a" data-page-node-id="g8Hj6ExsqEkWZVoLa8MAbt">
+    <p data-page-node-id="59KQ03J8fEPAgGAMwUIshw"><span class="label k" data-page-node-id="tpQp24kt7OlRTjuIIl1ZRE">考点</span>细节，答不好会显得只是照抄教程。</p>
+    <p data-page-node-id="8V4xjR55qHZGQwV6qy56oj"><span class="label s" data-page-node-id="Lz7YSSC0D2ZwDIGxnnGEiR">话术</span>「用 Spring AI 的注解式声明。<code data-page-node-id="UkGPzgxOIqoA7CHAHCa0Wf">SearchAgentTools</code> 这个类里用 <code data-page-node-id="OLv8lgwKSwwy3BonnXyHFR">@Tool(name=..., description=...)</code> 标注方法，参数上用 <code data-page-node-id="VjM8xnZBrz8PPslT2Hlp9k">@ToolParam</code> 说明含义和是否必填，然后通过 <code data-page-node-id="ZxU84d2kH7b1sfUBSCC4pW">ChatClient...tools(searchAgentTools)</code> 把整个对象注册进去，框架会自动把注解描述转成模型的工具定义。描述写得好不好直接决定模型会不会在正确的场景选中正确的工具，所以我把 description 写成了『适合什么场景』而不是『这个函数干什么』——比如 <code data-page-node-id="CBcJQIoHU7uvQLKLkf9l9U">knowledge_search</code> 写的是『适合查询简历写法、STAR、项目表达、面试话术等』，给模型明确的使用边界。」</p>
+    <p data-page-node-id="ZOVLClkM9rM1ZnRjVe7dHM"><span class="label z" data-page-node-id="XRXr8PDRNaX5YoKQQlVRQy">追问</span>「现在有几个工具？扩展成 20 个会有什么问题？」——答：现在两个。<strong data-page-node-id="PEvSqnxXvcheVU7j7lXpKs">工具一多，最先出问题的是选择准确率</strong>，描述相近的工具会被选错，或者模型为了保险一次性调用一堆工具。这时候需要按场景分组、给 Planner 做工具子集的路由，而不是把全部工具都塞进一次请求——这也是 MCP 这类协议想解决的问题（工具多了要有发现和筛选机制）。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="YKmZEwrQi7y2cZ0zo4im2R">
+  <div class="q" data-page-node-id="Oyz2hphEct6bOd911ojFdY"><span class="idx" data-page-node-id="AeOIxsyNgDvFjK3aN7IIRh">B4</span>工具返回结果为空或者报错，你的链路会怎么走？</div>
+  <div class="a" data-page-node-id="fA7n1h8t0YhJe2D763fqfG">
+    <p data-page-node-id="9eIHuzQgEJvvwJes7q7VZB"><span class="label k" data-page-node-id="bCNpiCsLPzW9ABk49WvWb1">考点</span><strong data-page-node-id="ws82goD9HvpIAG78W8BJ5d">异常路径的设计</strong>，这是区分「写完功能就交」和「考虑过线上情况」的分水岭。</p>
+    <p data-page-node-id="DhFaoOi2woFWqJhXC926MV"><span class="label s" data-page-node-id="9azLwVbGOqAFBIVbEB0EPB">话术</span>「分三层。</p>
+    <p data-page-node-id="4X6loZA7sa6Uv0LdsoMGD4"><strong data-page-node-id="AYwf0J95GmxLAs5zpO1Yup">工具内部：</strong>知识库检索失败或没有结果，返回的是<strong data-page-node-id="LAkWO1HV1sbfpgBkgCOOMn">一段说明性文本</strong>而不是抛异常——比如『知识库暂无匹配结果』。这样模型拿到的是一个它看得懂的观察结果，可以据此决定换个查询词再试，或者直接告诉用户知识库里没有。</p>
+    <p data-page-node-id="tOqRRi7n2rsvGLsp8YtGe8"><strong data-page-node-id="ChdGQk6TBQBFAgIMuY8i8p">网页抓取：</strong>单个页面超时 7 秒或抛异常，用 <code data-page-node-id="F4lM2uLg2ziZeyKHDffa26">completeOnTimeout</code> 和 <code data-page-node-id="fK9o2BC5PIyprqa9giTRFe">exceptionally</code> 返回一条内容为空的结果。链路继续走，最终拼提示词时跳过正文为空的结果——一个页面挂掉不影响其他页面。</p>
+    <p data-page-node-id="9tTfHSsMxyqWI1EPL4J2NI"><strong data-page-node-id="1FB6LCETFrntrIrCsLcDAN">整条工具链：</strong>如果 ReAct 循环本身抛异常（比如模型服务不可用），外层 <code data-page-node-id="5SPzW8uTIAcQHIt7lxkhiZ">onErrorResume</code> 会捕获，记录降级日志，然后退回「一次性工具调用 + 标准生成」。再往上，如果连工具开关都是关的，就走纯生成。</p>
+    <p data-page-node-id="x9Nuv5ixMFmuzd6aJeqU3x">所以整个链路的保证是：<strong data-page-node-id="pKvvE56fWU48oqpTefNm6I">只要模型服务还在，用户就一定能拿到回答</strong>，只是用不用得上检索的区别。这个兜底逻辑是我特意设计的，因为工具调用引入的外部依赖太多了——搜索服务、网页、向量库都可能挂。」</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="73XmlHNJR6G8DCdSj8XSZk">C 组 · RAG 与向量检索</h3>
+
+<div class="qa" data-page-node-id="zuAxQAxEY3ctkLEiiWiDQq">
+  <div class="q" data-page-node-id="vpsPWW9npIlKsL2Vk5EYH8"><span class="idx" data-page-node-id="NRUM3EwLg3k5umBm1Fz7D8">C1</span>完整讲一下你的 RAG 链路。</div>
+  <div class="a" data-page-node-id="2b2Ov5CJZXW1GnxvJbfarI">
+    <p data-page-node-id="FlmLKqBlkLvWxpKsxtYlMk"><span class="label k" data-page-node-id="WfyJci3GPSQAUUJzNDj4hH">考点</span>能不能把 RAG 讲成一条工程链路，而不是「向量库查一下塞进 prompt」。</p>
+    <p data-page-node-id="UFwVeH0sFmU4DxuC4AK3ss"><span class="label s" data-page-node-id="kiawsr6SvFGAy7BTuJDeYw">话术</span>按「离线入库 → 在线检索」两段讲，见 3.4 的流程图。重点强调四个「为什么」：<strong data-page-node-id="H8djgE2g8BLRgH4oe3dLqF">为什么切分、为什么双路、为什么重排、为什么截断</strong>。</p>
+    <p data-page-node-id="3KsgJu2cnYPhvc4WsL4ZBX">「离线侧：文档按标题层级递归切分成 512 字符的 chunk、重叠 64，调 DashScope 的 text-embedding-v2 得到 1536 维向量，写进 PostgreSQL 的 pgvector 列，建 HNSW 余弦索引。</p>
+    <p data-page-node-id="uVMpYt82IfMFidLTeLpanh">在线侧：用户问题进来，我用两路查询——一路是原始问题，另一路在问题后面拼一段导向语，把检索方向往『答案应该长什么样』偏。两路各取一半候选，按 id 去重合并，这一步会召回 topK 的两倍（<code data-page-node-id="cVx3wG76mfaOnzDdD0JenX">expandFactor=2</code>），是故意放大的。然后把候选交给 GTE 重排模型做精排，最后按 0.35 的相似度阈值过滤、最多保留 8 条，格式化成带相关度和分类的片段清单注入 system prompt。</p>
+    <p data-page-node-id="7NjjdVQ1sBmKdkdtysavGJ">注入的时候我会明确写一句『请优先据此组织回答，勿虚构知识库中不存在的事实』——这句话对压制幻觉很有用，它给了模型一个明确的拒答许可。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="MRDKI0w6Tgk6CZhjaHApbe">
+  <div class="q" data-page-node-id="dzDdYzeGXrvCLcgqhhAFNI"><span class="idx" data-page-node-id="wYXTSNIeG86qrlEeLZjdlm">C2</span>为什么要做分块（chunking）？512 和 64 是怎么定的？</div>
+  <div class="a" data-page-node-id="QVDoQucZepFbZXLIHwpHns">
+    <p data-page-node-id="r7phoUraGO1cwYWlfXd1HE"><span class="label k" data-page-node-id="G8p0SyWEzL8HT1ATyxBWN3">考点</span>你知不知道分块是在解决什么问题。</p>
+    <p data-page-node-id="Sf5uea3JqDhFN4YEjDY1Ym"><span class="label s" data-page-node-id="25IsQB5cDOuBVlgKKFZO7z">话术</span>「不分块的问题很直接：一整篇文档压成一个向量，<strong data-page-node-id="DDZDaf7LBbLFCptSUr0uxX">语义被平均掉了</strong>。一篇讲简历的文档里包含排版、STAR、技能描述好几块内容，合成一个向量之后，用户问『STAR 怎么写』和问『技能栏怎么排』算出来的相似度几乎一样，检索就没有区分度了。反过来，如果切得太碎，一个 chunk 只有一句话，又缺上下文，模型拿到也理解不了。</p>
+    <p data-page-node-id="0WVKSYIEqig4ZOTKAzXuqB">所以分块本质是在<strong data-page-node-id="3tPhIYtgtUqhn1AWAIu2HI">『语义聚焦』和『上下文完整』之间找平衡点</strong>。</p>
+    <p data-page-node-id="7QDZ3lqbfDXucfC1ABq02j">512 字符是我的知识源（结构化 markdown）下一个二级标题能覆盖的典型长度——按标题切出来的段落自然落在这个量级，所以 512 是一个跟着数据走的选择，不是拍的。64 字符的重叠是为了防止关键句正好被切在边界上，两边的 chunk 都能看到完整的那句话，代价是存储和 embedding 成本增加约 12%。</p>
+    <p data-page-node-id="fNVD0wd0BHJE2hzxVxbmU2"><span class="label z" data-page-node-id="y7O6N5yYz1aQa0ex57FDHM">追问</span>「怎么验证分块有效？」——答：这是我觉得做得最扎实的一步。我写了入库脚本支持 <code data-page-node-id="TRjqrdcGNs7YUrT8HLVdNx">--mode whole</code>（整篇入库）和 <code data-page-node-id="Giq9UGfwoBGeA7CReFAmoP">--mode chunk</code>（切分入库）两种模式，用同一套 28 条评测集各跑一遍，比 Hit@K 和 MRR 的差值。这样「分块有没有用」是一个可复现的实验结论，不是感觉。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="5Qa8kp3H42WtP013cWxwsU">
+  <div class="q" data-page-node-id="FGlEEGvgGjOE0YtDeGWB8a"><span class="idx" data-page-node-id="l1pxeGv0WB6E2p4gTaXZp8">C3</span>余弦相似度、内积、欧氏距离有什么区别？你用的哪个？</div>
+  <div class="a" data-page-node-id="YFNRaWWnmQ4VEnfJKR7qB0">
+    <p data-page-node-id="d0WPnFXCNdwY8rAkytCxUV"><span class="label k" data-page-node-id="AyJ5dIRhjNFNCPZPYt5nAS">考点</span>基础功，答错会很难看。</p>
+    <p data-page-node-id="R1K4U86s1yEUwxyY4Zo306"><span class="label s" data-page-node-id="ZQmxOSDRc2GJGCZzRJlcA8">话术</span>「三个的区别在<strong data-page-node-id="hLFutZTaJvCFRnl6hsJ8be">对『长度』的敏感度</strong>上。</p>
+    <ul data-page-node-id="IeBEVUPzajZ7BjSrIDlGiP">
+      <li data-page-node-id="dP8MWoX6Wsjsx2BFrvLqNV"><strong data-page-node-id="Z7pPtW1hBDtxNkgKJXfOQH">内积</strong>同时受方向和长度影响，向量模长越大结果越大；</li>
+      <li data-page-node-id="lCXjGut0xoTr29wkLJHms2"><strong data-page-node-id="z44JCpnVsEVwR6esPOWjG0">欧氏距离</strong>看的是空间里的直线距离，同样被长度影响；</li>
+      <li data-page-node-id="ibiiwAneWYSQXzYhRp6nQL"><strong data-page-node-id="a3QJAUjKfFhFn1rSGPVJFM">余弦相似度</strong>只看夹角，把模长归一化掉了，衡量的是方向上的接近程度。</li>
+    </ul>
+    <p data-page-node-id="AvPEysFdOsQnV2NadaMGoa">我用的是<strong data-page-node-id="X18JhXHWUhB37kz79DgSJF">余弦距离</strong>（pgvector 的 <code data-page-node-id="imecdIgp465tGtShDjk4jH">&lt;=&gt;</code> 算子），索引也是 <code data-page-node-id="yoR8RqWO7D8hVWvYKtaLxU">vector_cosine_ops</code>。原因是文本 embedding 的语义主要由方向表达，长度往往反映的是文本长短这类无关因素，用余弦能避免『长文本因为向量模长大而被误判为更相关』。</p>
+    <p data-page-node-id="Wi9bXqdH8VFGEEZh98PBeB">有个细节：<code data-page-node-id="H2Ya93yfoHDte5fVtbc6mk">&lt;=&gt;</code> 返回的是距离（1 − cosθ，范围 [0,2]），而我要的是相似度，所以做了 <code data-page-node-id="thAuhsVBSEwskZ1ekGjPlh">similarity = 1 − d / 2</code> 的换算，展开就是 <code data-page-node-id="PhGTcbw5hf4vMo22kgtGqB">(1 + cosθ) / 2</code>，把结果归一到 [0,1]，这样 0.35 这个阈值才是可解释的。</p>
+    <p data-page-node-id="eCt4JDYtE2P9963PS3iu90"><span class="label z" data-page-node-id="ky4BQBtYutcr805T7yyxmJ">追问</span>「那如果向量都做了 L2 归一化呢？」——答：归一化之后模长都是 1，内积就等于余弦相似度，两者等价，这时候用哪个都行，而且内积计算更快。DashScope 的 embedding 不保证归一化，所以我用余弦更稳妥。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="f4FLXJ535IgxLjQbZOy4Au">
+  <div class="q" data-page-node-id="emKpqPAZehmEoOgPoZkZlc"><span class="idx" data-page-node-id="yestLtBJAoo9QeE0HGcvBm">C4</span>重排（Rerank）和向量检索是什么关系？为什么两个都要？</div>
+  <div class="a" data-page-node-id="MHnvnJPxREhIE6hdvxVuHT">
+    <p data-page-node-id="Hyh5ywFXxlJEs7xGCkPa9Y"><span class="label k" data-page-node-id="kt3e4fvqCvBMD5eOWDBH5b">考点</span>双塔 vs 交叉编码器的区别。</p>
+    <p data-page-node-id="3tjLFWqTBhDk3WX0vkCBjz"><span class="label s" data-page-node-id="tqsBjophaMh44l647WLz0z">话术</span>「两者是<strong data-page-node-id="OJRz1B9AK7sTnUUPS9BQ6O">粗排和精排</strong>的分工。</p>
+    <p data-page-node-id="YNsJl1D4PwkE4XC8BA5i8T">向量检索是<strong data-page-node-id="nlaG6CIiknMO0FTzGuzgXT">双塔</strong>结构：query 和 document 是<strong data-page-node-id="faTOtFwWv9OaHaFK1u8ADB">分别</strong>编码成向量再算距离的。好处是可以提前把所有文档的向量算好建索引，检索是近似最近邻查询，非常快；坏处是两者从头到尾没有交互，只能算一个粗粒度的『整体语义像不像』。</p>
+    <p data-page-node-id="EQB133RPMvVAK5Jc410o6q">重排模型是<strong data-page-node-id="BVviX2cEo1KQPEIo4OCrri">交叉编码器</strong>：把 query 和每个候选文档<strong data-page-node-id="FtZ5Cu5pSvmNCS6DedeweZ">拼在一起</strong>放进模型过一遍，能捕捉词级别的细粒度交互，所以排序准得多。代价是每算一个候选都要跑一次完整推理，很慢——如果知识库有一万条，用重排全量排序是不可接受的。</p>
+    <p data-page-node-id="dy49a39Dz1M3vW1iPX5dGh">所以工程上的标准做法就是我这个组合：<strong data-page-node-id="JnCeZNKsz3cK2oneOE6Bdt">用向量检索做粗排，快速把一万里挑出十几条；再用重排对这十几条精排</strong>。这也是我把 <code data-page-node-id="dUZkFaFCDBHGkcPz0aCbey">expandFactor</code> 设成 2 的原因——向量检索可能把正确的文档排在第 8 位，如果我 topK 只取 5，它就被截掉了，重排再准也救不回来。先放大到 10 条给重排留空间，重排完再截到 8 条。</p>
+    <p data-page-node-id="PLpiil2DnxrDPuV52QYPqs"><span class="label z" data-page-node-id="LV4bewwFC9Raife8abYt3h">追问</span>「重排挂了怎么办？」——答：我做了降级，DashScope 调用失败或响应解析异常时退回按向量相似度排序。重排是「锦上添花」，不是「不可替代」，所以可以降级；这也是把重排放在一个独立 Service 里、用配置项 <code data-page-node-id="zoPjOWZS6ne82Y45GEETGT">rag.rerank.enabled</code> 可以整体开关的原因。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="6MlI5IUKXAGkD5i8ZVfpzz">
+  <div class="q" data-page-node-id="ybjtSe0mTZXhNDuDvhuGd5"><span class="idx" data-page-node-id="Z04OzPAuDHCyNn8dJqWM2K">C5</span>RAG 是怎么缓解幻觉的？能完全消除吗？</div>
+  <div class="a" data-page-node-id="Ps5CQ78bxvgpB7yGJUF2o2">
+    <p data-page-node-id="CHxR2UtwcDqF0PX0jklPYk"><span class="label k" data-page-node-id="468B7AO9JLqyvk62BhulHX">考点</span>对 RAG 的期望值要清醒，说「完全解决」就是不懂。</p>
+    <p data-page-node-id="0Dv6qpQZciLw74JdOijQHz"><span class="label s" data-page-node-id="w0VOWqyXS6LNlftwylwkPG">话术</span>「RAG 能<strong data-page-node-id="xlH44Fs6F0OS0Lo7msusFI">缓解</strong>但不能消除幻觉。</p>
+    <p data-page-node-id="rP42iypJ23hjSy5F6vSW05">它起作用的机制是：模型回答时会优先依据上下文里给它的内容，而不是完全靠参数里的记忆。所以当问题落在我知识库覆盖的领域（简历写法、STAR、面试话术）时，回答的事实性明显更好。</p>
+    <p data-page-node-id="5HVmd6oYczYUEaRbvieHso">我在实现上做了四件事来加强这一点：<strong data-page-node-id="9dmEgr6JLAbZ4AGtZToyQn">一是阈值过滤</strong>，相似度低于 0.35 的片段不注入，宁可不给也不给噪声；<strong data-page-node-id="QXsa9glD1jhKJotUEiVjNl">二是条数上限</strong>，最多 8 条，避免上下文太长稀释注意力；<strong data-page-node-id="uq2q648axHO8ZXhxd0WGXq">三是显式约束</strong>，注入时明确写『勿虚构知识库中不存在的事实』；<strong data-page-node-id="JkItbxDFBasob710rB6Hyw">四是分类过滤</strong>，允许按 category 收窄检索范围，减少跨领域干扰。</p>
+    <p data-page-node-id="wHnBUwuxBdEYqic3pJd7Cd">但要说清楚三个它治不了的场景：<strong data-page-node-id="nNUoWXyCeVxg56Z41J76yG">知识库里根本没有答案时</strong>，模型还是可能顺着常识编；<strong data-page-node-id="q3BEAtZSH7Jwadk2ycIWl6">检索回来的是不相关内容时</strong>，反而会误导模型（这就是为什么阈值和重排很重要）；<strong data-page-node-id="s32hw7x2l69vdgOiAMTXFN">问题本身要求综合推理时</strong>，模型可能在拼接多个片段的过程中产生错误的推论。</p>
+    <p data-page-node-id="CCp21REB5Cy1sOCHuHQ2st">所以我的判断是：RAG 是『让回答有据可依』，不是『保证正确』。要再往前走，得加引用溯源——让模型明确标出每句话来自哪个片段，这样用户能自己验证；我的片段格式化里已经带了相关度和分类，算是为引用做了一半准备。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="uuIk64CanRLYlsP61n6XCk">
+  <div class="q" data-page-node-id="VhrUYxNxbvcFciwBUDbcbH"><span class="idx" data-page-node-id="7YcOJwYQmv4e8Lkokm1SNg">C6</span>知识库怎么更新？新增文档要全量重算向量吗？</div>
+  <div class="a" data-page-node-id="PJA3toSrR4vZdaLRq9LYHh">
+    <p data-page-node-id="zRHUHV8IZC1d9H5ISXEsJG"><span class="label k" data-page-node-id="5sNiLCxcjrCThOQFfu5KCf">考点</span>有没有考虑数据运维，而不只是一次性导入。</p>
+    <p data-page-node-id="T4fiFi7m0EowdLRoQanbKQ"><span class="label s" data-page-node-id="WAG0gyFb0GS6mAcHMm2YBB">话术</span>「不需要全量重算。我有三条路径：</p>
+    <p data-page-node-id="gDzXKl2XAO86uQZNldV77N"><strong data-page-node-id="BcPXxgDFO6nPUP31LgG1Qz">单条更新：</strong><code data-page-node-id="RUAMmSLH6DvWfCnrHFQVro">updateKnowledge</code> 改内容时会重新对这个 chunk 做一次 embedding 再写回，其他条不受影响。</p>
+    <p data-page-node-id="vyNUvvbZxKeFcH3PnYDShG"><strong data-page-node-id="xx1AiNiqagINQ9ehxQqqQe">批量导入：</strong><code data-page-node-id="huNhyNmCKtSRnycbw86AzG">importBatch</code> 按 16 条一批并发向量化后写入。</p>
+    <p data-page-node-id="1h0MLwE9awbqqaFPHi2c9D"><strong data-page-node-id="4v3WrDByQOquUNFsYExDlz">向量回填：</strong><code data-page-node-id="FE7fdwpQW54Gi3cZDt51uq">refillEmbeddings</code> 专门处理历史数据——按 id 升序扫出 <code data-page-node-id="7Axdcc7omzkBdq0vNUJZOF">embedding IS NULL</code> 的记录分批补齐，用 <code data-page-node-id="RBXcsLgRrH9a1sI9HsACr9">executeBatch</code> 批量提交。这个接口是为了兼容『早期只存了文本没存向量』的数据，也能用于换 embedding 模型后的重建。</p>
+    <p data-page-node-id="Abbu5yAlixvT02UXz8fmUX">批量导入有个坑我处理了：DashScope 批量调用可能返回数量对不上（部分失败），所以我做了<strong data-page-node-id="O5FTBHTC2OUGWUtcoPXHwe">逐条重试</strong>——批量失败就降级成一条一条调，单条也失败就把这条标记为空向量跳过，不让一条坏数据把整批导入搞失败。</p>
+    <p data-page-node-id="z3WyhLAoyJQQQo84o6umyV"><span class="label z" data-page-node-id="gkyjvHXYoYPuxUAUFeTFrh">追问</span>「换了 embedding 模型怎么办？」——答：维度变了就必须重建，因为旧向量和新向量不在同一个空间里，混着用检索结果会彻底乱掉。我的处理是：启动时从 <code data-page-node-id="wUxNYYT1Nva5mAatolYFyx">pg_attribute</code> 读列的维度，然后校验每次返回的向量维度和它一致，不一致直接跳过并打警告——这样至少不会静默写进去一堆错维度的数据。彻底的做法是加一个模型版本字段，双写两套向量，切换时重建索引。</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="F0JQS3EtbsM3BpyGHFLoSI">D 组 · 流式与 SSE</h3>
+
+<div class="qa" data-page-node-id="YdMyQxeR4aNf2AFNd2n9Mu">
+  <div class="q" data-page-node-id="vl0wzdlbB1CaxgKcQ3seLI"><span class="idx" data-page-node-id="DnXmaqUlZ6I3I9vEwmc0JM">D1</span>SSE 和 WebSocket 你怎么选？为什么用 SSE？</div>
+  <div class="a" data-page-node-id="4vuE2r1mKFL4Pz7zfkRPbW">
+    <p data-page-node-id="il983KSqvXuWZn49CFpcP0"><span class="label k" data-page-node-id="AMGsODheCy0dq8740Z7EDm">考点</span>技术选型的基本判断。</p>
+    <p data-page-node-id="83MikdBk09rx0MPzYBiHXY"><span class="label s" data-page-node-id="dhBPzTNWjEPruCHumfOAOt">话术</span>「选 SSE，因为我的场景是<strong data-page-node-id="uEVGLburgbUXeFYtVUkFNl">单向的、服务器推给客户端</strong>的流式文本，不需要客户端在同一连接上持续发消息。</p>
+    <ul data-page-node-id="x6YSEyF5GhAgBiG9EG8fwi">
+      <li data-page-node-id="RjmnEAD0xiQ7o59KFnqhz0">SSE 是普通 HTTP，天然穿透代理和网关，浏览器原生支持 <code data-page-node-id="raKLn6vl5xroYmOOj1WRiM">EventSource</code>，还有自动重连；服务端在 Spring 里就是返回一个 <code data-page-node-id="AHFJvnMkXcsh93B9NerHCB">Flux</code> 配 <code data-page-node-id="niTZB7hWOCMY1LGLwjqtk0">produces = text/event-stream</code>，非常轻。</li>
+      <li data-page-node-id="KYNtFXrHwGxFmiBL9GBV11">WebSocket 是<strong data-page-node-id="sxVaOFSLEqwVyOnvcK5O0H">全双工</strong>的，会带来连接状态管理、心跳保活、横向扩展时的会话粘滞这些复杂度——而我完全用不到双向能力。</li>
+    </ul>
+    <p data-page-node-id="t8gUkBPW8kFcDElAgVMm7G">所以结论是：只要是单向推送就用 SSE，别为了『看起来更高级』上 WebSocket。」</p>
+    <p data-page-node-id="HiitnXKaCyx6Qa95PkbWXq"><span class="label z" data-page-node-id="9PACHBcqryDQjbRXHlAAxX">追问</span>「SSE 有什么坑？」——答：三个。<strong data-page-node-id="5bM3JYshj1Wm7tmz1LEGGD">一是浏览器对同域 SSE 连接数有限制</strong>（HTTP/1.1 下约 6 个），多标签页会互相占用，需要 HTTP/2 或者用 fetch 实现 SSE 来规避；<strong data-page-node-id="SiWRwpohVdIkTNNXi3Ciaq">二是中间层代理可能缓冲响应</strong>导致看起来不流式，要配 <code data-page-node-id="XmwevgFFl2YiYPC7fchXoH">X-Accel-Buffering: no</code>；<strong data-page-node-id="8BF6tZfzK5ymGAouKPtDEF">三是断线重连会重新发起请求</strong>，如果不带 last-event-id 就会重复生成，要注意幂等。另外我前端用的是 <code data-page-node-id="FlJok2YSas4pdAHuRFo5UG">fetch-event-source</code> 而不是原生 <code data-page-node-id="nCYgmGW3X5ywSXayOPwPhS">EventSource</code>，因为原生 API 不支持自定义请求头，而我的接口需要 POST 传参。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="IivBPf0uKM4LIsPz7CSCMj">
+  <div class="q" data-page-node-id="n40CslCFGTjeWTJ5L0Mbw1"><span class="idx" data-page-node-id="r9c1S8cs4loQEIuUPgvzbi">D2</span>流式响应里怎么区分「推理过程」和「最终回答」？</div>
+  <div class="a" data-page-node-id="Fyg3CVFFXbn8GdvDEnuwqr">
+    <p data-page-node-id="rsSmo2g9HH79T4D7WU4a0o"><span class="label k" data-page-node-id="3FeRP68FnVMmFKoi41Flcv">考点</span>细节，说明你真的处理过这个数据。</p>
+    <p data-page-node-id="1zDJlom3a4g4cx8E2Kkfag"><span class="label s" data-page-node-id="z6sxRTHCBBFp2gHJbo57Kn">话术</span>「我把输出包装成一个统一结构，两个字段：<code data-page-node-id="AK1sMhneDqOBIuSAtaTFu6">reasoning</code> 和 <code data-page-node-id="wGgVwc8KJBYUG3naqVeBsa">v</code>。映射的时候判断 <code data-page-node-id="KY8KDxMjBOv7yxXLjY0M3T">message.getMetadata().get("reasoningContent")</code> 有没有值——有就说明这一片是推理内容（推理模型会有这个字段），包装成 <code data-page-node-id="zbTuas8pSPhibn7FXaLAdI">{reasoning: "..."}</code>；否则就是正文，包装成 <code data-page-node-id="ztVxOWEkieGkfHA2duTy5W">{v: "..."}</code>。前端按字段分别渲染：推理内容放到可折叠的『思考过程』区域，正文走 markdown 渲染。</p>
+    <p data-page-node-id="d4ufUPpmkpPPXbsd6bDdKv">落库的时候我也是分开存的，<code data-page-node-id="s8sd6q38FujpYopCAwD89q">t_chat_message</code> 表里有独立的 <code data-page-node-id="2cSYZHH8WNBHZuBaDeAkOu">reasoning_content</code> 字段。这样重新打开历史会话，思考过程不会混进正文里造成排版混乱。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="mmUcJugvElKUBj9jSiPU6M">
+  <div class="q" data-page-node-id="5jv3HwaoseAYsv4zewxsBK"><span class="idx" data-page-node-id="eHRpEgECkacbMTirek7ybf">D3</span>用户在生成过程中刷新页面 / 关闭浏览器，会发生什么？</div>
+  <div class="a" data-page-node-id="dyKd1Ipv62n3r4O1HsANOI">
+    <p data-page-node-id="fE4QX0rDXw69Ssy0HDAWM5"><span class="label k" data-page-node-id="FjyzSdHlWCsOTofs8C7dPR">考点</span>流式场景下的资源释放与数据一致性，是很实际的问题。</p>
+    <p data-page-node-id="ZPl7irx9of9Pbn1YljE1xE"><span class="label s" data-page-node-id="3I7mwRKpqQA3LSpGRKumnA">话术</span>「前端断开连接时，Reactor 会发出 <code data-page-node-id="D0rZl2FSUqoVxa6IKWK1MU">CANCEL</code> 信号。我的处理是：</p>
+    <p data-page-node-id="hR2bVLiEnC2ulKzpt1J7fR"><strong data-page-node-id="S1f0mRW1x14SavSRuCEzN0">已经产出的内容落库。</strong>在 <code data-page-node-id="fR4coxML5cdhwSzlU3wzu9">doFinally</code> 里捕获 CANCEL，如果聚合到的内容非空，就把『用户消息 + 已生成的部分回答』一起写进去——这样用户重新进会话能看到已经生成的部分，而不是白丢。</p>
+    <p data-page-node-id="3Nrq1dPD2LXYIQm2a6ai8G"><strong data-page-node-id="8sH0csYamt67sQVtIGUYvG">一个字都没产出就不落库。</strong>如果用户在发起请求后立刻关掉页面，这时候数据库里写一条空回答只会污染会话列表，所以直接跳过。</p>
+    <p data-page-node-id="zDMpvcn68CZ6XG6nDFUMtc"><strong data-page-node-id="dF6Zs7W6jKkslcgVULqVfK">防止重复落库</strong>用 <code data-page-node-id="jN1WtL23sh0Sz9cXuEIdJu">AtomicBoolean.compareAndSet</code> 做一次性开关，因为 <code data-page-node-id="RS42MumLb9hqpSdBCduW6K">doOnComplete</code> 和 <code data-page-node-id="JHMVkkDAXbxymQSOhyGAzO">doFinally</code> 在取消场景下存在竞态，不控制的话可能同一个会话写两遍。</p>
+    <p data-page-node-id="H3mchZfUtZq0byH4CUE8DT">另外在上层，<code data-page-node-id="b8Q1goAFDNxIb33EK2KcnK">wrapChatStream</code> 也对 CANCEL 做了处理，会把这次运行标记为『取消』而不是『失败』落进审计日志——否则我的异常率统计里会混进大量用户主动取消，失真。」</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="AaxA56dfcCX2zE6soWQCDj">E 组 · 工程化、部署与数据库</h3>
+
+<div class="qa" data-page-node-id="JXJqqwJAqZvKhsfmfTHISQ">
+  <div class="q" data-page-node-id="QJH83pNHacp9CQyZ9mEpsp"><span class="idx" data-page-node-id="A7xjoddzBZz6c4kOcpUIGf">E1</span>为什么向量库和业务库都用 PostgreSQL？</div>
+  <div class="a" data-page-node-id="5AQ62MAEq46sEBFkbEl8t1">
+    <p data-page-node-id="k1ngihKDqGnXKTjD2bZCo9"><span class="label k" data-page-node-id="4m02nfMR2viZzEYiQmU1Z2">考点</span>技术选型的成本收益分析。</p>
+    <p data-page-node-id="cQdDk7DjC0sHR4VBsulKnr"><span class="label s" data-page-node-id="SVw4DzgSZiECeOorcOGxdf">话术</span>「因为这个项目的规模用不上专用向量库。用 pgvector 的收益是：</p>
+    <ul data-page-node-id="IaFnPAcLHC06p3rUB8urOB">
+      <li data-page-node-id="Lu560CfmYPSKbJ5VuhTzZD"><strong data-page-node-id="ZhJfV0CiDQe1rqMWKweGkG">少一个组件。</strong>不用额外维护 Milvus / Qdrant 这样一套独立的存储，部署、备份、监控都省了——我整个后端就是 Compose 里四个容器。</li>
+      <li data-page-node-id="vUWLEYqvHdRHnkgyxBGCnK"><strong data-page-node-id="gsIf3D8eHdArjdvG5eCfbD">能和业务数据做事务。</strong>知识库的元数据（分类、来源、更新时间）和向量在同一张表里，改内容重算向量可以在一个事务里完成，不会出现『向量更新了但元数据没更新』的不一致。</li>
+      <li data-page-node-id="kjV76Wfldf753h1HNtWn0t"><strong data-page-node-id="msNWcSIPkvTHFrrboHnHjF">能借用 SQL 的能力。</strong>分类过滤直接 <code data-page-node-id="bDv8ssxacJGOTYuNHxJ4rH">WHERE category = ?</code>，分页、排序、统计都是现成的。</li>
+    </ul>
+    <p data-page-node-id="FoWXJocnBwAWLZxDCtlNPg">它的上限也很清楚：数据量到千万级，HNSW 索引的内存占用和检索延迟就会成为问题，那时候再上专用向量库。所以我的判断是<strong data-page-node-id="rHNwxCRhc8PEzGEkZw8dmG">先选简单的方案，把瓶颈留到真的出现时再解决</strong>。」</p>
+    <p data-page-node-id="9K3gVgEvF3jarbYOyN0aa1"><span class="label z" data-page-node-id="573uoXSnBGAjd2s9J5B22d">追问</span>「怎么迁移到 Milvus？」——答：我把检索封装在 <code data-page-node-id="XCRfZ3G6XKqoQ689KzEf31">ResumeKnowledgeBaseService.searchSimilar</code> 这一个方法后面，上层（双路召回、重排、截断）都不知道底层是什么。换向量库只需要换这个方法加一个向量写入的适配，RAG 链路其余部分不用动。这也是当初把它抽成接口的原因。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="YGD2sMH0DcqqTU9VflZW88">
+  <div class="q" data-page-node-id="NoCHs5NdGpxl2KLIjDivCF"><span class="idx" data-page-node-id="tAdXTQ6EVE04WVw3KN8AyH">E2</span>Docker Compose 里服务启动顺序怎么保证的？</div>
+  <div class="a" data-page-node-id="4YOqV3ahQYykihpP10DV2c">
+    <p data-page-node-id="HHkoSvND77zG1PGfjysq5a"><span class="label k" data-page-node-id="Z1X8yEBkgKeuhhkXqATKLA">考点</span><code data-page-node-id="rhgeiizFUZHABPux9WcGMT">depends_on</code> 的坑，很常见的面试题。</p>
+    <p data-page-node-id="0w8xQTqB8G4T5suDkgn9TY"><span class="label s" data-page-node-id="BW890iuRnGUwTPdwksB3ro">话术</span>「<code data-page-node-id="0f3NCdvDKdGkeJjmhoDXYu">depends_on</code> 默认只保证<strong data-page-node-id="2PiuL1hReSWTvYzZZJsIds">容器启动顺序</strong>，不保证里面的服务真的就绪了。所以我在 postgres 上配了 healthcheck——<code data-page-node-id="JUA88qGBWglolII4DY9OVj">pg_isready</code> 每 10 秒探一次——然后 backend 的依赖写成 <code data-page-node-id="6xIyM7RH7RQGwP5zEXSqaM">condition: service_healthy</code>，等数据库真的能接受连接了才启动。不然后端会在一开始连接失败然后崩掉。</p>
+    <p data-page-node-id="BukFaVgBtfVkWOoIgS5R65">另外 postgres 那边我把建表脚本挂到了 <code data-page-node-id="Bwl2HGMMwb2EQanRVMiLX2">/docker-entrypoint-initdb.d/</code> 目录下，编排文件里带序号前缀 <code data-page-node-id="N26M7CSZsXqoIOglmEN7Bo">01-</code>、<code data-page-node-id="aEuOwjveEcUI9sCsrHMqa4">02-</code> 控制执行顺序。<strong data-page-node-id="tMTUfDSOl1Fh9SUUIb91gL">要注意这个目录只在数据卷为空时执行一次</strong>，所以它不是迁移方案——真要改表结构得上 Flyway 或者 Liquibase。我现在是靠手工执行脚本，这在生产里是不可接受的，是个明确的待改进点。</p>
+    <p data-page-node-id="f6RXu1wU8qOrRnCyrGRPFc">还有一点：日志我挂载到了宿主机目录，这样容器重建日志不丢。密钥不在 compose 文件里写死，走根目录的 <code data-page-node-id="61AgbhtpOmv36lPi12Q0XN">.env</code>，而且 <code data-page-node-id="BXJcjWL4ExY3QaDn3OdnN6">.env</code> 是 gitignore 的。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="e5dqd9MWI0PGwx4m3ctFma">
+  <div class="q" data-page-node-id="ShHKIqQ6r6gRPTZgNIvjLw"><span class="idx" data-page-node-id="GYnuZEOGXTegBoKOzAWcD1">E3</span>pgvector 的 HNSW 和 IVFFlat 怎么选？</div>
+  <div class="a" data-page-node-id="VYELuD2Wqfcqbw70oOzinH">
+    <p data-page-node-id="BTj1PTYfog1vK3DnGUECM0"><span class="label k" data-page-node-id="o9H5qUReuq7OHNayKYDjtg">考点</span>向量索引的原理认知。</p>
+    <p data-page-node-id="xcVv6LyZCQnCwvyEyCSQbj"><span class="label s" data-page-node-id="ZHJ9DedRXYHV55KZvHVnXi">话术</span>「两者都是<strong data-page-node-id="xYWqKuhJgFwNIzzEBxIYql">近似最近邻</strong>索引，也就是牺牲一点召回率换查询速度。</p>
+    <ul data-page-node-id="ZreWedsi6hvKiBmtjVMYJy">
+      <li data-page-node-id="304WbfBBJXMmjuZzGmddUN"><strong data-page-node-id="T3CXFM25BdzMaGesNciKbr">IVFFlat</strong> 会先把向量聚成若干簇，查询时只扫最接近的几个簇。它需要<strong data-page-node-id="jJFa1r02kBEhnWtpDN1RC0">先有数据再建索引</strong>（训练聚类中心），而且数据变化后需要重建才能保持效果。</li>
+      <li data-page-node-id="s07MdBQr3ogdZCy17tcp9X"><strong data-page-node-id="nZfsT3jm4Lr4uqeg93NIJq">HNSW</strong> 是分层的小世界图，查询时在图上贪心跳转。它<strong data-page-node-id="LmxFhTKFlWpAnLcsciDibT">不需要训练</strong>，插入数据是增量维护的，召回率和延迟通常都更好。</li>
+    </ul>
+    <p data-page-node-id="pXhiSSbAYjyHRiut8yBJBC">我选 HNSW，主要两个原因：<strong data-page-node-id="eswFX4zXhEauOVdLVc0PbR">一是知识库会持续增删改</strong>，IVFFlat 每次大改都要重建，运维成本高；<strong data-page-node-id="w1g5rIDmLKoPWkxzoIxRs2">二是它不需要训练</strong>，空表就能建索引，部署流程简单。代价是构建慢、内存占用更大（每个向量要多存图的边），在数据量不大的情况下这个代价完全能接受。」</p>
+    <p data-page-node-id="5utDzwDulSzwWbYHebV8M5"><span class="label z" data-page-node-id="jwtkNSnxBZk72R53kjoeF7">追问</span>「HNSW 有哪几个关键参数？」——答：主要是 <code data-page-node-id="TglQCgSc5JhE2HHylk7CZI">m</code>（每个节点的最大连接数，越大召回越高、内存越多）和 <code data-page-node-id="YOCAWQqlzBG8UFQRSB0KP3">ef_construction</code>（建索引时的候选队列大小，越大索引质量越好、构建越慢）。查询时还可以临时调 <code data-page-node-id="0djgHWuXzVt4FQ2McDT4FK">hnsw.ef_search</code> 在召回率和延迟之间做权衡。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="Oz50YCFqAzn8Ef6DQpjhNI">
+  <div class="q" data-page-node-id="oXU6mW7b9NE9duVm1Se744"><span class="idx" data-page-node-id="6pCS5DjOJL28drtDakq3xr">E4</span>这个项目怎么排查线上问题？</div>
+  <div class="a" data-page-node-id="B3EPU0wONNIxyxDXWJkJ9g">
+    <p data-page-node-id="IW6b2yAaJqkRGa3udAhKsV"><span class="label k" data-page-node-id="I0whOCoEj9HVvYpaqksIrE">考点</span>可观测性意识，很多候选人完全没有这块。</p>
+    <p data-page-node-id="l12BPHvBqBvG6NfI9v7CC6"><span class="label s" data-page-node-id="HFFPfNtEYtMKOHUwHYE4zr">话术</span>「我做了三层：</p>
+    <p data-page-node-id="CYGi3QQLD4adDeZ2twB0w5"><strong data-page-node-id="bf6en61Qn4vzTz0tktV7ZF">一是请求级的链路日志。</strong>每次请求生成一个 <code data-page-node-id="unxZlxExDkgHuK6J4V0CBz">requestId</code>，从意图识别、上下文装配、Prompt 构建、Planner 决策，到 ReAct 的每一轮工具调用，每一步都记 <code data-page-node-id="Gr5Nl5bK0RbHxqWjEEf9BQ">step + 耗时 + 摘要</code>，统一带 requestId 输出。出问题直接按 requestId 捞全过程，能看到是 Planner 判错了、检索没召回、还是模型跑偏了。</p>
+    <p data-page-node-id="ZRAtubnTc8lG787GIXbldE"><strong data-page-node-id="fl9RhEOJiYAHqRcaYy0UyC">二是关键指标埋点。</strong>首 token 延迟、总耗时、输出字符数、推理字符数、是否触发降级、走的哪条工具模式——每次请求结束打一条汇总日志。这些指标能回答『变慢了没有』『降级率是不是涨了』这类问题。</p>
+    <p data-page-node-id="VZfHJH2XnN9T0mUKvDrxLL"><strong data-page-node-id="gjvl6pNFCYuxNiB1xPWUC8">三是日志分级落盘。</strong>用 Log4j2 把 application 和 error 分成两类文件，保留 30 天；同时做了一件事——把 SSE 连接断开产生的异常做了降噪处理，因为用户在流式过程中关页面是常态，这类异常会把 error 日志淹掉，掩盖真正的问题。</p>
+    <p data-page-node-id="nMnRBFrwmknepubokBGPeY">现在的短板是<strong data-page-node-id="cNOC5PZeHVl1tja1fS4cMo">审计日志只落在日志文件里，没有落库</strong>，所以做不了聚合分析（比如按天统计降级率、按耗时分布看 P95）。要改进的话应该异步写到一张审计表或者打进时序库，再配 Grafana 看板。」</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="QNvst00RFs2EpdEqbIN6vd">F 组 · Java 基础与并发（结合项目）</h3>
+
+<div class="qa" data-page-node-id="KKylWu3tqkgHJ0FyH5Ko7f">
+  <div class="q" data-page-node-id="8Ml58108KCfODg5wpbFu7v"><span class="idx" data-page-node-id="vQ17oyBoy8DWuiXbmUyxwV">F1</span>你的线程池是怎么配的？为什么要多个池？</div>
+  <div class="a" data-page-node-id="Ykz3YKZYFAUOFqA0i10zEA">
+    <p data-page-node-id="Nwa84p0no8WM4DVMKo07Dy"><span class="label k" data-page-node-id="fByvMZ9kTlGPvXKap6K3E0">考点</span>不只是会传参，还要知道为什么要隔离。</p>
+    <p data-page-node-id="xqI6GM7T2hYlyxECnjDNxB"><span class="label s" data-page-node-id="WOAe1i7STxf3vEBuztE5HN">话术</span>「我按任务类型拆了两个池：<code data-page-node-id="sOMamZspDcGaVfM3FDsd4E">httpRequestExecutor</code> 专门发 HTTP 请求（IO 密集，线程大部分时间在等网络），<code data-page-node-id="1bGGnuDioioaDnBfrvM4BQ">resultProcessingExecutor</code> 专门解析 HTML（CPU 密集）。</p>
+    <p data-page-node-id="9ICPACgVapf9y169TO80kc"><strong data-page-node-id="DAglpCMFPhdD4EMIRh2qAt">为什么要拆？</strong>如果共用一个池，一批慢的网页请求会把池里所有线程占住，后面就算有解析任务也排不进去——虽然解析很快，但被慢任务堵死了。这是典型的<strong data-page-node-id="qjLwISK8sylf0lRyBlIZfJ">用线程池隔离来做故障隔离</strong>：一类任务的异常不会传染给另一类。这个问题叫『线程池饥饿』。</p>
+    <p data-page-node-id="TeoyLySVu24JwkpUvsye8Z">另外我用的是 Spring 的 <code data-page-node-id="Ka4Nf5fpefhEJ1vSvV01LD">ThreadPoolTaskExecutor</code>，可以配核心线程数、最大线程数、队列容量、拒绝策略和 <code data-page-node-id="GcYvZe6yAGn9UD4MdmKY9u">CallerRunsPolicy</code> 这类自定义行为。在批量抓取里我其实还依赖了 <code data-page-node-id="3UG04Qj4e0vW3VBSSRtgxR">CompletableFuture</code> 的超时机制，单条任务 7 秒超时，所以即使线程被占住，链路整体也不会无限等。</p>
+    <p data-page-node-id="LfuRE3Z68krvobV7lznW5h"><span class="label z" data-page-node-id="AORus1BBUs3kPZw90JGxeY">追问</span>「为什么不用 <code data-page-node-id="Ny3P2yzEKowq5Y299yVaeD">Executors.newFixedThreadPool</code>？」——答：因为它的队列是<strong data-page-node-id="KvvMhkp4XdW7RQDkhvvGSU">无界</strong>的 <code data-page-node-id="NftxfDlLj0ClkXA6M3P8ea">LinkedBlockingQueue</code>，任务会无限堆积，内存迟早爆掉，本质上和直接 new Thread 一样危险（只是把 OOM 从线程栈换到了队列）。阿里规约也明确要求手动 new ThreadPoolExecutor 并指定有界队列。我在第二个项目（AI 报告平台）里改造的就是这个问题。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="AROVAnGvJ5ep8zEatYuiZD">
+  <div class="q" data-page-node-id="loFZBzco72cO9Fd39jeI3B"><span class="idx" data-page-node-id="2FQlgtmdeMtakO4d73L4Ys">F2</span><code data-page-node-id="5oQvjQkr12C1lGQN3n2RG4">CompletableFuture</code> 的 <code data-page-node-id="wsVZbMfMguTR7XCh6uksIW">allOf</code> / <code data-page-node-id="59yCciquEG32AWnTaINBpW">completeOnTimeout</code> / <code data-page-node-id="BP74bHLDrBHCMh3ckVF0ql">exceptionally</code> 分别做什么？</div>
+  <div class="a" data-page-node-id="p8Pb8TCoAWe3pMiMu6Up8v">
+    <p data-page-node-id="Bh3LEB775QT2wJJfklnOQL"><span class="label k" data-page-node-id="8oNBJcCMTD13zSrTS2YLu5">考点</span>异步编排的基本功，你的项目里正好用了这三个。</p>
+    <p data-page-node-id="L2EXNwlUwaQP54RQB7j7GP"><span class="label s" data-page-node-id="67ME2lbButAGJzcm2uyS9Z">话术</span>「在并发抓取里三个都用到了：</p>
+    <ul data-page-node-id="AOO9pV8a08oBl2YoOy0VZ0">
+      <li data-page-node-id="sEL4glEMgX37G3MPU7y1Ym"><code data-page-node-id="IbSeMD6SL2dLd8NDwVJQ0a">allOf</code>：把 N 个独立任务的 future 聚合成一个，等全部完成。注意它返回的是 <code data-page-node-id="i0WxPX8BrTdCCJKi1o2gI4">CompletableFuture&lt;Void&gt;</code>，本身不带结果，结果要从原来的 future 列表里 <code data-page-node-id="nYAEIQEETVOWPFiMrG2EKf">join</code> 出来——我是在 <code data-page-node-id="lDBZFG9YdelXRa884LVyRJ">thenApplyAsync</code> 里遍历原列表拿的。</li>
+      <li data-page-node-id="GUfFvqSwPk2QilA5iNnb2F"><code data-page-node-id="lHpsGoFRjVl1e5twtW9PBS">completeOnTimeout</code>：给单个任务加超时兜底。7 秒还没抓到就用一个备用的空结果把 future 完成，这样它算『成功』不算『失败』，<code data-page-node-id="WK0EOLFb8Tq41CL4VCDWdW">allOf</code> 不会被卡住。</li>
+      <li data-page-node-id="IHKrzDFpK1dtca8F2g99jD"><code data-page-node-id="vgMTsOO56iDMngZZOLRTfm">exceptionally</code>：异常兜底，把异常转成一个降级值，避免异常向上传播导致整个聚合失败。</li>
+    </ul>
+    <p data-page-node-id="D5SV9nK9YA4jWORcwHpnFa"><strong data-page-node-id="EDw7oi5EEXz48wjhUNlOyC">这两个兜底的意义是：</strong>CompletableFuture 默认的行为是「一荣俱荣、一损俱损」——任何一个子任务抛异常，<code data-page-node-id="yMy89LPqlLCK5Y1YW2ZFCt">allOf</code> 的结果就是异常，前面成功的都白做了。抓网页这种外部依赖极不稳定的场景，必须让每个子任务自己把失败消化掉，返回降级值，整体才不会因为一个页面挂了而全盘失败。」</p>
+    <p data-page-node-id="tfAT1HCZpiG6HjbRUkTF8V"><span class="label z" data-page-node-id="4p9SSYJv4jzomekJpW2HMq">追问</span>「<code data-page-node-id="eZpZoLQDkFSScGiWBSvLt5">thenApply</code> 和 <code data-page-node-id="sku0EWX7oHmOhc8DowJVkW">thenApplyAsync</code> 的区别？」——答：<code data-page-node-id="Z5v7FLID5tr1unPUy0QPDQ">thenApply</code> 在<strong data-page-node-id="NrdLR87ki6c9CqXdLtnVTc">完成上一个任务的那个线程</strong>上执行，<code data-page-node-id="AzT3ljmqcOQCuiyRfiQnPN">thenApplyAsync</code> 会重新提交到一个线程池（不传参就用 ForkJoinPool，我传了 <code data-page-node-id="V9osrGXVxdvmYsjijQAKjz">processingExecutor</code>）。我这里必须用 Async 并指定线程池，否则 HTML 解析会跑在 HTTP 线程上，回到我以为已经避开的那个问题。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="1DEscEgOfLgpaLgsN8NOJc">
+  <div class="q" data-page-node-id="eMOPBNVFFPVrtcT7jJs1yv"><span class="idx" data-page-node-id="j2Apm53qMrMxJGDhbfg4Pm">F3</span>HashMap 什么条件下转红黑树？（高频基础题，结合你的项目说说）</div>
+  <div class="a" data-page-node-id="r3R9Er4oauV79W0q6EXzNi">
+    <p data-page-node-id="QaExeBBKymqf0nZtzw08ri"><span class="label k" data-page-node-id="liEGs3HBg6qhO1pE0FGDPF">考点</span>基础知识。<strong data-page-node-id="QbjKGoZKOxMAAGaeTrXSa6">注意这题和智询工作台关系不大</strong>，答完基础后可以主动把它拉到项目上，显得不只会背书。</p>
+    <p data-page-node-id="lDJHrBaoE7SLUdeFoNwmb0"><span class="label s" data-page-node-id="OImWoUo83GCgzLB6hTNgDB">话术</span>「两个条件同时满足：<strong data-page-node-id="DoDFmwkmIP4mevRV6D1jiO">单条链表的长度达到 8，且整个 table 的容量不小于 64</strong>。如果容量不到 64，会先扩容而不是转树——因为容量小的时候哈希冲突多是因为桶太少，扩容比转树更划算。反向的，红黑树节点数降到 6 会退化回链表，中间留 7 这个缓冲是为了避免在 7、8 之间反复转换。</p>
+    <p data-page-node-id="TQgnimf2IoZB8QiqnUAqPP">阈值定成 8 是基于泊松分布的：哈希分布均匀的情况下，一个桶里出现 8 个元素的概率约为千万分之六，几乎不可能——所以正常情况下根本走不到树化，树化是一个防御极端情况的兜底。</p>
+    <p data-page-node-id="OSzsp2VCxR1JE1RB83KoDY">结合项目说一句：我在做 RAG 双路召回合并的时候用了 <code data-page-node-id="8KQhY1ewGjZw6KBetH1jl9">LinkedHashMap</code> 按 id 去重，选它而不是 HashMap 是因为<strong data-page-node-id="CiOf9CpW80qZCXnp7GpQnf">要保留插入顺序</strong>——第一路检索的结果更贴近原始问题，去重时应该优先保留它并排在前面，而 <code data-page-node-id="782IYspzDFa1dIYyG9EzJD">putIfAbsent</code> 只能保证不覆盖，顺序要额外处理，所以顺序敏感的合并就得用 LinkedHashMap。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="LwtbbejCqL3yqbamUbsXa1">
+  <div class="q" data-page-node-id="ZgL9MjEA9wmx7AMxfTpa32"><span class="idx" data-page-node-id="zZ0YE0GAWtKujZDqptj6j2">F4</span>JVM 内存结构讲一下，你的项目里可能在哪出问题？</div>
+  <div class="a" data-page-node-id="CJ2mIoWnqftbw3DeRPL0S2">
+    <p data-page-node-id="wIFY5rA5oLuGAWXZSo2ETB"><span class="label k" data-page-node-id="vYpUVGSmuXCfvaUkfl8CGG">考点</span>基础 + 结合项目。后半句才是分水岭。</p>
+    <p data-page-node-id="6xd1p3VmErx9NfNao2zrJc"><span class="label s" data-page-node-id="NhsTEH2mBzD7QFmE3CqEHv">话术</span>先说结构：<strong data-page-node-id="eZMziWU967N04E4oYSYZT3">线程共享的堆和方法区（元空间），线程私有的虚拟机栈、本地方法栈、程序计数器。</strong>堆又分新生代（Eden + 两个 Survivor，默认 8:1:1）和老年代。对象优先在 Eden 分配，经历一次 Minor GC 存活就进 Survivor 并且年龄加一，<strong data-page-node-id="37DdF6aOC4ZM5D6X6lSjw0">年龄到 15（默认 <code data-page-node-id="QOWEtK3CwmeagGtV4Wk6gI">MaxTenuringThreshold</code>）或者 Survivor 里同年龄对象超过一半（动态年龄判定）就晋升老年代</strong>。大对象直接进老年代。</p>
+    <p data-page-node-id="pMZW158Uvk54l4V4UibvVP">结合我的项目，最可能出堆内存问题的地方有三个：</p>
+    <ul data-page-node-id="DvcZY3fZfCBkwogDTUEPyz">
+      <li data-page-node-id="gzGQ5lIpgSuaKp1xMNI83H"><strong data-page-node-id="yBtUoNLCh30N0vzAoEPVqM">简历解析。</strong>PDFBox 和 POI 解析文件时会创建大量临时对象，文件本身还有 3MB 的限制——这个限制除了防滥用，也是在控制解析过程的内存峰值。</li>
+      <li data-page-node-id="FQLttXcgqARCn54utYni93"><strong data-page-node-id="fbedy1tWHQzNL0F13O9fPB">流式聚合。</strong>落库的 Advisor 里用 StringBuilder 把整段回答聚合起来，长回答会一直待在堆上直到请求结束。这是必要的（不然没法落库），但意味着单个请求的内存占用和输出长度成正比。</li>
+      <li data-page-node-id="3IEvhZsI02gIVmYZQQjSk1"><strong data-page-node-id="4Ljc1AauaFkFRmClTKxCHG">网页正文抓取。</strong>抓回来的原始 HTML 可能有几百 KB，如果并发抓取的条数或线程池配置不当，同时驻留的 HTML 会把堆压得很紧——这也是我把结果条数限制在前 5 条的原因之一。</li>
+    </ul>
+    <p data-page-node-id="pcp1Jb7FZUxbBV9vfqgmB1">排查思路是：先 <code data-page-node-id="jZeN8Ln7pc1aXyMfrpeInz">jstat -gcutil</code> 看是不是频繁 Full GC，<code data-page-node-id="LLOENC8UAAaha3OmkTRRKQ">jmap -histo</code> 看对象分布找出异常增长的类型，必要时 <code data-page-node-id="RcK7xowRpnDsasSfGiQvtU">jmap -dump</code> 下来用 MAT 分析引用链。我现在没有配 JVM 参数，生产上应该至少设置 <code data-page-node-id="CwkDV2bwMnGlCdXHZOGIik">-Xms</code> / <code data-page-node-id="e6owU5NpmukqkhSfQVywR8">-Xmx</code>、选 G1 收集器并配上 OOM 时自动 dump。」</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="zrBde72menNhuaJcDFmaWW">G 组 · 结合校园社区项目（缓存与消息队列）</h3>
+
+<div class="qa" data-page-node-id="KFa3JSJPzyKB8NxaxFFHDh">
+  <div class="q" data-page-node-id="N7ZTl8jLRDiUdCIIJKlSN2"><span class="idx" data-page-node-id="pdMfMzE47E0xgugG6hkfqd">G1</span>你的二级缓存是怎么设计的？本地缓存和 Redis 怎么保证一致？</div>
+  <div class="a" data-page-node-id="DikqwXcH20FaKmH1UZR0tL">
+    <p data-page-node-id="nttaVLhjWOsns6iLrtnWxE"><span class="label k" data-page-node-id="623jT2rb1s08COJLCl6yH4">考点</span>多级缓存的一致性，这是最容易被问穿的地方。</p>
+    <p data-page-node-id="hIl74VFLCH0ZdN8a2sX7PW"><span class="label s" data-page-node-id="8NamazVli9aeZWFDZ7Oy0f">话术</span>「结构是 <strong data-page-node-id="QEm4NqbGMQmWNtsnVlbJiY">Caffeine（进程内）→ Redis（进程间）→ MySQL</strong>。读的时候先查本地，没有再查 Redis，最后回源 DB 并逐层回填。用户信息这类热点数据，本地命中后完全不需要走网络，这是响应时间从 7ms 降到 3ms 的主要原因。</p>
+    <p data-page-node-id="drxop1IjpiFA2h0QVz74AH"><strong data-page-node-id="TPSGt2muF8MxzzRKltbiwj">一致性是二级缓存最麻烦的地方</strong>，因为本地缓存是每个实例私有的，一个实例改了数据，其他实例并不知道。我的处理是：</p>
+    <ul data-page-node-id="p7Dm92TQLPc2lrHuUXDteE">
+      <li data-page-node-id="UGR9Pd5dgWApvBOrAxjJTo">写数据时先删 Redis、再写 DB，然后通过 <strong data-page-node-id="buqHI6OKm7N1Y8pouB5Us8">RabbitMQ 广播（fanout）</strong>把失效消息推给所有实例，每个实例收到后清掉自己的本地缓存。</li>
+      <li data-page-node-id="hyyHebOeM9fGqjB7uL8jL1">为什么是<strong data-page-node-id="2Qx39Nk0CTAc3mZ96JEeAR">延迟双删</strong>？因为存在这个时序：线程 A 删缓存后正在写库，线程 B 在这中间读到旧数据又回填进缓存。等 A 写完之后，缓存里就是脏数据了。所以在写库之后再延迟一小段时间做<strong data-page-node-id="BhGkyjDxGsZTCWMQ6GjsH0">第二次删除</strong>，把可能被回填的脏数据清掉。延迟时间要大于一次『读 DB + 写缓存』的耗时。</li>
+    </ul>
+    <p data-page-node-id="SXqcr7gbvjpAZJvhV1RAnF">说实话这套方案的强一致是做不到的——延迟双删也只能覆盖大部分情况。<strong data-page-node-id="BjGDZQwcDEtniX0LowPkBP">底层思路是：缓存只用于能容忍短时间不一致的场景</strong>（比如用户昵称、头像这类展示数据），涉及库存、余额这种强一致的必须绕过缓存走 DB。这个边界我是清楚并且刻意划的。」</p>
+    <p data-page-node-id="ATJajEhCmDPxGYMq85evqu"><span class="label z" data-page-node-id="ILKrB02qO7XXmfXzcC3H6F">追问</span>「本地缓存的容量和过期怎么设？」——答：Caffeine 用 <code data-page-node-id="FbU9wQDrCtHreG6pBYRUr8">maximumSize</code> 限制条数（防内存无上限增长）+ <code data-page-node-id="5rtmRyt0AiobKqgRVmJAes">expireAfterWrite</code> 设一个较短的过期时间作为兜底的兜底——即使 MQ 消息丢了，过期也能保证最终一致。这个『短过期』是我认为比延迟双删更可靠的一层保障。</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="sMJtsheTdBhxEFfq5lNorS">
+  <div class="q" data-page-node-id="dH3vAoJM94cjBZfBaqdC95"><span class="idx" data-page-node-id="fm5pk0PCyDSzWJDcselrgm">G2</span>缓存穿透、击穿、雪崩分别怎么解决？</div>
+  <div class="a" data-page-node-id="lz8qBVStxDwjhkfc0L0i5H">
+    <p data-page-node-id="bms635AF2sPJcnDQqZYZ6P"><span class="label k" data-page-node-id="C37ln6rA7hq94HiBFURZ3V">考点</span>八股高频题，答的时候尽量说自己项目里的<strong data-page-node-id="aSP21pFzt1ZraUbFcomdif">具体数值和选择</strong>。</p>
+    <table data-page-node-id="KGivih7zXoAnIFPdtBt2MJ">
+      <thead data-page-node-id="PwNKAA5eI84qCa0rxYIVkQ"><tr data-page-node-id="cANNc7PW2b5nGXUF8ck0CU"><th data-page-node-id="ouvgMjbwbqoqUj3uFna6my">问题</th><th data-page-node-id="gNhGzXGoKCANVnkd0qI9dh">本质</th><th data-page-node-id="p9rohIUz8M0UPuFQKwam64">我的处理</th></tr></thead>
+      <tbody data-page-node-id="fKXaE7s3l6YOERiRxuv4Rl">
+        <tr data-page-node-id="hiG6lo9cHDujjFhOHWv2K7"><td data-page-node-id="pxhtG02nSX8CUp2l6lPqea"><strong data-page-node-id="GtnmIoO9tfszvvbbmisLNZ">穿透</strong></td><td data-page-node-id="CvIdsAQSHkJsZwLj4HGn2p">查一个数据库里也不存在的 key，缓存永远不命中，每次都打到 DB</td><td data-page-node-id="CZFPGHqnhWNlCDa3UwKhDt">对查询结果为空的 key 也缓存一个空值，TTL 设短一些（比如 60 秒）。这样恶意请求会被缓存挡住。更彻底的做法是布隆过滤器，在入口就把不存在的 key 拦掉——但它有误判率，且删除数据麻烦，所以我先用空值缓存</td></tr>
+        <tr data-page-node-id="ldW4aFW490FSKaJTUDZV0o"><td data-page-node-id="rxUlfHUX1avaJbHvGbYJum"><strong data-page-node-id="f6DWNDsuHjcCw3qn2LLy4N">击穿</strong></td><td data-page-node-id="5yZBQcN82KX7ZzCUAkwD3W">某个热点 key 恰好过期，瞬间大量请求同时回源</td><td data-page-node-id="RnVxPYm973dftoxBQM5y8B">热点 key 用互斥锁或逻辑过期：只有一个请求去回源，其他请求短暂等待或直接返回旧的过期数据。对用户信息这种场景，返回稍微旧一点的数据比让用户等更好</td></tr>
+        <tr data-page-node-id="5BLJWQ7HmEgaMaYe7E9fJy"><td data-page-node-id="kG73RqK9QnPqJEy2oRHf2m"><strong data-page-node-id="Z9AUfBeL0bmTZjmuEXtWDs">雪崩</strong></td><td data-page-node-id="G6ASCryMgoDGhqSVnF7Clj">大量 key 在同一时刻集体过期，或者缓存服务整体挂掉</td><td data-page-node-id="lnKVCgtjR7OAxfh8oag1N2">过期时间加<strong data-page-node-id="cNs85P5jelvZ90xjdIDcs6">随机扰动</strong>（基础 TTL 上叠加一个随机区间），避免同时失效。另外本地缓存本身就是一层保护——Redis 整体不可用时，热点数据还能从 Caffeine 拿到，这是多级缓存额外的容错价值</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="RJFXPxasAx2hjCZUUUg2Hq">
+  <div class="q" data-page-node-id="GEszSuz6wT02sHRt0YsL0L"><span class="idx" data-page-node-id="KjGEKqVMYKf9tFGplZO1Ws">G3</span>「兜底写库 + 异步发送失败消息」具体是怎么做的？</div>
+  <div class="a" data-page-node-id="29QfZi33DB0BLBQRWy4kBr">
+    <p data-page-node-id="gSHh14Qp4eU0mmbdfRY0sO"><span class="label k" data-page-node-id="jfJDS2bdCXivtPCSINDoJf">考点</span>消息可靠性，核心问题是「怎么保证消息不丢」。</p>
+    <p data-page-node-id="D0x86HMlbyGaJEYpR8vtp1"><span class="label s" data-page-node-id="9AwbACXvhIoFwb1sKBw2LG">话术</span>「要保证不丢，得看三个环节：</p>
+    <p data-page-node-id="FAYT2WdGL8GkRgwIGw0QhT"><strong data-page-node-id="qdQudVtTyapVXbGqQMhBbg">生产者到 Broker：</strong>开启 Confirm 机制，Broker 收到消息会回调确认；没收到确认的消息失败重试。如果重试也失败，就<strong data-page-node-id="JcxCTE3WXtsFloI3no5Aqz">把这条消息落库留痕</strong>，由后台补偿任务定时扫描重发——这就是『兜底写库』。为什么不能只靠内存重试？因为进程一重启，内存里的重试队列就没了。</p>
+    <p data-page-node-id="G0r765H8frK7FomxfmCn6b"><strong data-page-node-id="4LNIhPYKgVUlG1WPHQGANP">Broker 自身：</strong>声明队列和消息都设为持久化，防止 Broker 重启丢消息。</p>
+    <p data-page-node-id="1nt9LwyjwZ94CnqHOLUzMq"><strong data-page-node-id="84xND129bfmSBsYGHnvGYM">Broker 到消费者：</strong>用<strong data-page-node-id="KpZaYpp8Hs8DQArC12vgvQ">手动 ACK</strong>，业务处理成功再确认；失败就 nack 或者不确认，让消息重新投递。业务侧必须做幂等——因为『处理成功但 ACK 丢了』会导致消息重投，重复消费是必然出现的，不是异常。</p>
+    <p data-page-node-id="GRhSzD8ZCK9BAGXJpDEt2q">延迟消息是用<strong data-page-node-id="HkhoyJxwtUU5fHPf3EMYcW">死信队列 + TTL</strong> 实现的：消息先进一个带 TTL 的队列，到期后变成死信转到真正的消费队列，达到延迟投递的效果。RabbitMQ 没有原生的延迟队列，这是社区的标准做法（也可以用延迟插件，但会增加部署依赖）。」</p>
+  </div>
+</div>
+
+<h3 data-page-node-id="nlDXrLfyMvpORKMPd2Aj8z">H 组 · 软性问题</h3>
+
+<div class="qa" data-page-node-id="ijoL0BD6KGEvqCDLq9TQJr">
+  <div class="q" data-page-node-id="mTm1cjmpMbKZdkqTX4XIQR"><span class="idx" data-page-node-id="73qbE3aFxDp2QK2LWDHlWP">H1</span>你怎么保证自己写的代码是对的？</div>
+  <div class="a" data-page-node-id="Gt0GCR97QYcdKxbiH5PzFk">
+    <p data-page-node-id="4plEeveTyEAZxxqNB2rFtS"><span class="label k" data-page-node-id="7guZ0nMDm3MPC1f9cGG20C">考点</span>质量意识。这题很多人答「多测试」，太空。</p>
+    <p data-page-node-id="V1cDJDq7YYfBFVzhZWXI54"><span class="label s" data-page-node-id="ozmQtsDBa12lKUEoYac0OU">话术</span>「分三层。</p>
+    <p data-page-node-id="XfF0BfoxuxBTg4ZAlV5Ozh"><strong data-page-node-id="MBlEfD4BKoBZol2lTfqiwa">第一层是能自动跑的验证。</strong>RAG 这种效果型的功能最难验证，因为它没有『对/错』只有『好/差』。所以我把评测脚本化了——改任何检索参数，跑一遍就知道 Hit@K 和 MRR 是涨了还是跌了，还能和上一次的结果做差值对比。这让『优化』变成了可验证的动作。</p>
+    <p data-page-node-id="rj5gsTsMynGd9oy2Uc7uyy"><strong data-page-node-id="HVE3nnQYxG6Rr3xvyxDqnh">第二层是边界和异常。</strong>我习惯先把失败路径列出来再写主流程：模型不按格式输出、工具返回空、外部接口超时、用户中途关页面、数据库写一半失败。这个项目的三级降级和流取消时的部分落库，都是这么设计出来的。</p>
+    <p data-page-node-id="krPEvcACVvALqVZiQRO3bT"><strong data-page-node-id="xvRCcHiBh45FMzL5tmzGyJ">第三层是可观测。</strong>上线之后靠日志定位问题，所以我在每一步都埋了耗时和摘要。判断标准很简单：<strong data-page-node-id="Qwk1juR3R0ndCLw8Kmqt9i">出问题的时候，我能不能只看日志就说清是哪一步、为什么错。</strong>如果不能，就说明埋点不够。</p>
+    <p data-page-node-id="l0m8dLKhihg9v8KDCYdzw6">不足是我没有写单元测试。Convincing 的借口我说不出口——真实原因是这个项目功能迭代快、我在赶进度。但代价是明显的：改一处逻辑要手工回归。如果重来，我会至少给 RAG 的截断、双路去重、ReAct 的解析这几个纯逻辑方法补上单测，因为它们是纯函数、最好测、也最容易改坏。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="dpbakI5I8rrlqvbH4IfWFN">
+  <div class="q" data-page-node-id="lhSSOnyQ9WMWbHLrGSxbuX"><span class="idx" data-page-node-id="Ky0zPLJmsS1v3TTS6YtoFc">H2</span>AI 相关的东西你是怎么学的？遇到不懂的技术怎么解决？</div>
+  <div class="a" data-page-node-id="bZsIT1GihzavgzXBxDtHkc">
+    <p data-page-node-id="kjUYqeeGKsUO8HG4OHDjLj"><span class="label k" data-page-node-id="aHcJC6ByltwGtSX1C0nAa3">考点</span>学习能力和方法，尤其 AI 领域没有成熟教程可抄。</p>
+    <p data-page-node-id="MlfNpPc6PhpEQNlr7NH070"><span class="label s" data-page-node-id="UeC4yZEkINVKLom4RBCMpi">话术</span>「我的路径是<strong data-page-node-id="qEPJfsryMUjrmG6AM0uEFr">先看官方文档和源码，再自己实现一遍，最后用数据验证</strong>。</p>
+    <p data-page-node-id="CxEvSV1ClDFoAbtsmOp3ur">比如 RAG，一开始我也只是知道『切分 → 向量化 → 检索 → 重排』这个概念链条，但真做的时候发现到处是选择：chunk 切多大、阈值定多少、要不要重排、重排后留几条。这些参数没有任何教程能给我答案，因为它们<strong data-page-node-id="FQNGiOEcfIs59GLb1RgVIE">完全取决于我的数据</strong>。所以我就写了一个切分入库脚本，支持整篇入库和切分入库两种模式，跑了对比实验，用 Hit@K 和 MRR 决定。这个方法是我从这个项目里学到的最有价值的东西——<strong data-page-node-id="rp5dByMbDnWM40X9qqZ3cF">效果型的问题,要用实验而不是直觉来回答。</strong></p>
+    <p data-page-node-id="tR4ydtyKL00lYuPhCe31Ev">日常我会用 Claude Code 这类工具辅助开发，但我的用法比较克制：让它帮我写重复性的样板代码、解释我看不懂的报错、Review 我写的 SQL，但涉及架构取舍和检索参数的部分我会自己想，因为这些必须理解原理才能调。我也踩过一次坑——早期完全依赖它生成的代码，结果 ReAct 的解析逻辑有隐藏 bug，排查了很久，从那之后这类核心逻辑我都坚持自己写自己测。」</p>
+  </div>
+</div>
+
+<div class="qa" data-page-node-id="t44JldHCTwJDfsmVAW1e7a">
+  <div class="q" data-page-node-id="RyB6gXjyHHNWsSKzB4QUQ4"><span class="idx" data-page-node-id="5Hmh2xDcTHIXqflZ1RbY1w">H3</span>你的职业规划是什么？为什么投这个岗位？</div>
+  <div class="a" data-page-node-id="IE0TpzUI0kNZif4DsdPycj">
+    <p data-page-node-id="bHh54X8YxxRV8VRYrbF2P1"><span class="label k" data-page-node-id="4eb8RxiUBgtDa5pDrAUR8l">考点</span>稳定性与方向一致。<strong data-page-node-id="fRBGBI2JutenBG8e3pA3LA">不要说「想学更多技术」</strong>，太虚。</p>
+    <p data-page-node-id="9Gf4yYC2h46yBcAcK2Wj8u"><span class="label s" data-page-node-id="Tnp49CdhSgErVKfwByFGCp">话术（投 Java 后端时）</span>「短期我想先把后端的基本功做扎实，特别是高并发和数据一致性这块——我做过缓存和消息队列，但都是单机规模，很想在真实的大流量场景里把这些东西的边界摸清楚。长期我对 AI 应用的工程化很有兴趣，我做过 Agent 编排和 RAG 的完整链路，发现这个方向和传统后端的结合点非常多：怎么把 LLM 调用这种高延迟、高不确定性、高成本的外部依赖，做成一个稳定可控的系统——这里面需要的还是后端那一套：限流熔断、异步化、可观测、降级兜底。所以我希望找一个既能做扎实的后端，又能接触到 AI 应用落地的环境。」</p>
+    <p data-page-node-id="7KHFG2vE3l0mvj9VEKNyQC"><span class="label s" data-page-node-id="dpOesOXFeSXBAVXx6XZxRs">话术（投 AI 应用/AI 工程岗时）</span>把重点往前移：「我想做 AI 应用的工程化落地。我理解这个岗位的核心不是调模型 API，而是把模型的不确定性包装成产品能用的确定性——我在智询工作台里做的就是这件事：三级降级、格式解析容错、Token 成本控制、效果量化评测。这些经验让我知道一个 AI 功能从 demo 到可用之间差的是什么。」</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s7" data-page-node-id="FS6OC2HDtRzCpCErP3OpZT"><span class="n" data-page-node-id="Vz85dqCpE3m7NwunzKY8fC">07</span>通用回答模板</h2>
+
+<p class="lead" data-page-node-id="eAHpdjT01lEjtnCf6BPEAt">下面这些模板是骨架，<strong data-page-node-id="ep0HRhhwp2Ukc5jrAZGi2r">把方括号里的内容换成你自己的</strong>就能用。重点是掌握结构，而不是背字。</p>
+
+<h3 data-page-node-id="Qm2e66cIx6sTODcGEZPkyH">模板一 · 项目介绍（万能结构）</h3>
+<pre data-page-node-id="6XdRQEyVB6BHB80MdO6oOQ"><code data-page-node-id="h980Ca7BPuN24VQ340YR1J">【一句话定位】这是一个 [做什么] 的 [什么系统]，解决 [谁的什么痛点]。
+【为什么难】这个场景的难点在于 [技术上真正的难点]。
+【技术选型】后端用 [技术栈]，[关键选型] 是因为 [理由]。
+【我的角色】我负责 [具体模块]，其中 [最有含金量的部分] 是我独立设计并实现的。
+【做成什么样】[量化结果]，这个数字是通过 [评测方法] 得到的。</code></pre>
+
+<div class="card green" data-page-node-id="dPJC7l5Y24DKq8EBiskpdd">
+  <p data-page-node-id="XNlFZQUcDIcg8B3ZePYlao"><strong data-page-node-id="erl3ja3pQR1XIMbPzvK6CG">套用到智询工作台：</strong></p>
+  <p data-page-node-id="TtBHh9HYCQTEXXBjNobvDN">「这是一个 AI 简历优化与职业顾问平台，解决通用大模型在求职领域缺乏专业知识和实时信息的问题。难点在于要让模型自己判断该不该查资料、查不到怎么兜底，同时保证输出的稳定性和可控的成本。后端用 Spring Boot 3.4 + Spring AI 接 DeepSeek 和 DashScope，存储选了 PostgreSQL 加 pgvector，这样向量库和业务库能共用一套事务。我负责 Agent 编排链路和 RAG 检索链路的设计与实现，其中 ReAct 多轮工具调用和三级降级是我独立设计的。最终检索 Hit@5 做到 92.9%，Hit@10 100%，这是用 28 条标注测试集跑出来的可复现结果。」</p>
+</div>
+
+<h3 data-page-node-id="dKFH0d6ydkfaa3vhZJ4DJE">模板二 · STAR 描述技术难点（不要讲产品，讲技术）</h3>
+<pre data-page-node-id="rQjXe6P8YzRz5y66aDODM2"><code data-page-node-id="zLystmlJlOZU6Cz8kxhsAq">S（情境）：在做 [功能] 的时候，我发现 [具体的技术现象/问题]。
+T（任务）：我需要在不 [不能牺牲的东西] 的前提下，解决 [这个问题]。
+A（行动）：我做了三件事——
+   ① [做法一]，因为 [原理层面的理由]；
+   ② [做法二]，权衡是 [代价]，但我接受因为 [原因]；
+   ③ [做法三]，这是兜底，保证 [最坏情况下也不会怎样]。
+R（结果）：[量化结果]，并且 [可复现的验证方式]。</code></pre>
+
+<div class="card green" data-page-node-id="Bxv8hwbFYKQv70IcpzSQOo">
+  <p data-page-node-id="AwILAmCAdbM40Jmi9GdteS"><strong data-page-node-id="4JS6sPz76i9HLRgWzrxDCD">套用示例（RAG 效果不好）：</strong></p>
+  <p data-page-node-id="KYHCWfSmsDqfoKzAB3pNpl">「<strong data-page-node-id="aq3gLKCEsoRUoQ3rlhI1Dj">S：</strong>知识库搭好之后我发现，用户问『我该不该在简历里放照片』，检索回来的却是讲排版规范的内容——字面上看问题在问照片，但知识库里对应的条目讲的是『简历不宜包含敏感信息』，措辞不重合，向量距离就拉不开。</p>
+  <p data-page-node-id="r2TSGZ3v8nnLc369AuW19W"><strong data-page-node-id="ErR8XrHJof62m37EgMWolO">T：</strong>我要在不动知识来源、不引入人工规则的前提下，把这类『问法和答案措辞不一致』的召回提上来。</p>
+  <p data-page-node-id="zljDbo8qvyTcTuGlYyMA8P"><strong data-page-node-id="hmYBHlkZYjrPxDRlG03RyX">A：</strong>我做了三件事。一是<strong data-page-node-id="axlvKdO7ofGMwfqS8vA1Ag">双路查询</strong>：除了用原始问题检索，再加一路在问题后面拼一段导向语，把查询向量往『答案该长什么样』的方向偏，本质是轻量的 query rewrite。二是<strong data-page-node-id="J39MFQXpKaeGYzkeLPBn4E">扩大召回再精排</strong>：把候选放大到 topK 的两倍，交给 GTE 重排模型做交叉编码精排——因为向量检索是双塔结构，只能算粗粒度相似度，重排能把 query 和文档拼起来算，排序准得多。三是<strong data-page-node-id="tmBN35gtbzP8SQ1mZb2O2B">阈值截断</strong>：相似度低于 0.35 的片段宁可不给，因为给噪声比不给更糟，它会误导模型。</p>
+  <p data-page-node-id="SECXW7c29ptFXgwVb4mB2H"><strong data-page-node-id="xG8aRnFH7wfxEWRv8J8AW3">R：</strong>我用 28 条带标注的测试集做了评测，Hit@5 92.9%、Hit@10 100%、MRR 0.736、空结果率 0。这个结果可复现——我写了脚本支持两次实验做差值对比，改任何参数都能量化地知道是变好还是变坏。」</p>
+</div>
+
+<h3 data-page-node-id="08AR6CDnUBKoIo1O299FaJ">模板三 · 遇到的最大困难</h3>
+<pre data-page-node-id="pWYeoLlkLoPoXgDJ6s86UE"><code data-page-node-id="kH2UVUWiZZfusFjDX8yFTD">【困难是什么】我遇到的最大困难是 [技术问题]，它的难点在于 [为什么难]。
+【我一开始想错了】我最初的思路是 [错误方案]，跑出来 [失败现象]。
+【怎么定位的】我先 [定位手段]，发现 [根因]，确认问题出在 [具体位置]。
+【最终方案】所以我改成 [方案]，关键点是 [核心机制]。
+【学到了什么】这件事让我意识到 [方法论层面的收获]。</code></pre>
+
+<div class="card green" data-page-node-id="3GhthnBjeLYnMjARMGkjJg">
+  <p data-page-node-id="hpJ9WFsXjo2xH8Gx9vQWpj"><strong data-page-node-id="7goNsLxdJb38U6Txu6aB49">套用示例（ReAct 循环不稳定）：</strong></p>
+  <p data-page-node-id="MxJeUPjruHss2KGLOO86w0">「<strong data-page-node-id="yUO6uEHExJc6U4iC4YEJDY">困难：</strong>ReAct 循环在真实使用中不稳定，模型有时候会不按我给的格式输出，有时候该停的时候不停、一直重复调工具。</p>
+  <p data-page-node-id="2c3GaYKzQT66t0HGqVP5na"><strong data-page-node-id="IRjbn9svjyp645jQroySMA">想错了：</strong>我一开始的解法是不断加长提示词里的格式说明，把 JSON 示例写得更详细。结果提示词越来越长，成本上去了，稳定性只提升了一点——因为模型输出的随机性不是靠写清楚就能完全消除的。</p>
+  <p data-page-node-id="HoLDcL9Dm2uXvTDJnw88OR"><strong data-page-node-id="EGdLsGETtCjlEhvyj6Cknt">怎么定位：</strong>我开始记每一步的审计日志，把每轮的思考、解析出来的工具调用、耗时都打出来。看日志就清楚了：问题分两类——一类是 JSON 解析失败（格式问题），一类是模型在信息足够后继续调工具（收敛问题）。这两类的解法完全不同，混在一起时我根本分不清是哪种。</p>
+  <p data-page-node-id="5J1W6e9ZAMSKM7Nx8MPQCj"><strong data-page-node-id="6Ac3XAnkQERMElIHYab4AA">最终方案：</strong>分开处理。格式问题用<strong data-page-node-id="yK94dIVm70k1qFuDWisp0M">兜底降级</strong>——解析失败不当作异常，而是让它走标准生成路径，保证用户一定有答案；收敛问题用<strong data-page-node-id="AN4Pak3JfUGK3Z9X1ahpAF">硬上限</strong>——maxSteps 取 Planner 决策和用户配置的较小值，最坏情况下也就多花两三轮 token。</p>
+  <p data-page-node-id="wEwj2u9MnZDlfDxwNQ04kp"><strong data-page-node-id="nPVovj0Z5CZSjd6PSNU7Op">收获：</strong>我意识到<strong data-page-node-id="S5OVCDJCNg0zzKpndsUFwK">不要把系统的稳定性寄托在提示词的措辞上</strong>，模型的行为是不可控的，稳定的做法是在外面套一层确定性的工程约束：上限、超时、降级、重试。后来我看到一句话印证了这个想法——LLM 应用的核心工作是『驯服不确定性』，我完全同意。」</p>
+</div>
+
+<h3 data-page-node-id="aOJA8KkTmWtMt6wRkHvSdT">模板四 · 为什么这么设计</h3>
+<pre data-page-node-id="09fXbf2XaZp1ypRh1UQhDV"><code data-page-node-id="Te3a1kuYfdSibEpjGWAwUE">【先给结论】我选 [方案] 而不是 [替代方案]，核心原因是 [一句话本质]。
+【对比】如果用 [替代方案]，[会带来什么具体的坏处]。
+【代价】我这个方案也不是没有代价：[代价是什么]。
+【但我接受，因为】[为什么这个代价可以接受]。
+【边界】如果 [某个条件变化]，我会换成 [另一方案]。</code></pre>
+
+<div class="card green" data-page-node-id="JLDnJMgNtevntkIJrlhT1V">
+  <p data-page-node-id="VH4vtcDCO68ubTTEOot7TW"><strong data-page-node-id="7OPt5svOBlRTDPW4ySymcC">背下这个结构，任何「为什么用 X 不用 Y」都能套。</strong>面试官最欣赏的不是「X 更好」，而是你<strong data-page-node-id="6MQaveAB8egppK8a7R25hd">知道 X 的代价在哪、以及什么条件下会改用 Y</strong>——这说明你是在做判断，而不是在跟风。</p>
+</div>
+
+<h3 data-page-node-id="AbUdtEmo4xMt6GUb7TguHE">模板五 · 你负责哪部分（个人项目的诚实版）</h3>
+<pre data-page-node-id="BCY9ZC2lFz8n6AFH7Cby3H"><code data-page-node-id="GLNxKIW6JqaU0BUCgzTpK2">这个项目是我独立完成的，从前端到部署都是我一个人做。
+不过如果按投入的比重算，主要精力在 [后端 Agent 编排和 RAG 这一块]，
+大概占了 [70%]。[前端] 那一层我做到了 [可用]，但 [哪些方面不够好]——比如我
+没做组件拆分，主页面文件比较长。</code></pre>
+
+<div class="card amber" data-page-node-id="SZ5EgomVUj77npnjGmF0Ea">
+  <p data-page-node-id="ctbn8T4VYnXPfp4LVCC2OO"><strong data-page-node-id="i6x3dazVQTwQO0RuzIBszN">主动说一个自己的不足</strong>会比说「全都是我做的」更有可信度。面试官见过太多把教程项目说成自己独立设计的候选人，你主动划边界，反而说明你的自我认知是准的。</p>
+  <p data-page-node-id="CaWse9nmffd5vZY0lQBIxE"><strong data-page-node-id="zFHzGKweiMoUpAdWiCH4DA">但注意：</strong>划边界要划在「做完了但做得不够好」的地方，不要划在「核心功能是别人的」上。核心链路必须是你做的，否则这个项目在面试里就没有意义。</p>
+</div>
+
+<h3 data-page-node-id="YEmupwTxuRu6c0DZPmFxZd">模板六 · 完全不会时怎么答</h3>
+<div class="card red" data-page-node-id="pRsKfKreEQJ1AAjY1xwiGG">
+  <p data-page-node-id="w7kvv6I7AdjHkuz2sah6vr">不要沉默，不要硬编，不要含糊地说「大概是这样」。用这个三段式：</p>
+  <ol data-page-node-id="IRcBFh8LIe1gvgo2gqGK2A">
+    <li data-page-node-id="OMBD2QhIO38okgn4jMG4ND"><strong data-page-node-id="gtuxo4OJ3WzXFFBMIHkbqQ">明确说不会：</strong>「这个我没有实际用过，不敢乱说。」</li>
+    <li data-page-node-id="Jyi8k0CBCRECZpmB6mAZZP"><strong data-page-node-id="sOAijoCBDujCQGDEQm4G6J">给出你知道的最近邻知识：</strong>「我的理解是……（讲你确实知道的相邻概念），但具体到这个点我不确定。」</li>
+    <li data-page-node-id="MyyZ0rTERr0tKWq2Cf0eeW"><strong data-page-node-id="aK9ai60piLblbpDg2eo6wI">给出你的推演：</strong>「如果让我现在判断，我会从……这个角度去想，但需要查一下验证。」</li>
+  </ol>
+  <p data-page-node-id="ZQObCN3hZIbcW2Wodrefwl">这个回答既诚实、又展示了你<strong data-page-node-id="0xzIkEeNirZSM3SHt0EFo6">有解决问题的思路</strong>。面试官问的很多问题本来就不是要你会不会，而是想看你面对未知时的反应方式。</p>
+</div>
+
+<h3 data-page-node-id="8bzCjD7AoFoUDNN9jN55oR">模板七 · 反问环节（一定要问）</h3>
+<div class="card purple" data-page-node-id="MhD43rj4ioqQB5uAIFBWB8">
+  <p data-page-node-id="jE2RIo6pUFhNvVaeWFaH9G"><strong data-page-node-id="vCSVYJIqkV7fPzFHXAQ70W">技术类（推荐，显得你真的关心工作内容）：</strong></p>
+  <ul data-page-node-id="PXV6iDWTLybZMM13a3z9vX">
+    <li data-page-node-id="Ep6G7qOjp7uc0CnB80nP0n">团队现在在做的 AI 应用，是更偏平台化（做能力给业务方用），还是直接面向终端用户？</li>
+    <li data-page-node-id="qNxdklU53YVlRxFcmMuCAN">这块业务现在最大的技术瓶颈是什么——是模型效果、成本，还是工程稳定性？</li>
+    <li data-page-node-id="1aX4Al1VHkQIUM10i2mSb8">团队怎么做 AI 功能的效果评估？有没有类似评测集的机制？</li>
+    <li data-page-node-id="a1BBbGqX7LwpzhtN1CnFa9">新人进来一般会先负责哪类模块？</li>
+  </ul>
+  <p data-page-node-id="AUFqLEGgrOWVL7Jd2sBhGr"><strong data-page-node-id="wDmfWBtCXywyNdVahp7cuI">成长类（显示你想长期干）：</strong></p>
+  <ul data-page-node-id="6EinawxaecQqS9Dzq9DeCI">
+    <li data-page-node-id="uC2YdiMmGsyIULEwXDGC2i">团队的代码评审和技术分享是怎么做的？</li>
+    <li data-page-node-id="pb8QpzCQ6Orn84N1H2CC6r">新人有没有 mentor 机制？</li>
+  </ul>
+  <p data-page-node-id="aP0rtoRuQcuGeJft5zxHZi"><strong data-page-node-id="6mJZI4jilK1RDHk4nCrIUP">不要问：</strong>「加班多不多」（可以问「团队的工作节奏大概是怎样的」，一样能拿到信息）；「我表现怎么样」（当场问这个很尴尬）；官网上能查到的信息。</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="sec" id="s8" data-page-node-id="fjIr75dfMHHEht8Q5MT1Wh"><span class="n" data-page-node-id="NhISioXjl3lHtbYZBGaPf7">08</span>面试前 48 小时清单</h2>
+
+<div class="two" data-page-node-id="pUsoAgghOygPdjVdwWYL6q">
+  <div class="card" data-page-node-id="YfiHx0StnJfkSOOxCZxL6M">
+    <h4 data-page-node-id="EGmvHfpHowweDA8mJblaAj">必须搞清楚的知识点</h4>
+    <ul data-page-node-id="ItiyAcB7s2T36xPZAXVDdT">
+      <li data-page-node-id="66C22IzhBg7Sl4rs4RtOaC">ReAct 和 Function Calling 的区别</li>
+      <li data-page-node-id="bQr9drUC1y3FKbGMnMpWtA">双塔 vs 交叉编码器，为什么先粗排再精排</li>
+      <li data-page-node-id="eFRcuNp3yZPXiCo7ca7d02">余弦距离 / 内积 / 欧氏距离的区别</li>
+      <li data-page-node-id="Yuj8iw419SdUG1EvvO7Mbu"><code data-page-node-id="6Od5YhXzYVwB8LL6guawq1">&lt;=&gt;</code> 算子和 <code data-page-node-id="XcirHGvQQlFIqAoI6ZJkMb">1 − d/2</code> 的换算</li>
+      <li data-page-node-id="BYHSZjZ6VZoLzuYxmQw1Wj">HNSW vs IVFFlat</li>
+      <li data-page-node-id="dPyJiCh2RHCYTs4B9T7jlE">SSE vs WebSocket</li>
+      <li data-page-node-id="sTw0GTXCA61NHugHBlukie">线程池为什么不用 Executors 工厂方法</li>
+      <li data-page-node-id="kaGQjl9M5XFL4OjtX3Dvjp">CompletableFuture 三个兜底方法的语义</li>
+      <li data-page-node-id="vWogAsEW507btNLoKCnZC0">HashMap 树化条件（8 + 64）</li>
+      <li data-page-node-id="hBZejMIWDR24BAFtIDZ7dD">JVM 内存结构与对象晋升</li>
+      <li data-page-node-id="2AK1FFzVVF9OQio0llcO1p">缓存穿透 / 击穿 / 雪崩</li>
+      <li data-page-node-id="m8XaGt57BblpMNDrDFaAd4">延迟双删的时序图</li>
+    </ul>
+  </div>
+  <div class="card" data-page-node-id="HZEbfqTpkacEU0WtAkmvyO">
+    <h4 data-page-node-id="zvXty1LUEL3wsuPXyR3Hr8">必须能张口就来的数字</h4>
+    <ul data-page-node-id="0u5sC3MeuUyelGVynxQ3ax">
+      <li data-page-node-id="OlHXw6Z5QTSTk7RT3FLc6e">评测集 <strong data-page-node-id="QYhIaf94EtQMbKP4BcFMkJ">28 条</strong></li>
+      <li data-page-node-id="EEzhNkJ9Ejv1uuhFI09bW4">Hit@5 <strong data-page-node-id="aAISWAmOaOUrYphW32Epol">92.9%</strong> / Hit@10 <strong data-page-node-id="1WKj7rkd7UxG6lnxJJzYs9">100%</strong></li>
+      <li data-page-node-id="sS6aQPnhn0qrMkhiGxv73k">MRR <strong data-page-node-id="RUqk89xiGFF2ErJh0AUFvW">0.736</strong> / 空结果率 <strong data-page-node-id="rF1itjAfud7iOBbpHEj22C">0</strong></li>
+      <li data-page-node-id="6TKVsLsfrZRnDYvgjAAWmf">相似度阈值 <strong data-page-node-id="z6T97kem8GESOzaDPQVomB">0.35</strong>，最多保留 <strong data-page-node-id="zc1WPnCuzuaR7EX7tAbbrt">8</strong> 条</li>
+      <li data-page-node-id="qDnVgvApoGXyGRyCS71VEG">召回放大系数 <strong data-page-node-id="oh13PY3PGyVXAiQTYC2fSv">2</strong></li>
+      <li data-page-node-id="JOfNQazIucFb3UPMJggs0A">chunk <strong data-page-node-id="MPQOPV55VOx1s9SHiS9kB5">512</strong> 字符 / 重叠 <strong data-page-node-id="1cNYAMUD9GaM1VMiwsJc1y">64</strong> 字符</li>
+      <li data-page-node-id="uhf1MxikhHCTOzMIdjGqFh">embedding 维度 <strong data-page-node-id="4JTPFKaOLjq1MwDISpqnhs">1536</strong>，批量 <strong data-page-node-id="4bXQOQNTDhI17tjL3BvlDO">16</strong></li>
+      <li data-page-node-id="EqFXn8NoLGnHIB7xdVmP27">ReAct 默认最多 <strong data-page-node-id="fRN4FNDQIZVefL8Z7pOcxP">3</strong> 轮</li>
+      <li data-page-node-id="YmA7mTH41KQZ0GKjtRPNou">历史消息加载 <strong data-page-node-id="qcnaFPkgQzHDwqVboKPUw1">50</strong> 条</li>
+      <li data-page-node-id="ZghBCGV1UMUU91SnjIn6Bq">抓取超时 <strong data-page-node-id="yynB9wNax8YIDqkkkoekao">7 秒</strong>，取前 <strong data-page-node-id="KAvoaGSLPw4FurT6ICxaFi">5</strong> 条结果</li>
+      <li data-page-node-id="zs8RwcjyMhMG8LgjNOXPby">简历上传限制 <strong data-page-node-id="QY2y7HfuS6knbmcFQzZp5p">3MB</strong></li>
+      <li data-page-node-id="FrGvThlFaj0HTVlIGyVhII">日志保留 <strong data-page-node-id="B5xefkwTg8JTGmzwsaYoZF">30 天</strong></li>
+    </ul>
+  </div>
+</div>
+
+<div class="card red" data-page-node-id="lGBDMX3kkVrxsK4Db5nYtG">
+  <h4 data-page-node-id="IwDi0Y3vqPg5E4Dul6QhBD">必须处理掉的四处简历风险</h4>
+  <ol data-page-node-id="V1P2xDD1damnIwGGtqeBZJ">
+    <li data-page-node-id="yQzt0zS0XFR4hzEN2qRAAO"><strong data-page-node-id="7s2H9w7ZyDnhoTWk1j47vW">MCP</strong> —— 代码里零命中，删除或准备 5.1 的话术</li>
+    <li data-page-node-id="HfQDnNoXFOjYki3ppcMYlQ"><strong data-page-node-id="eKnAyGV8hF3T1yEU9imx9B">分块位置</strong> —— 是离线 Python 脚本，不是 Java 运行时</li>
+    <li data-page-node-id="FRaOqj6uttGhdsnQVShf0Q"><strong data-page-node-id="52BMSr6VuHBWqhQ4hzXwNc">正文清洗</strong> —— 是 Jsoup 抽纯文本 + 条数限制，不是「三层清洗」</li>
+    <li data-page-node-id="eGBFXqFImuBpqAPJNBVY5A"><strong data-page-node-id="nezBDzATG2AqZ788D0JeO7">70% 这个数字</strong> —— 口径改成「字符量降幅 90% 以上，对外保守说约 70%」</li>
+  </ol>
+</div>
+
+<div class="card green" data-page-node-id="RzknQUUp4CQXehJdVkUZ8c">
+  <h4 data-page-node-id="jzHhq6C229lfAEFdWn0Wrs">最后一件重要的事</h4>
+  <p data-page-node-id="sSZJHdYvyJp4tw3pnSPmOI">面试前，<strong data-page-node-id="fLHEa8D3CGE573BGrypGwD">把项目完整跑一遍</strong>。不是看代码，是把 <code data-page-node-id="nz7D4YXL06rpbSmLkVmhDE">docker compose up -d --build</code> 跑起来，打开页面，自己问几个问题，看日志里打出来的每一步。真跑过一遍的人和一个只看过代码的人，讲出来的东西质感完全不同——你会自然地提到「这里提示词会慢一点」「这个工具偶尔返回空」，这些细节是背不出来的。</p>
+  <p data-page-node-id="uEEdatPHffSunFDFmFdptX">如果时间允许，<strong data-page-node-id="UQXBS9ExjFgQoQFpECbSod">把那 28 条评测跑一遍</strong>，看到真实的 Hit@K 数字出现在自己屏幕上的时候，你讲这组数据时的底气是不一样的。</p>
+</div>
+
+<p class="foot" data-page-node-id="A9CZ7De8NmVQruSzXZ5kBi">基于项目源码与简历逐项核对整理 · 智询工作台面试准备手册</p>
+
+</div>
+</body>
+</html>

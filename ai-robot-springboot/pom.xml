@@ -20,6 +20,8 @@
 
     <properties>
         <!-- JDK 鐗堟湰 -->
+        <!-- 供 <version>${revision}</version> 使用，缺少会导致 mvn 构建报 must be a constant version -->
+        <revision>0.0.1-SNAPSHOT</revision>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

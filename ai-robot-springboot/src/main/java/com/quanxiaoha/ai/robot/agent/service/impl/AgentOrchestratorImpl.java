@@ -12,6 +12,7 @@ import com.quanxiaoha.ai.robot.agent.model.ResumeOptimizeAgentRequest;
 import com.quanxiaoha.ai.robot.agent.service.AgentAuditLogger;
 import com.quanxiaoha.ai.robot.agent.service.AgentOrchestrator;
 import com.quanxiaoha.ai.robot.agent.service.AgentPlannerService;
+import com.quanxiaoha.ai.robot.agent.service.ModelCallGuard;
 import com.quanxiaoha.ai.robot.agent.service.SearchToolFacade;
 import com.quanxiaoha.ai.robot.agent.step.ContextAssemblerStep;
 import com.quanxiaoha.ai.robot.agent.step.IntentClassifierStep;
@@ -30,11 +31,13 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SignalType;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +64,13 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
     private SearchToolFacade searchToolFacade;
     @Resource
     private SearchAgentTools searchAgentTools;
+
+    @Resource
+    private ModelCallGuard modelCallGuard;
+
+    /** ReAct 循环整体超时上限，防止某一步挂死拖垮整个请求 */
+    @Value("${agent.react.overall-timeout-ms:90000}")
+    private long reactOverallTimeoutMs;
 
     @Resource(name = "deepSeekChatModel")
     private ChatModel chatModel;
@@ -138,13 +148,16 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
         }
         agentAuditLogger.recordPrompt(context);
         agentAuditLogger.recordToolMode(context, "resume-direct");
-        Flux<String> stream = ChatClient.create(chatModel)
-                .prompt()
-                .system(context.getSystemPrompt())
-                .user(context.getUserPrompt())
-                .stream()
-                .content()
-                .map(this::toJsonEvent);
+        Flux<String> stream = modelCallGuard.guard(
+                () -> ChatClient.create(chatModel)
+                        .prompt()
+                        .system(context.getSystemPrompt())
+                        .user(context.getUserPrompt())
+                        .stream()
+                        .content()
+                        .map(this::toJsonEvent),
+                StringUtils::isNotBlank,
+                toJsonErrorEvent("抱歉，本次生成未能完成，请稍后重试。", "model_unavailable"));
         return wrapTextStream(context, stream);
     }
 
@@ -215,7 +228,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
         context.setReactFinished(false);
         context.setCurrentReactStep(0);
 
-        return Flux.create(sink -> {
+        return Flux.<AIResponse>create(sink -> {
             try {
                 String currentSystemPrompt = context.getSystemPrompt();
                 String userInput = context.getUserInput();
@@ -299,7 +312,7 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                 log.error("ReAct 循环异常: {}", e.getMessage(), e);
                 sink.error(e);
             }
-        });
+        }).timeout(Duration.ofMillis(reactOverallTimeoutMs));
     }
 
     private String buildReactPrompt(String baseSystemPrompt, String userInput, String reactTrace,
@@ -385,14 +398,24 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
     private String executeToolCall(AgentContext context, String toolName, String toolArgs) {
         if (StringUtils.isBlank(toolName)) return "";
         String query = StringUtils.defaultIfBlank(toolArgs, context.getUserInput());
+        long start = System.currentTimeMillis();
 
-        switch (toolName) {
-            case "knowledge_search":
-                return searchToolFacade.searchKnowledgeWithRerank(query, context.getKbCategory(), context.getKbTopK());
-            case "web_search":
-                return searchToolFacade.searchWeb(query, Math.min(context.getKbTopK(), 5));
-            default:
-                return "未知工具: " + toolName;
+        try {
+            switch (toolName) {
+                case "knowledge_search":
+                    return searchToolFacade.searchKnowledgeWithRerank(query, context.getKbCategory(), context.getKbTopK());
+                case "web_search":
+                    return searchToolFacade.searchWeb(query, Math.min(context.getKbTopK(), 5));
+                default:
+                    return "未知工具: " + toolName;
+            }
+        } catch (Exception ex) {
+            // 单个工具失败不炸掉整个 ReAct 循环：返回可读的失败观察结果，让模型据此继续决策
+            log.warn("工具调用失败已隔离: tool={}, query={}, cost={}ms, reason={}",
+                    toolName, query, System.currentTimeMillis() - start, ex.getMessage());
+            return "【" + toolName + " 调用失败】"
+                    + StringUtils.defaultIfBlank(ex.getMessage(), ex.getClass().getSimpleName())
+                    + "。请基于已有信息继续作答，或换一个查询角度重试。";
         }
     }
 
@@ -442,12 +465,18 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
         if (StringUtils.isBlank(context.getToolMode())) {
             agentAuditLogger.recordToolMode(context, "standard");
         }
-        ChatClient.ChatClientRequestSpec spec = ChatClient.create(chatModel)
-                .prompt()
-                .system(context.getSystemPrompt())
-                .user(context.getUserPrompt());
-        spec.advisors(buildChatAdvisors(reqVO, false));
-        return mapChatStream(spec);
+        // 用模型调用守卫包裹：首 token 超时保护 + 瞬时错误重试 + 优雅兜底
+        return modelCallGuard.guard(
+                () -> {
+                    ChatClient.ChatClientRequestSpec spec = ChatClient.create(chatModel)
+                            .prompt()
+                            .system(context.getSystemPrompt())
+                            .user(context.getUserPrompt());
+                    spec.advisors(buildChatAdvisors(reqVO, false));
+                    return mapChatStream(spec);
+                },
+                item -> item != null && (StringUtils.isNotBlank(item.getV()) || StringUtils.isNotBlank(item.getReasoning())),
+                AIResponse.builder().v("抱歉，本次生成未能完成，请稍后重试。").error("model_unavailable").build());
     }
 
     private List<Advisor> buildChatAdvisors(AiChatReqVO reqVO, boolean alwaysUseMemory) {
@@ -489,12 +518,27 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                     }
                     context.setOutputChunks(context.getOutputChunks() + 1);
                     if (item != null) {
+                        // 守卫下发的兜底错误事件同样计入中断，保证审计状态准确
+                        if (StringUtils.isNotBlank(item.getError()) && !context.isStreamInterrupted()) {
+                            agentAuditLogger.recordStreamInterrupted(context, item.getError());
+                        }
                         context.setOutputChars(context.getOutputChars() + StringUtils.length(item.getV()));
                         context.setReasoningChars(context.getReasoningChars() + StringUtils.length(item.getReasoning()));
                     }
                 })
-                .doOnComplete(() -> finishRun(context, true, null, finished))
-                .doOnError(ex -> finishRun(context, false, ex == null ? null : ex.getMessage(), finished))
+                // 流式异常不再冒泡为 SSE error：转成终态事件，保留已输出内容，避免前端空白
+                .onErrorResume(ex -> {
+                    String reason = StringUtils.defaultIfBlank(ex.getMessage(), ex.getClass().getSimpleName());
+                    agentAuditLogger.recordStreamInterrupted(context, reason);
+                    if (context.getOutputChars() <= 0) {
+                        return Flux.just(AIResponse.builder()
+                                .v("抱歉，本次生成未能完成，请稍后重试。")
+                                .error(reason)
+                                .build());
+                    }
+                    return Flux.just(AIResponse.builder().v("").error(reason).build());
+                })
+                .doOnComplete(() -> finishRun(context, !context.isStreamInterrupted(), context.getErrorMessage(), finished))
                 .doFinally(signalType -> {
                     if (signalType == SignalType.CANCEL) {
                         finishRun(context, false, "stream cancelled", finished);
@@ -511,8 +555,15 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
                     context.setOutputChunks(context.getOutputChunks() + 1);
                     context.setOutputChars(context.getOutputChars() + StringUtils.length(item));
                 })
-                .doOnComplete(() -> finishRun(context, true, null, finished))
-                .doOnError(ex -> finishRun(context, false, ex == null ? null : ex.getMessage(), finished))
+                .onErrorResume(ex -> {
+                    String reason = StringUtils.defaultIfBlank(ex.getMessage(), ex.getClass().getSimpleName());
+                    agentAuditLogger.recordStreamInterrupted(context, reason);
+                    if (context.getOutputChars() <= 0) {
+                        return Flux.just(toJsonErrorEvent("抱歉，本次生成未能完成，请稍后重试。", reason));
+                    }
+                    return Flux.just(toJsonErrorEvent("", reason));
+                })
+                .doOnComplete(() -> finishRun(context, !context.isStreamInterrupted(), context.getErrorMessage(), finished))
                 .doFinally(signalType -> {
                     if (signalType == SignalType.CANCEL) {
                         finishRun(context, false, "stream cancelled", finished);
@@ -537,11 +588,20 @@ public class AgentOrchestratorImpl implements AgentOrchestrator {
     }
 
     private String toJsonEvent(String text) {
-        String safe = text == null ? "" : text.replace("\\", "\\\\")
+        return "{\"v\": \"" + escapeJson(text) + "\"}";
+    }
+
+    /** 构造终态错误事件：v 可为空（保留已输出内容），error 为错误提示 */
+    private String toJsonErrorEvent(String v, String error) {
+        return "{\"v\": \"" + escapeJson(v) + "\", \"error\": \"" + escapeJson(error) + "\"}";
+    }
+
+    private String escapeJson(String text) {
+        String safe = text == null ? "" : text;
+        return safe.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
                 .replace("\t", "\\t");
-        return "{\"v\": \"" + safe + "\"}";
     }
 }

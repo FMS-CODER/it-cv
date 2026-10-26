@@ -67,6 +67,14 @@ public class AgentAuditLogger {
                 context.getScene(), throwable == null ? "unknown" : throwable.getMessage(), throwable);
     }
 
+    /** 记录流式输出过程中的异常中断（已尽可能保留已输出内容） */
+    public void recordStreamInterrupted(AgentContext context, String reason) {
+        context.setStreamInterrupted(true);
+        context.setErrorMessage(reason);
+        log.warn("Agent stream interrupted: requestId={}, scene={}, reason={}",
+                context.getRequestId(), context.getScene(), reason);
+    }
+
     public void recordFirstToken(AgentContext context) {
         if (context.getStartedAtMs() <= 0 || context.getFirstTokenLatencyMs() > 0) {
             return;

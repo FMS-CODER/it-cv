@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Maven 构建加速：国内服务器直连中央仓库极慢，统一走阿里云公共仓库。
+  仅用于 Docker 构建（Dockerfile 通过 mvn -s 指定），不影响本地开发。
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <mirrors>
+        <mirror>
+            <id>aliyun-public</id>
+            <name>阿里云公共仓库</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <!--
+              镜像所有仓库，但排除 pom 中声明的两个快照仓库：
+              快照只在官方源发布，被重定向到阿里云会解析失败。
+            -->
+            <mirrorOf>*,!spring-snapshots,!central-portal-snapshots</mirrorOf>
+        </mirror>
+    </mirrors>
+</settings>

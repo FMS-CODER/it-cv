@@ -40,8 +40,19 @@ rag:
   truncation:
     similarity-threshold: 0.35
     max-top-k: 8
+    hard-floor: 0.2   # 硬下限：低于该分数视为完全无关，不注入
+    min-keep: 1       # 保底条数：全部低于软阈值时至少保留 1 条，避免上下文静默为空
   retrieval:
     expand-factor: 2
+
+agent:
+  model:
+    retry:
+      max-attempts: 3     # 含首次，最多尝试 3 次
+      backoff-ms: 500     # 指数退避基数
+    first-token-timeout-ms: 30000  # 首 token 等待超时，超过判为瞬时故障并重试
+  react:
+    overall-timeout-ms: 90000      # ReAct 循环整体超时上限，防止某一步挂死拖垮请求
 
 
 

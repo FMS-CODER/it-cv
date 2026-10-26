@@ -1,0 +1,28 @@
+{"question": "应届生投递技术岗时，简历超过1页但内容都是实习和课程项目，该不该删减？", "expected_id": 1, "category": "知识文档"}
+{"question": "招聘方说‘不要照片’，那如果我有作品集链接但没技术博客，要不要硬凑个个人网站放简历里？", "expected_id": 1, "category": "知识文档"}
+{"question": "简历里该不该写身份证号和照片？为什么HR建议删掉这些信息？", "expected_id": 2, "category": "知识文档"}
+{"question": "项目经验在简历中应该占多大比例？如果我的实习经历比项目经历更亮眼，该怎么安排模块顺序？", "expected_id": 2, "category": "知识文档"}
+{"question": "技术栈部分写‘掌握Spring Boot’，面试官如果追问三层，我该怎么回答才显得真实又专业？", "expected_id": 3, "category": "知识文档"}
+{"question": "简历里把Redis写在中间件栏，但只写了‘熟悉’，如果被问到Redis的持久化机制和主从同步原理，我该怎么组织答案？", "expected_id": 3, "category": "知识文档"}
+{"question": "简历里写‘熟悉思源黑体和Arial字体的搭配使用’，如果面试官让我现场改一份PDF简历的字体排版，我该怎么快速调整并解释选择依据？", "expected_id": 4, "category": "知识文档"}
+{"question": "你说简历中每条技能都要能被追问三层，那‘掌握1.15-1.3行距对可读性的影响’这一条，第二层和第三层追问可能会是什么？", "expected_id": 4, "category": "知识文档"}
+{"question": "简历里写了学生会干事经历，但岗位JD完全没提学生工作能力，这样会不会显得不够聚焦？", "expected_id": 5, "category": "知识文档"}
+{"question": "我把简历文件名设成了'简历.pdf'，听说这会影响HR的第一印象，正确的命名格式是什么？", "expected_id": 5, "category": "知识文档"}
+{"question": "面试官让我讲一个项目经历，我该怎么组织语言才能既清晰又有说服力？", "expected_id": 6, "category": "知识文档"}
+{"question": "我写简历时总被说‘太笼统’，比如只写了‘负责系统优化’，怎么用STAR把这件事写得具体又专业？", "expected_id": 6, "category": "知识文档"}
+{"question": "面试官总说我简历里‘做了很多事’但看不出效果，怎么用R（结果）部分让成果一目了然？", "expected_id": 7, "category": "知识文档"}
+{"question": "我在写项目经历时总被说‘像团队总结’，怎么把T（任务）真正聚焦到个人责任，避免和团队目标混淆？", "expected_id": 7, "category": "知识文档"}
+{"question": "面试官问我‘你优化过系统性能，具体怎么做的’，我该怎么用STAR法则+量化数据来回答才显得专业？", "expected_id": 8, "category": "知识文档"}
+{"question": "如果项目里没有精确的性能监控数据，只记得大概效果变好了，我该怎么合理估算并说出让人信服的量化结果？", "expected_id": 8, "category": "知识文档"}
+{"question": "面试官说我简历里‘负责后端开发’太笼统，该怎么改才能体现真实贡献？", "expected_id": 9, "category": "知识文档"}
+{"question": "我优化了一个接口，但没做压测，没法给出准确的性能数据，还能怎么写才显得有说服力？", "expected_id": 9, "category": "知识文档"}
+{"question": "HashMap 在什么条件下会把链表转换成红黑树？", "expected_id": 10, "category": "知识文档"}
+{"question": "为什么日常开发中 ArrayList 比 LinkedList 用得更多？", "expected_id": 10, "category": "知识文档"}
+{"question": "为什么实际开发中 ArrayList 的使用频率远高于 LinkedList？", "expected_id": 11, "category": "知识文档"}
+{"question": "线程池的四种拒绝策略各有什么适用场景？", "expected_id": 11, "category": "知识文档"}
+{"question": "JVM堆内存中新生代的默认空间比例是多少？对象从Eden区到老年代的晋升过程是怎样的？", "expected_id": 12, "category": "知识文档"}
+{"question": "针对IO密集型应用，线程池的核心线程数应该如何设置？为什么CMS回收器容易产生内存碎片？", "expected_id": 12, "category": "知识文档"}
+{"question": "MySQL的B+树索引为什么比B树更适合范围查询？", "expected_id": 13, "category": "知识文档"}
+{"question": "为什么在联合索引(a,b,c)上，查询条件where a=1 and c=3无法使用到c列的索引？", "expected_id": 13, "category": "知识文档"}
+{"question": "MySQL默认的事务隔离级别是什么？它是如何解决幻读问题的？", "expected_id": 14, "category": "知识文档"}
+{"question": "缓存与数据库不一致时，为什么推荐‘先更新数据库，再删除缓存’而不是反过来？", "expected_id": 14, "category": "知识文档"}

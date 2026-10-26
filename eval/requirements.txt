@@ -1,0 +1,5 @@
+# 量化评估工具依赖（保持轻量，不引入重型框架）
+requests>=2.31.0
+openai>=1.30.0
+# 文档切分入库需要直连 PostgreSQL(pgvector)
+psycopg[binary]>=3.1.0
